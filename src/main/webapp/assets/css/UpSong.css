@@ -1,0 +1,66 @@
+* {
+  margin: 30px auto;
+}
+/* .wrap-slider {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  z-index: -1;
+} */
+
+.content-form {
+  margin-top: 100px;
+  text-align: start;
+}
+.wrap-header-form {
+  margin: 20px auto;
+}
+.header-form {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 50px;
+  color: #35686c;
+}
+.wrap-form {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  color: #35686c;
+
+  font-weight: bold;
+  font-size: large;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.input-song-name {
+  width: 250px;
+  height: 40px;
+  border-radius: 5px;
+
+  font-size: medium;
+  font: 400;
+  padding: 2px 4px;
+  border: 1px solid #b8b8b8;
+}
+.input-song-name:focus {
+  border: 1px solid #5cb8bf;
+}
+
+/* input file mp3 and img  */
+input[type="file"] {
+  /* color: transparent; */
+}
+.submit-btn input {
+  width: 250px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  font-size: large;
+  background-color: #35686c;
+  color: rgb(255, 255, 255);
+}
+.submit-btn input:hover {
+  background-color: #5cb8bf;
+  color: white;
+}

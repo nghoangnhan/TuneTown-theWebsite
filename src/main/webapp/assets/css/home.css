@@ -1,0 +1,514 @@
+/* BODY  */
+/* CONTENT  */
+.content {
+  font-size: 14px;
+}
+
+/* MUSIC NAV  */
+.wrap-music-nav {
+  display: flex;
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  z-index: 99;
+}
+.wrap-music-nav .music-nav {
+  display: flex;
+  list-style: none;
+  font-size: 16px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+
+  width: 100%;
+  height: 100%;
+  background-color: #27333b;
+  align-items: center;
+  justify-content: center;
+}
+.wrap-music-nav .list-tool {
+  display: flex;
+  /* margin: 10px 10px 10px 10px; */
+  /* padding: 25px 0px 20px 20px; */
+}
+/* .wrap-music-nav .wrap-nav-item {
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+} */
+.wrap-music-nav .nav-item {
+  height: 100%;
+  /*width: 60px; */
+  /* margin: 0px 50px; */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: rgba(222, 222, 222, 0.793);
+}
+
+/* CAN CHINH HOME  */
+.wrap-music-nav .wrap-nav-item .nav-item.home {
+  position: absolute;
+  left: 50px;
+  top: 3px;
+}
+.wrap-music-nav .nav-item:hover {
+  color: rgb(251, 251, 251);
+  border-bottom-color: rgb(251, 251, 251);
+}
+/* .nav-item.is-active {
+  border: 3px;
+  border-bottom-style: solid;
+  white-space: nowrap;
+  color: rgb(251, 251, 251);
+  border-bottom-color: rgb(251, 251, 251);
+} */
+.wrap-music-nav i {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.wrap-music-nav input[type="text"] {
+  border-radius: 6px;
+  height: 30px;
+  width: 400px;
+  border: none;
+  padding-left: 5px;
+  margin-right: 10px;
+  transition: linear 0.5s;
+}
+
+.wrap-music-nav input[type="text"]:focus {
+  margin-left: -20px;
+  width: 500px;
+  transition: linear 0.5s;
+}
+
+/* Profile  */
+.wrap-music-nav .nav-item-profile {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+.wrap-music-nav .nav-item-profile #avatar-profile {
+  height: 50px;
+  width: 50px;
+  right: 20px;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.wrap-music-nav .nav-item-profile .wrap-music-nav {
+  position: relative;
+}
+.wrap-music-nav .nav-item-profile #option-profile {
+  display: none;
+  position: absolute;
+  border-radius: 10px;
+  left: -125px;
+  top: 10px;
+  transform: translateY(28%);
+  height: 150px;
+  width: 180px;
+  background-color: #585858;
+}
+.wrap-music-nav .nav-item-profile #option-profile.active {
+  display: block;
+}
+#option-profile > li {
+  width: 100%;
+  height: 50px;
+}
+#option-profile > li > a {
+  text-decoration: none;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-weight: 700;
+  color: #cfc7c7;
+  font-size: large;
+  height: 100%;
+
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#option-profile > li > a:hover {
+  background-color: #888888;
+}
+
+/* end MUSIC NAV */
+
+/* CONTENT */
+.content {
+  top: 70px;
+  position: relative;
+  display: flex;
+}
+/* start MUSIC FEED  */
+.music-feed {
+  width: 85%;
+  height: fit-content;
+  /* background-color: #121212; */
+  background-image: linear-gradient(#224d54, #000000);
+  font-size: large;
+}
+
+/* playlist  */
+.title-playlist {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+  margin: 20px 0px 10px 30px;
+  color: #ffffff;
+}
+.wrap-playlist-item {
+  height: 200px;
+  border-radius: 10px;
+  background-color: #434343;
+  padding: 10px 10px 10px 30px;
+  display: flex;
+  gap: 40px;
+}
+.wrap-playlist-item .playlist-item {
+  background-color: rgb(0, 255, 170);
+  cursor: pointer;
+  position: relative;
+  height: 180px;
+  width: 140px;
+  padding: 10px 7px 10px 16px;
+  border-radius: 10px;
+  background-color: #282828;
+}
+.wrap-playlist-item .playlist-item:hover {
+  background-color: #252627;
+}
+.wrap-playlist-item .playlist-item img {
+  margin-bottom: 15px;
+  width: 130px;
+  position: relative;
+  border-radius: 7px;
+}
+.wrap-playlist-item .playlist-item .playlist-title {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-size: medium;
+  font-weight: bolder;
+  color: #fafafa;
+  margin-bottom: 5px;
+}
+.wrap-playlist-item .playlist-item .playlist-artist {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-size: small;
+  color: #828282;
+}
+.wrap-playlist-item .playlist-item .iconplay {
+  position: absolute;
+  right: 15px;
+  bottom: 10px;
+  font-size: xx-large;
+  color: rgb(101, 255, 191);
+}
+.wrap-playlist-item .playlist-item .iconplay:hover {
+  color: rgb(0, 255, 115);
+}
+/* end playlist  */
+/* Song  */
+.title-song {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+  margin: 30px 0px 10px 30px;
+  color: #ffffff;
+}
+.wrap-song-item {
+  height: 100%;
+  width: 100%;
+}
+/* NO HOVER  */
+.wrap-song-item .song-item.nohover:hover {
+  background-color: transparent;
+}
+
+.wrap-song-item .song-ranking-nohover {
+  color: #fefefe;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-right: 5px;
+}
+.wrap-song-item .song-genre-nohover {
+  position: absolute;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  color: #fbfbfb;
+  font-size: 14px;
+  right: 200px;
+}
+.wrap-song-item .song-view-nohover {
+  position: absolute;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  color: #fbfbfb;
+  font-size: 14px;
+  right: 40px;
+}
+/* END NO HOVER  */
+.wrap-song-item .song-item {
+  display: flex;
+  background-color: transparent;
+  padding: 12px 10px 10px 20px;
+  position: relative;
+  align-items: center;
+  cursor: pointer;
+}
+.wrap-song-item .song-item:hover {
+  background-color: #2a2a2a;
+  border-radius: 10px;
+}
+
+.wrap-song-item .song-ranking {
+  color: #fefefe;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  margin-right: 20px;
+}
+.wrap-song-item img {
+  height: 50px;
+  border-radius: 5px;
+}
+.wrap-song-item .song-info {
+  margin-left: 20px;
+}
+.wrap-song-item .song-info .song-info-title {
+  color: #fefefe;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 7px;
+}
+.wrap-song-item .song-info .song-info-author {
+  color: #a6a6a6;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-size: small;
+}
+.song-item .song-genre {
+  position: absolute;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 300;
+  color: #fbfbfb;
+  font-size: 14px;
+  right: 210px;
+}
+.song-item .song-view {
+  position: absolute;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 300;
+  color: #fbfbfb;
+  font-size: 14px;
+  right: 25px;
+}
+/* End Song  */
+
+/* end MUSIC FEED */
+/* MUSIC PLAYLIST */
+.music-playlist {
+  background-color: #1d1d1d;
+  color: #a6a6a6;
+  width: 15%;
+  position: fixed;
+  right: 0%;
+  height: 1000px;
+  padding-top: 20px;
+}
+.music-playlist .my-library {
+  font-size: 18px;
+  margin-left: 10px;
+  gap: 10px;
+  display: flex;
+  cursor: pointer;
+}
+.music-playlist .my-library:hover {
+  color: #ffffff;
+}
+
+.music-playlist .myplaylist-title {
+  text-transform: uppercase;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+  "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: #ffffff;
+  font-size: large;
+  margin-top: 50px;
+  margin-left: 10px;
+}
+.music-playlist .wrap-my-playlist {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+.music-playlist .wrap-my-playlist .my-playlist-item {
+  cursor: pointer;
+  font-size: medium;
+  margin-top: 15px;
+}
+.music-playlist .wrap-my-playlist .my-playlist-item:hover {
+  color: #fff;
+}
+/* END MUSIC PLAYLIST */
+/* END CONTENT */
+
+/* start MUSIC CONTROL BAR  */
+.music-control-bar {
+  background-color: rgb(22, 27, 25);
+  height: 85px;
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  z-index: 99;
+}
+.wrap-songing-item {
+  display: flex;
+  padding: 15px 10px 10px 20px;
+}
+.wrap-songing-item img {
+  height: 60px;
+  border-radius: 5px;
+}
+.wrap-songing-item .songing-info {
+  margin-left: 20px;
+  flex-grow: 1;
+}
+.wrap-songing-item .songing-info .songing-info-title {
+  color: #fefefe;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-weight: 700;
+  font-size: medium;
+  margin-bottom: 7px;
+  cursor: pointer;
+}
+.wrap-songing-item .songing-info .songing-info-author {
+  color: #a6a6a6;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
+  font-size: small;
+  cursor: pointer;
+}
+.wrap-songing-item .songing-info .songing-info-author:hover {
+  text-decoration: underline;
+}
+.wrap-songing-item .songing-control {
+  flex-grow: 3;
+  position: relative;
+  margin-top: 3px;
+  width: 400px;
+  height: 100%;
+  text-align: center;
+}
+.wrap-songing-item .songing-control .fa-step-backward,
+.wrap-songing-item .songing-control .fa-step-forward {
+  position: relative;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 40px;
+  margin-right: 40px;
+  /* margin-top: 12px; */
+  color: rgb(229, 229, 229);
+}
+.wrap-songing-item .songing-control .fa-pause-circle.active,
+.wrap-songing-item .songing-control .fa-play-circle.active {
+  position: relative;
+  display: inline-block;
+  font-size: 30px;
+  cursor: pointer;
+  margin-left: 40px;
+  margin-right: 40px;
+  /* margin-top: 12px; */
+  color: rgb(229, 229, 229);
+}
+.wrap-songing-item .songing-control .fa-pause-circle,
+.wrap-songing-item .songing-control .fa-play-circle {
+  display: none;
+}
+
+.wrap-songing-item .songing-control i:hover {
+  color: rgb(255, 255, 255);
+}
+/* timeline  */
+.control-timeline {
+  display: flex;
+  color: #ffffff;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto 0px;
+  position: relative;
+  top: 5%;
+}
+#slider-timeline {
+  display: block;
+  cursor: pointer;
+  height: 5px;
+  width: 400px;
+  margin: 0px 15px 0px;
+}
+#slider-timeline::-webkit-slider-thumb {
+  /* display: none; */
+  /* -webkit-appearance: none;
+  appearance: none; */
+}
+#slider-timeline::-webkit-slider-thumb:active {
+  background-color: #224d54;
+}
+
+#start-timeline {
+  margin-left: 10px;
+}
+#end-timeline {
+  margin-right: 10px;
+}
+
+/* Volume  */
+.wrap-songing-item .songing-volume {
+  position: relative;
+  display: flex;
+  margin-bottom: 5px;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+.wrap-songing-item .songing-volume i {
+  cursor: pointer;
+  font-size: 16px;
+  color: rgb(229, 229, 229);
+}
+.wrap-songing-item .songing-volume .fa-volume-down {
+  margin-right: 10px;
+}
+.wrap-songing-item .songing-volume .fa-volume-up {
+  margin-left: 10px;
+}
+#slider-volume {
+  cursor: pointer;
+  height: 3px;
+  width: 100px;
+
+  /* margin: 0px 15px 0px; */
+}
+#slider-volume::-webkit-slider-thumb {
+  /* display: none; */
+  -webkit-appearance: none;
+  appearance: none;
+}
+#slider-volume::-webkit-slider-thumb:input {
+  display: block;
+}
+
+/* end MUSIC CONTROL BAR; */
+/* end CONTENT  */
+/* BODY  */
