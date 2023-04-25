@@ -2,6 +2,7 @@ package vn.hcmute.tunetown.controller;
 
 import vn.hcmute.tunetown.DAO.UserDAO;
 //import vn.hcmute.tunetown.connection.HibernateConnection;
+import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.model.User;
 
 import org.hibernate.service.ServiceRegistry;
@@ -27,10 +28,12 @@ public class logInServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        User user = UserDAO.getUserByEmail(email);
-
         try {
-            if(email.equals(user.getEmail()) && password.equals(user.getUserPassword())){
+            User user = UserDAO.getUserByEmail(email, password);
+            if(user != null) {
+                GlobalUser.globalUserId = user.getUserID();
+                GlobalUser.globalUserName = user.getUserName();
+
                 url = "/loadSong";
                 if (user.getRoles() == 0) {
                     url ="/view/upSong.html";
@@ -45,12 +48,6 @@ public class logInServlet extends HttpServlet {
         }
 
         req.setAttribute("message", message);
-
-//        User user1 = new User();
-//        user1.setUserName("Nhan");
-//        UserDAO.insert(user1);
-//        HibernateConnection connection = new HibernateConnection();
-//        connection.saveTest();
 
         getServletContext().getRequestDispatcher(url).forward(req, resp);
     }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 @WebServlet(urlPatterns = {"/loadSong"})
@@ -21,7 +21,9 @@ public class loadSongServlet extends HttpServlet {
 
         try {
             SongDAO songDAO = new SongDAO();
-            ArrayList<Song> listSong = songDAO.getAllSongs();
+            List<Song> listSong = songDAO.getAllSongs();
+            System.out.println(listSong.stream().count());
+            System.out.println(listSong.get(0).getArtists().get(0).getUserName());
             req.setAttribute("listSong", listSong);
 
         } catch (Exception e)

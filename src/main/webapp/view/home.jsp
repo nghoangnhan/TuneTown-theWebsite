@@ -252,13 +252,17 @@
             <c:if test="${status.index < 10}">
               <div class="song-item" id="song-item-${song.getSongId()}" >
                 <div class="song-img">
-                  <img id="${song.getSongId()}" src="data:image/jpg;base64,${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>
+<%--                  <img id="${song.getSongId()}" src="data:image/jpg;base64,${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>--%>
+                  <img id="${song.getSongId()}" src="./assets/img/CoverArt/dontoliver.jpg" alt="" onclick="moveToControlBar(this)"/>
                   <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
                 </div>
                 <div class="song-info">
                   <div id ="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
-                  <div class="song-info-author">
-                    <c:forEach items="${song.getArtistList()}" var="o">
+                  <div class="song-info-author" id="song-info-author-${song.getSongId()}">
+                    <c:forEach items="${song.getArtists()}" var="o" varStatus="st">
+                      <c:if test="${st.index != 0}">
+                        ,
+                      </c:if>
                       ${o.getUserName()}
                     </c:forEach>
                   </div>
@@ -274,8 +278,6 @@
 
       </div>
       <!-- End Song Item  -->
-    </div>
-    <!-- END VÙNG FEED NHẠC -->
     <div class="music-playlist">
       <div class="my-library">
         <i class="fa fa-bookmark"></i>
@@ -293,6 +295,9 @@
         <div class="my-playlist-item">My Playlist #8</div>
       </div>
     </div>
+    </div>
+    <!-- END VÙNG FEED NHẠC -->
+
   </div>
   <!-- END MUSIC INTERACT  -->
 
@@ -303,18 +308,18 @@
         <img id="songing-image" src="./assets/img/CoverArt/starboy.jpg" alt="" />
       </div>
       <div class="songing-info">
-        <div id ="songing-info-title" class="songing-info-title">Starboy</div>
-        <div class="songing-info-author">The Weekend</div>
+        <div id ="songing-info-title" class="songing-info-title">None</div>
+        <div id="song-info-author" class="songing-info-author">None</div>
       </div>
 
       <div class="songing-control">
         <div class="control-btn">
-          <i class="fa fa-step-backward fa-2x"></i>
+          <i id="fa-backward" class="fa fa-step-backward fa-2x" onclick="backwardSong(this)"></i>
           <i id="fa-pause-circle" class="fa fa-pause-circle fa-2x" onclick="playAudio()">
             <audio id="audio" controls hidden="hidden" src = "" type="audio/mpeg"> </audio>
           </i>
             <i id="fa-play-circle" class="fa fa-play-circle active" onclick="playAudio()"></i>
-          <i class="fa fa-step-forward fa-2x"></i>
+          <i id="fa-forward" class="fa fa-step-forward fa-2x"></i>
         </div>
         <div class="control-timeline">
           <div id="start-timeline"><h4>0:00</h4></div>
@@ -338,7 +343,7 @@
                 type="range"
                 min="1"
                 max="100"
-                value="1"
+                value="100"
                 class="slider-volume"
                 id="slider-volume"
         />

@@ -1,10 +1,8 @@
 package vn.hcmute.tunetown.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.awt.*;
+import java.util.List;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -15,11 +13,17 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer songId;
     private String songName;
-    private ArrayList<User> artistList;
+
+    @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<User> artists;
+
     private String songPoster;
     private String songData;
     private Integer amountOfLikes;
     private Integer amountOfListens;
+
+    @ManyToMany(mappedBy = "playlistSongs")
+    private List<Playlist> playlists;
 
 
     public Song() {
@@ -29,20 +33,23 @@ public class Song {
         this.songName = songName;
     }
 
-    public ArrayList<User> getArtistList() {
-        return artistList;
+    public List<User> getArtists() {
+        return artists;
     }
 
-    public void setArtistList(ArrayList<User> artistList) {
-        this.artistList = artistList;
+    public void setArtists(List<User> artists) {
+        this.artists = artists;
     }
 
-    public Song(String songName, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens) {
+    public Song(Integer songId, String songName, List<User> artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens, List<Playlist> playlists) {
+        this.songId = songId;
         this.songName = songName;
+        this.artists = artists;
         this.songPoster = songPoster;
         this.songData = songData;
         this.amountOfLikes = amountOfLikes;
         this.amountOfListens = amountOfListens;
+        this.playlists = playlists;
     }
 
     public Integer getSongId() {
@@ -91,5 +98,12 @@ public class Song {
 
     public void setAmountOfListens(Integer amountOfListens) {
         this.amountOfListens = amountOfListens;
+    }
+
+    public List<Playlist> getPlaylists() {
+        return playlists;
+    }
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists = playlists;
     }
 }

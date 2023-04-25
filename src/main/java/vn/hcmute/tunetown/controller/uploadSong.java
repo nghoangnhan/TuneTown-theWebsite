@@ -19,8 +19,11 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.BlobInfo;
+import com.google.common.collect.ImmutableMap;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -42,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Base64;
 
 @WebServlet(urlPatterns = {"/upload"})
@@ -50,37 +54,11 @@ public class uploadSong extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-
-        String url = "/view/upSong.html";
-
-        String songName = req.getParameter("songName");
-
-        Part imagePart = req.getPart("songImage");
-        String imageName = songName;
-        InputStream imageInputStream = imagePart.getInputStream();
-        byte[] imageByte = imageInputStream.readAllBytes();
-        String songPoster = Base64.getEncoder().encodeToString(imageByte);
-
-
-        String songData = "https://www.youtube.com/watch?v=HGsEq3dp0l8&list=RDHGsEq3dp0l8&start_radio=1";
-
-        Song newSong = new Song(songName, songPoster, songData, 0, 0);
-        SongDAO songDAO = new SongDAO();
-        songDAO.uploadSong(newSong);
-
-
-//        try {
-//            GGDriveConnection.main();
-//        } catch (GeneralSecurityException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        FileInputStream serviceAccount;
+        InputStream serviceAccount;
 
         {
             try {
-                String path = "D:\\Hocki2_Nam3\\OOSE\\Project\\Main\\TuneTown\\src\\main\\webapp\\tunetowntest-e968a-firebase-adminsdk-vu7bk-37fd0625ea.json";
-                serviceAccount = new FileInputStream(path);
+                serviceAccount = getServletContext().getResourceAsStream("./WEB-INF/tunetowntest-e968a-firebase-adminsdk-vu7bk-37fd0625ea.json");
                 FirebaseOptions options = new FirebaseOptions.Builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                         .setDatabaseUrl("https://tunetowntest-e968a-default-rtdb.asia-southeast1.firebasedatabase.app/")
@@ -89,23 +67,12 @@ public class uploadSong extends HttpServlet {
 
                 FirebaseApp.initializeApp(options);
 
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference ref = database.getReference().child("users");
-
-                // Add user data to the database
-//                String email = req.getParameter("email");
-//                String name = req.getParameter("name");
-//                String email = "lhlam.lehoang@gmail.com";
-//                String name = "HoangLam";
-//                User user = new User(email,name);
-//                Map<String, String> userData = new HashMap<>();
-//                userData.put("email", email);
-//                userData.put("name", name);
-//                ref.push().setValueAsync(userData);
-//                req.setAttribute("user",user);
+                String appCheckToken = Arrays.toString(FirebaseAuth.getInstance()
+                        .createCustomToken("tunetowntest-e968a")
+                        .getBytes());
 
 
-                // Upload Image to Firebase Storage
+                // Upload Image to Firebase
                 Part filePart = req.getPart("songImage");
                 String fileName = filePart.getSubmittedFileName();
                 InputStream fileContent = filePart.getInputStream();
@@ -113,22 +80,21 @@ public class uploadSong extends HttpServlet {
                     FirebaseApp app = FirebaseApp.getInstance();
                     Storage storage = StorageClient.getInstance(app).bucket("tunetowntest-e968a.appspot.com").getStorage();
 
-                    BlobInfo blobInfo = BlobInfo.newBuilder("tunetowntest-e968a.appspot.com", "images/"+fileName)
+                    BlobInfo blobInfo = BlobInfo.newBuilder("tunetowntest-e968a.appspot.com", "images/" + fileName)
                             .setContentType(filePart.getContentType())
+                            .setMetadata(ImmutableMap.of("firebaseStorageDownloadTokens", appCheckToken))
                             .build();
                     // Upload the file to Firebase Storage
                     storage.create(blobInfo, fileContent,
                             Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
-                    // Close the input stream
-                    fileContent.close();
-                } catch (IOException e) {
-                    // Handle IO exception
-                    throw new RuntimeException(e);
                 } catch (Exception e) {
                     // Handle any other exception
                     throw new RuntimeException(e);
+                } finally {
+                    fileContent.close();
                 }
+
 
                 // Upload MP3 file to storage
                 Part filePart2 = req.getPart("songData");
@@ -138,31 +104,24 @@ public class uploadSong extends HttpServlet {
                     FirebaseApp app = FirebaseApp.getInstance();
                     Storage storage = StorageClient.getInstance(app).bucket("tunetowntest-e968a.appspot.com").getStorage();
 
-                    BlobInfo blobInfo = BlobInfo.newBuilder("tunetowntest-e968a.appspot.com", "audios/"+fileName2)
+                    BlobInfo blobInfo = BlobInfo.newBuilder("tunetowntest-e968a.appspot.com", "audios/" + fileName2)
                             .setContentType(filePart2.getContentType())
+                            .setMetadata(ImmutableMap.of("firebaseStorageDownloadTokens", appCheckToken))
                             .build();
                     // Upload the file to Firebase Storage
                     storage.create(blobInfo, fileContent2,
                             Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
-                    // Close the input stream
-                    fileContent2.close();
-                } catch (IOException e) {
-                    // Handle IO exception
-                    throw new RuntimeException(e);
                 } catch (Exception e) {
                     // Handle any other exception
                     throw new RuntimeException(e);
+                } finally {
+                    fileContent2.close();
                 }
 
-
-
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 }

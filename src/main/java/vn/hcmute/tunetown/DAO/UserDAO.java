@@ -14,41 +14,13 @@ public class UserDAO {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-//    public User getUser (String email) {
-//        String sql = "SELECT * FROM user WHERE email = ?";
-//        try {
-//            connection = new DBConnection().getConnection();
-//            ps = connection.prepareStatement(sql);
-//            ps.setString(1, email);
-//            rs = ps.executeQuery();
-//
-//            while(rs.next()){
-//
-//                User user = new User();
-//                user.setUserID(rs.getInt("userId"));
-//                user.setUserName(rs.getString("userName"));
-//                user.setEmail(rs.getString("email"));
-//                user.setUserPassword(rs.getString("userPassword"));
-//                user.setBirthDate(rs.getDate("birthDate"));
-//                user.setUserBio(rs.getString("userBio"));
-//                user.setCountry(rs.getInt("country"));
-//                user.setSex(rs.getInt("sex"));
-//                user.setRoles(rs.getInt("roles"));
-//
-//                return user;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-    public static User getUserByEmail(String email) {
+    public static User getUserByEmail(String email, String password) {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
         try {
-            String jpql = "SELECT u FROM User u WHERE u.email = :email";
+            String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.userPassword = :password";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
             query.setParameter("email", email);
+            query.setParameter("password", password);
             User user = query.getSingleResult();
             return user;
         } catch (NoResultException e) {
