@@ -56,7 +56,7 @@
     <div class="music-nav">
       <div class="list-tool">
         <div class="wrap-nav-item">
-          <a href="./view/home.jsp">
+          <a href="loadSong">
             <div class="nav-item home is-active">
               <i class="fa fa-home"></i>Home
             </div>
@@ -89,7 +89,7 @@
       <div class="form">
         <div class="inputfield">
           <label>First Name</label>
-          <input value="Thanh Toan" type="text" class="input" />
+          <input value="${user.getUserName()}" type="text" class="input" />
         </div>
         <div class="inputfield">
           <label>Last Name</label>
@@ -97,11 +97,11 @@
         </div>
         <div class="inputfield">
           <label>Password</label>
-          <input value="123" type="password" class="input" />
+          <input value="${user.getUserPassword()}" type="password" class="input" />
         </div>
         <div class="inputfield">
           <label>Birthday</label>
-          <input value="12/3/2002" type="date" class="input" />
+          <input value="${user.getBirthDate()}" type="date" class="input" />
         </div>
         <div class="inputfield">
           <label>Gender</label>
@@ -114,7 +114,7 @@
         </div>
         <div class="inputfield">
           <label>Email Address</label>
-          <input value="toanngu@gmail.com" type="text" class="input" />
+          <input value="${user.getEmail()}" type="text" class="input" />
         </div>
         <div class="inputfield">
           <label>Phone Number</label>
@@ -122,7 +122,7 @@
         </div>
         <div class="inputfield">
           <label>Address</label>
-          <input value="Ở nơi người dơi mới biết" class="textarea" />
+          <input value="${user.getUserBio()}" class="textarea" />
         </div>
         <div class="inputfield">
           <input type="submit" value="Update" class="btn" />

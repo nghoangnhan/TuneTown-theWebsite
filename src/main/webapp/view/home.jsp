@@ -57,14 +57,20 @@
     <div class="music-nav">
       <div class="list-tool">
         <div class="wrap-nav-item">
-          <div class="nav-item home is-active">
-            <i class="fa fa-home"></i>Home
-          </div>
+          <a href="loadSong">
+            <div class="nav-item home is-active">
+              <i class="fa fa-home"></i>Home
+            </div>
+          </a>
 
 
           <div class="nav-item text">
             <input name="search-bar" type="text" placeholder="Search" />
             <i class="fa fa-search"></i>
+          </div>
+
+          <div class="nav-item info">
+            <div class="info">Hello ${username}</div>
           </div>
 
           <div class="nav-item-profile">
@@ -89,7 +95,7 @@
 
   <div class="content">
     <!-- VÙNG FEED NHẠC  -->
-    <div class="music-feed">
+    <div class="music-feed active" id="music-feed">
       <!-- Playlist  -->
       <div class="title-playlist">Recommend Playlist</div>
       <div class="wrap-playlist-item">
@@ -249,7 +255,7 @@
         </div>
 
           <c:forEach items="${listSong}" var="song" varStatus="status">
-            <c:if test="${status.index < 10}">
+            <c:if test="${status.index < 100}">
               <div class="song-item" id="song-item-${song.getSongId()}" >
                 <div class="song-img">
 <%--                  <img id="${song.getSongId()}" src="data:image/jpg;base64,${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>--%>
@@ -277,22 +283,73 @@
         </div>
 
       </div>
-      <!-- End Song Item  -->
+    <!-- End Song Item  -->
+
+    <!-- TAB PLAYLIST  -->
+    <div id="playlist-feed" class="playlist-feed">
+      <div class="wrap-btn">
+        <div class="wrap-button-back-home">
+          <button id="btn-back-home" class="btn-back-home">
+            <i class="fa fa-chevron-circle-left"></i>Back
+          </button>
+        </div>
+        <div class="wrap-button-edit">
+          <button id="btn-edit" class="btn-edit">Edit</button>
+        </div>
+        <div class="wrap-button-delete">
+          <button id="btn-delete" class="btn-delete">Delete</button>
+        </div>
+        <div class="wrap-button-cancel">
+          <button id="btn-cancel" class="btn-cancel">Cancel</button>
+        </div>
+      </div>
+      <div class="title-playlist-feed">My Playlist #1</div>
+      <div class="wrap-song-item">
+        <div class="song-item nohover">
+          <div class="song-ranking-nohover">#</div>
+          <div class="song-info">
+            <div class="song-info-title">Title</div>
+          </div>
+          <div class="song-genre-nohover">Genre</div>
+          <div class="song-view-nohover">Views</div>
+        </div>
+
+        <div class="list-song-item" id="playlist-songs">
+<%--          songs in here--%>
+
+
+        </div>
+      </div>
+    </div>
+    <!-- END TAB PLAYLIST  -->
+
+
+
     <div class="music-playlist">
       <div class="my-library">
         <i class="fa fa-bookmark"></i>
         <div>Library</div>
       </div>
+      <div class="wrap-create-playlist">
+          <button id="btn-create-playlist" onclick="createPlaylist()" >
+            <i class="fa fa-plus-square">Create Playlist</i>
+          </button>
+
+
+      </div>
+
       <div class="myplaylist-title">My Playlist</div>
-      <div class="wrap-my-playlist">
-        <div class="my-playlist-item">My Playlist #1</div>
-        <div class="my-playlist-item">My Playlist #2</div>
-        <div class="my-playlist-item">My Playlist #3</div>
-        <div class="my-playlist-item">My Playlist #4</div>
-        <div class="my-playlist-item">My Playlist #5</div>
-        <div class="my-playlist-item">My Playlist #6</div>
-        <div class="my-playlist-item">My Playlist #7</div>
-        <div class="my-playlist-item">My Playlist #8</div>
+      <div class="wrap-my-playlist" id = "my-playlist">
+
+        <c:forEach items="${listPlaylist}" var = "playlist">
+
+          <div class="my-playlist-item"
+               id="playlist-id-${playlist.getPlaylistId()}" onclick="loadPlaylistSongs(this)">
+              ${playlist.getPlaylistName()}
+          </div>
+
+        </c:forEach>
+
       </div>
     </div>
     </div>
@@ -314,12 +371,14 @@
 
       <div class="songing-control">
         <div class="control-btn">
+            <i id="fa-random" class="fa fa-random"></i>
           <i id="fa-backward" class="fa fa-step-backward fa-2x" onclick="backwardSong(this)"></i>
           <i id="fa-pause-circle" class="fa fa-pause-circle fa-2x" onclick="playAudio()">
             <audio id="audio" controls hidden="hidden" src = "" type="audio/mpeg"> </audio>
           </i>
             <i id="fa-play-circle" class="fa fa-play-circle active" onclick="playAudio()"></i>
           <i id="fa-forward" class="fa fa-step-forward fa-2x"></i>
+            <i id="fa-retweet" class="fa fa-retweet"></i>
         </div>
         <div class="control-timeline">
           <div id="start-timeline"><h4>0:00</h4></div>
@@ -356,4 +415,6 @@
 </body>
 <footer></footer>
 <script src="./assets/js/home.js"></script>
+<script src="./assets/js/controller.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </html>

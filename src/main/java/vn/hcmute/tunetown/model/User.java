@@ -2,6 +2,8 @@ package vn.hcmute.tunetown.model;
 
 //import jakarta.persistence.*;
 
+import net.bytebuddy.utility.nullability.MaybeNull;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +36,9 @@ public class User implements Serializable {
     @ManyToMany
     private List<Song> songs;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Genre> favoriteGenre;
+
     public User(){
         userName = "";
         email = "";
@@ -41,7 +46,7 @@ public class User implements Serializable {
         userBio = "";
     }
 
-    public User(int userID, String userName, String email, String userPassword, Date birthDate, int sex, int country, String userBio, int roles){
+    public User(int userID, String userName, String email, String userPassword, Date birthDate, int sex, int country, String userBio, int roles, List<Song> songs, List<Genre> favoriteGenre) {
         this.userID = userID;
         this.userName = userName;
         this.email = email;
@@ -51,6 +56,8 @@ public class User implements Serializable {
         this.country = country;
         this.userBio = userBio;
         this.roles = roles;
+        this.songs = songs;
+        this.favoriteGenre = favoriteGenre;
     }
 
     public int getUserID() {

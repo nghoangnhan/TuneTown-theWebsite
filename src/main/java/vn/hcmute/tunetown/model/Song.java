@@ -1,5 +1,7 @@
 package vn.hcmute.tunetown.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.awt.*;
 import java.util.List;
@@ -23,6 +25,7 @@ public class Song {
     private Integer amountOfListens;
 
     @ManyToMany(mappedBy = "playlistSongs")
+    @JsonBackReference
     private List<Playlist> playlists;
 
 

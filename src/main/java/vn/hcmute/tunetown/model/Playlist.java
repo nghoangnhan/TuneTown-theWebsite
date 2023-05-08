@@ -1,5 +1,7 @@
 package vn.hcmute.tunetown.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,17 @@ public class Playlist {
     private Integer userId;
 
     @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Song> playlistSongs;
 
     public Playlist() {
+    }
+
+    public Playlist(Integer playlistId, String playlistName, Integer userId, List<Song> playlistSongs) {
+        this.playlistId = playlistId;
+        this.playlistName = playlistName;
+        this.userId = userId;
+        this.playlistSongs = playlistSongs;
     }
 
     public Integer getPlaylistId() {

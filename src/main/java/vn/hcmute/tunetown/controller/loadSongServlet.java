@@ -1,6 +1,9 @@
 package vn.hcmute.tunetown.controller;
 
+import vn.hcmute.tunetown.DAO.PlaylistDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
+import vn.hcmute.tunetown.GlobalUser;
+import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.Song;
 
 import javax.servlet.ServletException;
@@ -22,9 +25,11 @@ public class loadSongServlet extends HttpServlet {
         try {
             SongDAO songDAO = new SongDAO();
             List<Song> listSong = songDAO.getAllSongs();
-            System.out.println(listSong.stream().count());
-            System.out.println(listSong.get(0).getArtists().get(0).getUserName());
             req.setAttribute("listSong", listSong);
+
+            PlaylistDAO playlistDAO = new PlaylistDAO();
+            List<Playlist> listPlaylist = playlistDAO.getAllPlaylistByUserId(GlobalUser.globalUserId);
+            req.setAttribute("listPlaylist", listPlaylist);
 
         } catch (Exception e)
         {

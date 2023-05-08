@@ -33,6 +33,8 @@ public class logInServlet extends HttpServlet {
             if(user != null) {
                 GlobalUser.globalUserId = user.getUserID();
                 GlobalUser.globalUserName = user.getUserName();
+                System.out.println(GlobalUser.globalUserName);
+                req.setAttribute("username", GlobalUser.globalUserName);
 
                 url = "/loadSong";
                 if (user.getRoles() == 0) {
@@ -48,6 +50,7 @@ public class logInServlet extends HttpServlet {
         }
 
         req.setAttribute("message", message);
+
 
         getServletContext().getRequestDispatcher(url).forward(req, resp);
     }

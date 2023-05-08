@@ -31,6 +31,21 @@ public class UserDAO {
         }
     }
 
+    public User getUserById(Integer userId) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.userID = :userId";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("userId", userId);
+            User user = query.getSingleResult();
+            return user;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
 
     public void setUSer(User user) {
         String sql = "INSERT INTO user (userName, email ,userPassword, birthDate, sex, country, userBio, roles) VALUES " +

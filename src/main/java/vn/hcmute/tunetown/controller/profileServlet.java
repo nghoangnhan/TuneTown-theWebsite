@@ -1,5 +1,9 @@
 package vn.hcmute.tunetown.controller;
 
+import vn.hcmute.tunetown.DAO.UserDAO;
+import vn.hcmute.tunetown.GlobalUser;
+import vn.hcmute.tunetown.model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +17,11 @@ public class profileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = "/view/profile.jsp";
 
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserById(GlobalUser.globalUserId);
 
-
+        req.setAttribute("user", user);
         getServletContext().getRequestDispatcher(url).forward(req,resp);
-
-
     }
 
     @Override
