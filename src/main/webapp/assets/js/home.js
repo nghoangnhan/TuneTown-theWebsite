@@ -308,7 +308,8 @@ function getPlaylistSongs() {
 }
 
 // SHOW EDIT OPTION PLAYLIST
-const deleteCheckboxes = document.querySelectorAll("delete-checkbox");
+const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
+console.log(deleteCheckboxes)
 const editButton = document.getElementById("btn-edit");
 const deleteButton = document.getElementById("btn-delete");
 const cancelButton = document.getElementById("btn-cancel");
@@ -346,6 +347,12 @@ let activeContextMenu = null;
 songItems.forEach((songItem) => {
   songItem.addEventListener("contextmenu", showContextMenu);
 });
+
+let playlists;
+
+
+
+
 function showContextMenu(event) {
   event.preventDefault(); // Ngăn chặn hiển thị menu chuột phải mặc định của trình duyệt
 
@@ -361,6 +368,14 @@ function showContextMenu(event) {
     songItems.forEach((item) => item.classList.remove("active"));
   }
 
+  let playlistDropdownHTML = ``;
+  loadPLaylists();
+  console.log(playlists);
+  playlists.forEach((playlist) => {
+    playlistDropdownHTML += `
+           <li class="my-playlist" id="my-playlist-${playlist.playlistId}">${playlist.playlistName}</li>
+      `;
+  });
 
 
   const contextMenu = document.createElement("div");
@@ -369,18 +384,24 @@ function showContextMenu(event) {
     <ul>
       <li id="context-menu-option">
         <ul class="add-to-playlist">Add to Playlist<i class="fa fa-chevron-right"></i>
-            <ul class="playlist-dropdown" id="playlist-dropdown-id">          
-              <li class="my-playlist" id="my-playlist-1">My Playlist #1</li>
-              <li class="my-playlist" id="my-playlist-2">My Playlist #2</li>
-              <li class="my-playlist" id="my-playlist-3">My Playlist #3</li>
-              <li class="my-playlist" id="my-playlist-4">My Playlist #4</li>
+            <ul class="playlist-dropdown" id="playlist-dropdown-id">   
+                ${playlistDropdownHTML}       
             </ul>
         </ul>
       </li>   
       <li>Share</li>
       <li>Copy Link</li>
+      
     </ul>
   `;
+
+
+  let rightClickedSongId = event.target.getAttribute("id");
+  rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
+  console.log(rightClickedSongId);
+
+
+
   const songItemRect = songItem.getBoundingClientRect();
   contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
   contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
@@ -405,7 +426,7 @@ function showContextMenu(event) {
 
   addToPlaylistItem.addEventListener("mouseenter", showPlaylistDropdown);
   // addToPlaylistItem.addEventListener("mouseout", closePlaylistDropdown);
-  playlistDropdown.addEventListener("mouseover", showPlaylistDropdown);
+  // playlistDropdown.addEventListener("mouseover", showPlaylistDropdown);
   playlistDropdown.addEventListener("mouseout", closePlaylistDropdown);
 
   playlistItems.forEach((playlistItem) => {
@@ -421,6 +442,7 @@ function showContextMenu(event) {
     }
   }
   function showPlaylistDropdown() {
+    console.log("Show playlist dropdown");
     playlistDropdown.style.display = "block";
 
     isDropdownShown = true; // Đặt biến isDropdownShown thành true khi dropdown được hiển thị
@@ -428,44 +450,15 @@ function showContextMenu(event) {
   }
 
   playlistItems.forEach((playlistItem) => {
-    playlistItem.addEventListener("mouseover", showPlaylistOptions);
+    // playlistItem.addEventListener("click", addSongToPlaylist(rightClickedSongId));
+    playlistItem.addEventListener("click",getPlaylistId=(e)=>{
+      const playlistID =e.target.getAttribute("id")
+      // console.log(playlistID);
+      addSongToPlaylist(rightClickedSongId, playlistID);
+    })
   });
-  playlistDropdown.addEventListener("mouseover", showPlaylistOptions);
-  function showPlaylistOptions(event) {
-    // Create Playlist DOM
-    loadPLaylists();
 
-    const contextMenu = document.querySelector(".context-menu");
-    const playlistOptions = document.createElement("ul");
-    playlistOptions.className = "playlist-options";
-
-    let playlistDropDown = document.getElementById("playlist-dropdown-id");
-
-    console.log(playlists);
-
-    playlists.forEach((playlist) => {
-
-      playlistDropDown.innerHTML += `
-           <li class="my-playlist" id="my-playlist-${playlist.playlistId}">${playlist.playlistName}</li>
-      `
-      // const playlistOption = document.createElement("li");
-      // playlistOption.textContent = playlist.playlistName;
-      // playlistOption.dataset.playlistId = playlist.playlistId;
-      // playlistOption.addEventListener("click", addSongToPlaylist);
-      // playlistOptions.appendChild(playlistOption);
-    });
-
-    contextMenu.appendChild(playlistOptions);
-  }
-  // function addSongToPlaylist(event) {
-  //   const songItem = event.target.closest(".song-item");
-  //   const playlistId = event.target.dataset.playlistId;
-  //   console.log(`Add song to playlist ${playlistId}`);
-  //   // TODO: add the song to the selected playlist
-  // }
 }
-
-let playlists;
 
 function loadPLaylists(){
   $.ajax({
@@ -479,6 +472,27 @@ function loadPLaylists(){
 
       playlists = jsonData;
 
+    },
+    error: function (xhr){
+      console.log("Error: " + xhr.responseText);
+    }
+  });
+}
+
+function addSongToPlaylist(rightClickedSongId, playlistId) {
+
+  playlistId = deleteLetter(playlistId, "my-playlist-");
+
+  $.ajax({
+    url: "/TuneTown_war_exploded/addSongToPlaylist",
+    type: "post",
+    data: {
+      songId : rightClickedSongId,
+      playlistId: playlistId
+    },
+    dataType: "json",
+    success: function () {
+      console.log("Add successfully");
     },
     error: function (xhr){
       console.log("Error: " + xhr.responseText);

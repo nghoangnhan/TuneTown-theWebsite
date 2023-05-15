@@ -538,19 +538,19 @@
   border-radius: 10px;
 }
 
-#playlist-feed .song-item .song-edit .delete-checkbox {
+.song-item .song-edit .delete-checkbox {
   font-size: 20px;
   display: none;
   margin-right: 10px;
 }
 /* checkbox edit  */
-#playlist-feed .song-item .song-edit .delete-checkbox.active {
+.song-item .song-edit .delete-checkbox.active {
   display: block;
   transform: scale(1.1);
   cursor: pointer;
 }
 
-#playlist-feed .song-item .song-edit .delete-checkbox:checked::before {
+.song-item .song-edit .delete-checkbox:checked::before {
   background-color: #6b8aff;
   border-color: #6b8aff;
 }

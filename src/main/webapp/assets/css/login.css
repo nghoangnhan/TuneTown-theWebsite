@@ -148,7 +148,7 @@ section {
   border: none;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 7px;
 }
 .input-form input[type="submit"]:hover {
   background: #16a944;

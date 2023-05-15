@@ -22,32 +22,20 @@ public class SongDAO {
     private String sql = null;
 
     public Song getSong(Integer songId) {
-        Song song = new Song();
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
         try{
-            sql = "SELECT songId, songName, songPoster FROM songs WHERE songId = ?";
-
-            connection = new DBConnection().getConnection();
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, songId);
-
-            rs = ps.executeQuery();
-
-            while(rs.next())
-            {
-                song.setSongId(Integer.parseInt(rs.getString("songId")));
-                song.setSongName(rs.getString("songName"));
-
-                //song.setArtistList(getSongArtist(songId));
-
-                byte[] imageByte = rs.getBytes("songPoster");
-                String poster = Base64.getEncoder().encodeToString(imageByte);
-                song.setSongPoster(poster);
-            }
-        }catch (Exception e)
-        {
+            String jpql = "SELECT s FROM Song s WHERE s.songId =: songId";
+            TypedQuery<Song> songTypedQuery = em.createQuery(jpql, Song.class);
+            songTypedQuery.setParameter("songId", songId);
+            Song song = songTypedQuery.getSingleResult();
+            return song;
+        } catch (NoResultException e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
         }
-        return song;
     }
 
 
