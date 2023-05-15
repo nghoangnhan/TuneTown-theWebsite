@@ -1,4 +1,4 @@
-package vn.hcmute.tunetown.controller;
+package vn.hcmute.tunetown.controller.Authentication;
 
 import vn.hcmute.tunetown.DAO.UserDAO;
 //import vn.hcmute.tunetown.connection.HibernateConnection;
@@ -12,14 +12,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
-@WebServlet(urlPatterns = {"/Login"})
+@WebServlet(urlPatterns = {"/login"})
 public class logInServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String url = "/view/login.jsp";
         String message = null;
 
@@ -33,8 +33,9 @@ public class logInServlet extends HttpServlet {
             if(user != null) {
                 GlobalUser.globalUserId = user.getUserID();
                 GlobalUser.globalUserName = user.getUserName();
-                System.out.println(GlobalUser.globalUserName);
-                req.setAttribute("username", GlobalUser.globalUserName);
+
+                HttpSession session = req.getSession();
+                session.setAttribute("loggedUser", user);
 
                 url = "/loadSong";
                 if (user.getRoles() == 0) {
@@ -48,10 +49,7 @@ public class logInServlet extends HttpServlet {
             e.printStackTrace();
             message = "Invalid email";
         }
-
         req.setAttribute("message", message);
-
-
         getServletContext().getRequestDispatcher(url).forward(req, resp);
     }
 

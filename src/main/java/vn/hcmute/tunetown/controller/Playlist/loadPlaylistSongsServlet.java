@@ -1,4 +1,4 @@
-package vn.hcmute.tunetown.controller;
+package vn.hcmute.tunetown.controller.Playlist;
 
 import com.google.gson.Gson;
 import org.json.JSONArray;

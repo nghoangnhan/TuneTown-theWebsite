@@ -32,16 +32,16 @@ password.addEventListener("input", (e) => {
 });
 
 //Sự kiện trên form
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  if (password.value === "") {
-    error.style.display = "block";
-  }
-  if (
-    phonenumber.value.length >= 9 &&
-    password.value.length >= 6 &&
-    phonenumber.classList.contains("valid") == true
-  ) {
-    document.forms["form"].submit();
-  }
-});
+// form.addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   if (password.value === "") {
+//     error.style.display = "block";
+//   }
+//   if (
+//     phonenumber.value.length >= 9 &&
+//     password.value.length >= 6 &&
+//     phonenumber.classList.contains("valid") == true
+//   ) {
+//     document.forms["form"].submit();
+//   }
+// });

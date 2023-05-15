@@ -37,12 +37,12 @@
                 <a href="home.jsp"><img src="./assets/img/logo/logo.png" alt=""></a>
             </div>
             <div class="form">             
-                <form class="login_form" action="Login" method="post" name="form">
+                <form class="login_form" action="login" method="post" name="form">
                     <div class="input-wrapper">
                         <div class="font ">Email</div>
                         <input autocomplete="off" type="text" class="input" name="email" required placeholder="Please enter your Email">
                         <div class="font font2 ">Password</div>
-                        <input type="password" name="password" required placeholder="Please enter your Password">
+                        <input autocomplete="off" type="password" name="password" required placeholder="Please enter your Password">
                     </div>
 
                     <div class="input-wrapper" id="error">${message}</div>
@@ -54,7 +54,7 @@
                         <input type="submit" value="Log in">
                     </div>
                     <div class="input-form">
-                        <p class="input-form-register">Do not have an account? <a href="./register.html">Register</a></p>
+                        <p class="input-form-register">Do not have an account? <a href="view/register.jsp">Register</a></p>
                     </div>
                     <div class="input-form">
                         <p>Do not remember password? <a href="./forgotpassword.html">Forgot Password</a></p>
@@ -70,7 +70,7 @@
         </div>
         <!--Kết Thúc Phần Nội Dung-->
     </section>
-    <script src="../assets/js/login.js"></script>
+    <script src="./assets/js/login.js"></script>
 
 </body>
 </html>

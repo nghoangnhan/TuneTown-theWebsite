@@ -270,6 +270,7 @@ function getPlaylistSongs() {
             console.log(listSong);
 
             var listSongHTML = document.getElementById("playlist-songs");
+            listSongHTML.innerHTML = ``;
 
             listSong.forEach((song) => {
 
@@ -307,7 +308,7 @@ function getPlaylistSongs() {
 }
 
 // SHOW EDIT OPTION PLAYLIST
-const deleteCheckboxes = document.querySelectorAll(".delete-checkbox");
+const deleteCheckboxes = document.querySelectorAll("delete-checkbox");
 const editButton = document.getElementById("btn-edit");
 const deleteButton = document.getElementById("btn-delete");
 const cancelButton = document.getElementById("btn-cancel");
@@ -406,9 +407,11 @@ function showContextMenu(event) {
   // addToPlaylistItem.addEventListener("mouseout", closePlaylistDropdown);
   playlistDropdown.addEventListener("mouseover", showPlaylistDropdown);
   playlistDropdown.addEventListener("mouseout", closePlaylistDropdown);
+
   playlistItems.forEach((playlistItem) => {
     playlistItem.addEventListener("click", closePlaylistDropdown);
   });
+
   function closePlaylistDropdown(event) {
     if (
         !addToPlaylistItem.contains(event.relatedTarget) &&
@@ -427,6 +430,7 @@ function showContextMenu(event) {
   playlistItems.forEach((playlistItem) => {
     playlistItem.addEventListener("mouseover", showPlaylistOptions);
   });
+  playlistDropdown.addEventListener("mouseover", showPlaylistOptions);
   function showPlaylistOptions(event) {
     // Create Playlist DOM
     loadPLaylists();

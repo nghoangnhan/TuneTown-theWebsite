@@ -1,4 +1,4 @@
-package vn.hcmute.tunetown.controller;
+package vn.hcmute.tunetown.controller.Authentication;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
