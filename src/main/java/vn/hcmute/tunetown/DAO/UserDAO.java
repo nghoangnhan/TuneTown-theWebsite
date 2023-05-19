@@ -14,7 +14,7 @@ public class UserDAO {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public static User getUserByEmail(String email, String password) {
+    public static User getUserByEmailAndPassword(String email, String password) {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
         try {
             String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.userPassword = :password";
@@ -23,6 +23,55 @@ public class UserDAO {
             query.setParameter("password", password);
             User user = query.getSingleResult();
             return user;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+
+        }
+    }
+
+    public static User getUserByEmail(String email) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.email = :email ";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("email", email);
+            User user = query.getSingleResult();
+            return user;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+
+        }
+    }
+
+
+    public static String checkUserByEmail(String email) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.email = :email ";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("email", email);
+            User user = query.getSingleResult();
+            return user.getEmail();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+
+        }
+    }
+
+    public static String checkUserByUsername(String userName) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.userName = :userName ";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("userName", userName);
+            User user = query.getSingleResult();
+            return user.getUserName();
         } catch (NoResultException e) {
             return null;
         } finally {

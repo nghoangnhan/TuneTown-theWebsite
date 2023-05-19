@@ -29,7 +29,7 @@ public class logInServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         try {
-            User user = UserDAO.getUserByEmail(email, password);
+            User user = UserDAO.getUserByEmailAndPassword(email, password);
             if(user != null) {
                 GlobalUser.globalUserId = user.getUserID();
                 GlobalUser.globalUserName = user.getUserName();

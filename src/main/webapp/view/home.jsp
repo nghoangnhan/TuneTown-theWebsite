@@ -64,10 +64,11 @@
           </a>
 
 
-          <div class="nav-item text">
-            <input name="search-bar" type="text" placeholder="Search" />
-            <i class="fa fa-search"></i>
-          </div>
+            <!-- THANH SEARCH  -->
+            <div class="search-container">
+                <input id="search-content" name="search-bar" type="text" placeholder="Search" oninput="findSongs(this.value)" />
+                <div id="search-results" class="dropdown"></div>
+            </div>
 
           <div class="nav-item info">
             <div class="info">Hello ${username}</div>
@@ -83,7 +84,7 @@
               <ul id="option-profile">
                 <li><a href="loadProfile" methods="POST">Profile</a></li>
                 <li><a href="">Setting</a></li>
-                <li><a href="">Logout</a></li>
+                <li><a href="logOut">Logout</a></li>
               </ul>
             </div>
           </div>
@@ -245,7 +246,7 @@
 
       <!-- Song Item  -->
       <div class="title-song">Recommend Song</div>
-      <div class="wrap-song-item">
+      <div class="wrap-song-item" id="home-song">
         <div class="song-item nohover">
           <div class="song-info">
             <div class="song-info-title">Title</div>
@@ -254,35 +255,34 @@
           <div class="song-view-nohover">Listens</div>
         </div>
 
-          <c:forEach items="${listSong}" var="song" varStatus="status">
-            <c:if test="${status.index < 100}">
-              <div class="song-item" id="song-item-${song.getSongId()}" >
-                <div class="song-img">
-<%--                  <img id="${song.getSongId()}" src="data:image/jpg;base64,${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>--%>
-                  <img id="${song.getSongId()}" src="./assets/img/CoverArt/dontoliver.jpg" alt="" onclick="moveToControlBar(this)"/>
-                  <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
-                </div>
-                <div class="song-info">
-                  <div id ="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
-                  <div class="song-info-author" id="song-info-author-${song.getSongId()}">
-                    <c:forEach items="${song.getArtists()}" var="o" varStatus="st">
-                      <c:if test="${st.index != 0}">
-                        ,
-                      </c:if>
-                      ${o.getUserName()}
-                    </c:forEach>
-                  </div>
-                </div>
-                <div class="song-genre">Pop</div>
-                <div class="song-view">1,000,000</div>
+        <c:forEach items="${listSong}" var="song" varStatus="status">
+          <c:if test="${status.index < 100}">
+            <div class="song-item" id="song-item-${song.getSongId()}" >
+              <div class="song-img">
+                <img id="${song.getSongId()}"  src="./assets/img/CoverArt/dontoliver.jpg" alt="" onclick="moveToControlBar(this)"/>
+                <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
-            </c:if>
-          </c:forEach>
+              <div class="song-info" id="info-song">
+                <div id ="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
+                <div class="song-info-author" id="song-info-author-${song.getSongId()}">
+                  <c:forEach items="${song.getArtists()}" var="o" varStatus="st">
+                    <c:if test="${st.index != 0}">
+                      ,
+                    </c:if>
+                    ${o.getUserName()}
+                  </c:forEach>
+                </div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-view">1,000,000</div>
+            </div>
+          </c:if>
+        </c:forEach>
 
         <!-- End Song Item  -->
-        </div>
-
       </div>
+
+    </div>
     <!-- End Song Item  -->
 
     <!-- TAB PLAYLIST  -->

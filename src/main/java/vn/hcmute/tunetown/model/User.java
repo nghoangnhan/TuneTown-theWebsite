@@ -59,6 +59,14 @@ public class User implements Serializable {
         this.songs = songs;
         this.favoriteGenre = favoriteGenre;
     }
+    public User(String userName, String email, String userPassword, int sex, int roles) {
+        this.userName = userName;
+        this.email = email;
+        this.userPassword = userPassword;
+        this.sex = sex;
+        this.roles = roles;
+    }
+
 
     public int getUserID() {
         return userID;

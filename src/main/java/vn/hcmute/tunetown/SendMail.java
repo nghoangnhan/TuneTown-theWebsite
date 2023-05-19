@@ -4,8 +4,10 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import java.util.Random;
 
 public class SendMail {
+    public static int otp;
 
     public static void sendMail(String recieverMail) {
 
@@ -13,7 +15,7 @@ public class SendMail {
         String to = recieverMail;
 
         // Sender's email ID needs to be mentioned
-        String from = "sparkycreed@gmail.com";
+        String from = "bum.le.2k2@gmail.com";
 
         // Assuming you are sending email from through gmails smtp
         String host = "smtp.gmail.com";
@@ -34,7 +36,7 @@ public class SendMail {
 
             protected PasswordAuthentication getPasswordAuthentication() {
                 //setup app password reference https://support.google.com/accounts/answer/185833?hl=en
-                return new PasswordAuthentication(from, "lhvavugiocsbzjhe"); // or set up environment var APP_PASSWORD
+                return new PasswordAuthentication(from, "unnextvxrvlrzdvx");
 
             }
 
@@ -54,10 +56,16 @@ public class SendMail {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
-            message.setSubject("Có đơn hàng mới nè 2!", "UTF-8");
+            message.setSubject("Forget Password","UTF-8");
 
             // Now set the actual message
-            message.setText("Vietnam opening!");
+            Random random = new Random();
+            otp = random.nextInt(900000) + 100000; // Generates a random number between 100000 and 999999
+
+            // Set the OTP in the message text
+            String otpText = "Your OTP code to get password is: " + otp;
+            message.setText(otpText);
+
             System.out.println("sending...");
             // Send message
             Transport.send(message);
@@ -67,8 +75,4 @@ public class SendMail {
         }
 
     }
-    public static void main(String[] args) {
-        sendMail("haovu961@gmail.com");
-    }
-
 }

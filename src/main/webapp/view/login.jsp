@@ -60,12 +60,6 @@
                         <p>Do not remember password? <a href="./forgotpassword.html">Forgot Password</a></p>
                     </div>
                 </form>
-                <h2>Social Login</h2>
-                <ul class="icon-login">
-                    <li><i class="fa fa-facebook" aria-hidden="true"></i></li>
-                    <li><i class="fa fa-google" aria-hidden="true"></i></li>
-                    <li><i class="fa fa-twitter" aria-hidden="true"></i></li>
-                </ul>
             </div>
         </div>
         <!--Kết Thúc Phần Nội Dung-->

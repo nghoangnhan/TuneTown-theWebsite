@@ -281,10 +281,7 @@ function getPlaylistSongs() {
               });
 
               listSongHTML.innerHTML += `
-                        <div class="song-item">
-                          <div class="song-edit">
-                            <input type="checkbox" class="delete-checkbox" />
-                          </div>
+                        <div class="song-item playlisted">
                           <div class="song-ranking">1</div>
                           <div class="song-img">
                             <img src="${song.songPoster}" alt="" />
@@ -307,38 +304,38 @@ function getPlaylistSongs() {
     });
 }
 
-// SHOW EDIT OPTION PLAYLIST
-const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
-console.log(deleteCheckboxes)
-const editButton = document.getElementById("btn-edit");
-const deleteButton = document.getElementById("btn-delete");
-const cancelButton = document.getElementById("btn-cancel");
-editButton.addEventListener(
-    "click",
-    (showEditOption = () => {
-      deleteButton.classList.toggle("active");
-      cancelButton.classList.toggle("active");
-      [...deleteCheckboxes].forEach((item) => item.classList.toggle("active"));
-    })
-);
-deleteButton.addEventListener(
-    "click",
-    (deleteOption = () => {
-      const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
-      checkboxes.forEach((checkbox) => {
-        const songItem = checkbox.closest(".song-item");
-        songItem.remove();
-      });
-    })
-);
-cancelButton.addEventListener(
-    "click",
-    (removeOption = () => {
-      deleteButton.classList.remove("active");
-      cancelButton.classList.remove("active");
-      [...deleteCheckboxes].forEach((item) => item.classList.remove("active"));
-    })
-);
+// // SHOW EDIT OPTION PLAYLIST
+// const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
+// console.log(deleteCheckboxes)
+// const editButton = document.getElementById("btn-edit");
+// const deleteButton = document.getElementById("btn-delete");
+// const cancelButton = document.getElementById("btn-cancel");
+// editButton.addEventListener(
+//     "click",
+//     (showEditOption = () => {
+//       deleteButton.classList.toggle("active");
+//       cancelButton.classList.toggle("active");
+//       [...deleteCheckboxes].forEach((item) => item.classList.toggle("active"));
+//     })
+// );
+// deleteButton.addEventListener(
+//     "click",
+//     (deleteOption = () => {
+//       const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
+//       checkboxes.forEach((checkbox) => {
+//         const songItem = checkbox.closest(".song-item");
+//         songItem.remove();
+//       });
+//     })
+// );
+// cancelButton.addEventListener(
+//     "click",
+//     (removeOption = () => {
+//       deleteButton.classList.remove("active");
+//       cancelButton.classList.remove("active");
+//       [...deleteCheckboxes].forEach((item) => item.classList.remove("active"));
+//     })
+// );
 
 // RIGHT CLICK SONG ITEM
 // Show contextMenu
@@ -396,9 +393,6 @@ function showContextMenu(event) {
   `;
 
 
-  let rightClickedSongId = event.target.getAttribute("id");
-  rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
-  console.log(rightClickedSongId);
 
 
 
@@ -449,11 +443,17 @@ function showContextMenu(event) {
     if (isDropdownShown) songItem.classList.add("active");
   }
 
+
+  // rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
+  // console.log(rightClickedSongId);
+
   playlistItems.forEach((playlistItem) => {
     // playlistItem.addEventListener("click", addSongToPlaylist(rightClickedSongId));
     playlistItem.addEventListener("click",getPlaylistId=(e)=>{
-      const playlistID =e.target.getAttribute("id")
-      // console.log(playlistID);
+      const playlistID =e.target.getAttribute("id");
+      let rightClickedSongId = event.target.getAttribute("id");
+      rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
+      console.log("rightclickedSongId:" + rightClickedSongId);
       addSongToPlaylist(rightClickedSongId, playlistID);
     })
   });
@@ -498,5 +498,101 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
       console.log("Error: " + xhr.responseText);
     }
   });
+}
+
+
+//DELETE SONG ITEM TRONG PLAYLIST
+// Show contextMenu Trong Playlist
+const songItemsPlaylist = document.querySelectorAll(".song-item.playlisted");
+console.log(songItemsPlaylist);
+songItemsPlaylist.forEach((songItemPlaylist) => {
+  songItemPlaylist.addEventListener("contextmenu", showContextMenuPlaylist = (event) => {
+    event.preventDefault(); // Ngăn chặn hiển thị menu chuột phải mặc định của trình duyệt
+    const songItem = event.target.closest(".song-item");
+    const songItems = document.querySelectorAll(".song-item");
+    songItem.classList.add("active");
+
+    // Xóa context menu cũ nếu nó tồn tại
+    if (activeContextMenu) {
+      activeContextMenu.remove();
+    }
+    if (songItem.classList.contains("active")) {
+      songItems.forEach((item) => item.classList.remove("active"));
+    }
+    // Tạo context menu mới
+    const contextMenu = document.createElement("div");
+    contextMenu.className = "context-menu";
+    contextMenu.innerHTML = `
+        <ul>  
+          <li>Share</li>
+          <li>Copy Link</li>
+          <li class="remove-SongItem-playlist">Remove from Playlist</li>
+        </ul>
+      `;
+    // Lấy vị trí hiển thị của context menu
+    const songItemRect = songItem.getBoundingClientRect();
+    contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
+    contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
+
+    // Thêm contextmenu vào SongItem
+    songItem.appendChild(contextMenu);
+    activeContextMenu = contextMenu; // Cập nhật trạng thái context menu đang hiển thị
+    songItem.classList.add("active");
+    document.addEventListener("click", function hideContextMenu() {
+      // Đóng context menu khi click vào bất kỳ đâu trên trang
+      if (activeContextMenu === contextMenu) {
+        activeContextMenu = null; // Gán giá trị null nếu context menu được đóng bằng cách click vào một playlist item
+        songItem.classList.remove("active");
+      }
+      document.removeEventListener("click", hideContextMenu);
+      // songItem.classList.remove("active");
+      contextMenu.remove();
+    });
+
+    // REMOVE SONG ITEM FROM PLAYLIST
+    const removeSongItemPlaylist = contextMenu.querySelector(
+        ".remove-SongItem-playlist"
+    );
+    removeSongItemPlaylist.addEventListener("click", removeSongItemPlaylistFunc);
+
+    function removeSongItemPlaylistFunc() {
+      songItem.remove();
+    }
+  });
+});
+
+// // Find Songs
+function findSongs(searchQuery) {
+  var listSongHTML = document.getElementById("home-song");
+  var songItems = listSongHTML.getElementsByClassName("song-item");
+
+  var dropdown = document.getElementById("search-results");
+  dropdown.innerHTML = ""; // Clear previous results
+
+  for (var i = 0; i < songItems.length; i++) {
+    var songTitleElement = songItems[i].querySelector(".song-info-title");
+    var songTitle = songTitleElement.textContent.toLowerCase();
+
+    if (songTitle.includes(searchQuery.toLowerCase())) {
+      var songItemClone = songItems[i].cloneNode(true);// Resize each item within the dropdown
+      // Resize the image within the cloned song item
+      var songImg = songItemClone.querySelector(".song-img img");
+      songImg.style.width = "50px"; // Adjust the desired width
+      songImg.style.height = "50px"; // Adjust the desired height
+
+      songItemClone.addEventListener("click", function () {
+        var searchContent = document.getElementById("search-content");
+        searchContent.value = this.querySelector(".song-info-title").textContent; // Set search bar value to song title
+        dropdown.innerHTML = ""; // Clear the dropdown after selection
+      });
+      dropdown.appendChild(songItemClone); // Append the cloned item to the dropdown
+    }
+  }
+
+  if (dropdown.innerHTML === "") {
+    dropdown.style.display = "none"; // Hide the dropdown if no results
+  } else {
+    dropdown.style.display = "block"; // Show the dropdown with results
+  }
 }
 
