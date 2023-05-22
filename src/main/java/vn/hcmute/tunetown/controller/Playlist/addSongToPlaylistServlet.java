@@ -29,6 +29,6 @@ public class addSongToPlaylistServlet extends HttpServlet {
         playlist.getPlaylistSongs().add(song);
 
         playlistDAO.modifyPlaylist(playlist);
-        playlistDAO.modifyPlaylist(playlist);
+//        playlistDAO.modifyPlaylist(playlist);
     }
 }

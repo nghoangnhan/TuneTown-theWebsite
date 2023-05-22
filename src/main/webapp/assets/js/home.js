@@ -257,7 +257,7 @@ function showPlaylistFeed(musicfeed, playlistfeed) {
 function getPlaylistSongs() {
   console.log(currentPlaylistId);
     $.ajax({
-        url: "/TuneTown_war_exploded/loadPlaylistSongs",
+        url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylistSongs",
         type: "post",
         dataType: "json",
         data: {
@@ -284,7 +284,7 @@ function getPlaylistSongs() {
                         <div class="song-item playlisted">
                           <div class="song-ranking">1</div>
                           <div class="song-img">
-                            <img src="${song.songPoster}" alt="" />
+                            <img src="${song.songPoster}" alt="" onclick="moveToControlBar(this)"/>
                           </div>
                           <div class="song-info">
                             <div class="song-info-title">${song.songName}</div>
@@ -305,37 +305,37 @@ function getPlaylistSongs() {
 }
 
 // // SHOW EDIT OPTION PLAYLIST
-// const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
-// console.log(deleteCheckboxes)
-// const editButton = document.getElementById("btn-edit");
-// const deleteButton = document.getElementById("btn-delete");
-// const cancelButton = document.getElementById("btn-cancel");
-// editButton.addEventListener(
-//     "click",
-//     (showEditOption = () => {
-//       deleteButton.classList.toggle("active");
-//       cancelButton.classList.toggle("active");
-//       [...deleteCheckboxes].forEach((item) => item.classList.toggle("active"));
-//     })
-// );
-// deleteButton.addEventListener(
-//     "click",
-//     (deleteOption = () => {
-//       const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
-//       checkboxes.forEach((checkbox) => {
-//         const songItem = checkbox.closest(".song-item");
-//         songItem.remove();
-//       });
-//     })
-// );
-// cancelButton.addEventListener(
-//     "click",
-//     (removeOption = () => {
-//       deleteButton.classList.remove("active");
-//       cancelButton.classList.remove("active");
-//       [...deleteCheckboxes].forEach((item) => item.classList.remove("active"));
-//     })
-// );
+const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
+console.log(deleteCheckboxes)
+const editButton = document.getElementById("btn-edit");
+const deleteButton = document.getElementById("btn-delete");
+const cancelButton = document.getElementById("btn-cancel");
+editButton.addEventListener(
+    "click",
+    (showEditOption = () => {
+      deleteButton.classList.toggle("active");
+      cancelButton.classList.toggle("active");
+      [...deleteCheckboxes].forEach((item) => item.classList.toggle("active"));
+    })
+);
+deleteButton.addEventListener(
+    "click",
+    (deleteOption = () => {
+      const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
+      checkboxes.forEach((checkbox) => {
+        const songItem = checkbox.closest(".song-item");
+        songItem.remove();
+      });
+    })
+);
+cancelButton.addEventListener(
+    "click",
+    (removeOption = () => {
+      deleteButton.classList.remove("active");
+      cancelButton.classList.remove("active");
+      [...deleteCheckboxes].forEach((item) => item.classList.remove("active"));
+    })
+);
 
 // RIGHT CLICK SONG ITEM
 // Show contextMenu
@@ -345,9 +345,9 @@ songItems.forEach((songItem) => {
   songItem.addEventListener("contextmenu", showContextMenu);
 });
 
+
+
 let playlists;
-
-
 
 
 function showContextMenu(event) {
@@ -448,9 +448,8 @@ function showContextMenu(event) {
   // console.log(rightClickedSongId);
 
   playlistItems.forEach((playlistItem) => {
-    // playlistItem.addEventListener("click", addSongToPlaylist(rightClickedSongId));
     playlistItem.addEventListener("click",getPlaylistId=(e)=>{
-      const playlistID =e.target.getAttribute("id");
+      const playlistID = e.target.getAttribute("id");
       let rightClickedSongId = event.target.getAttribute("id");
       rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
       console.log("rightclickedSongId:" + rightClickedSongId);
@@ -462,7 +461,7 @@ function showContextMenu(event) {
 
 function loadPLaylists(){
   $.ajax({
-    url: "/TuneTown_war_exploded/loadPlaylists",
+    url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylists",
     type: "post",
     dataType: "json",
     success: function (data) {
@@ -484,7 +483,7 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
   playlistId = deleteLetter(playlistId, "my-playlist-");
 
   $.ajax({
-    url: "/TuneTown_war_exploded/addSongToPlaylist",
+    url: "/TuneTown_theWebsite_main_war_exploded/addSongToPlaylist",
     type: "post",
     data: {
       songId : rightClickedSongId,

@@ -18,6 +18,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobInfo;
 import com.google.common.collect.ImmutableMap;
 import com.google.firebase.FirebaseApp;
@@ -44,15 +45,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 @WebServlet(urlPatterns = {"/upload"})
 @MultipartConfig
 public class uploadSong extends HttpServlet {
+    private Song song;
+    private String downloadUrlData;
+    private String downloadUrlImage;
+    private String songName;
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        songName = req.getParameter("songName");
 
         InputStream serviceAccount;
 
@@ -84,10 +94,21 @@ public class uploadSong extends HttpServlet {
                             .setContentType(filePart.getContentType())
                             .setMetadata(ImmutableMap.of("firebaseStorageDownloadTokens", appCheckToken))
                             .build();
+
                     // Upload the file to Firebase Storage
                     storage.create(blobInfo, fileContent,
                             Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
+
+                    // Construct the download URL manually
+                    downloadUrlImage = "https://firebasestorage.googleapis.com/v0/b/" +
+                            "tunetowntest-e968a.appspot.com" +
+                            "/o/" +
+                            "images%2F" + fileName +
+                            "?alt=media";
+
+                    System.out.println("Image: "+downloadUrlImage);
+
                 } catch (Exception e) {
                     // Handle any other exception
                     throw new RuntimeException(e);
@@ -108,16 +129,31 @@ public class uploadSong extends HttpServlet {
                             .setContentType(filePart2.getContentType())
                             .setMetadata(ImmutableMap.of("firebaseStorageDownloadTokens", appCheckToken))
                             .build();
+
                     // Upload the file to Firebase Storage
                     storage.create(blobInfo, fileContent2,
                             Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
+
+                    // Construct the download URL manually
+                    downloadUrlData = "https://firebasestorage.googleapis.com/v0/b/" +
+                            "tunetowntest-e968a.appspot.com" +
+                            "/o/" +
+                            "audios%2F" + fileName2 +
+                            "?alt=media";
+
+                    System.out.println("Data: "+downloadUrlData);
+
                 } catch (Exception e) {
                     // Handle any other exception
                     throw new RuntimeException(e);
                 } finally {
                     fileContent2.close();
                 }
+                // Add to SQL
+                song = new Song(songName, downloadUrlImage, downloadUrlData, 10102312, 12302103);
+                SongDAO songDAO = new SongDAO();
+                songDAO.uploadSong(song);
 
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);

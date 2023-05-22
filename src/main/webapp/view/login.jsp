@@ -57,7 +57,7 @@
                         <p class="input-form-register">Do not have an account? <a href="view/register.jsp">Register</a></p>
                     </div>
                     <div class="input-form">
-                        <p>Do not remember password? <a href="./forgotpassword.html">Forgot Password</a></p>
+                        <p>Do not remember password? <a href="view/forgetPassword.jsp">Forget Password</a></p>
                     </div>
                 </form>
             </div>

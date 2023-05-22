@@ -34,30 +34,31 @@ public class loadPlaylistSongsServlet extends HttpServlet {
 
         PrintWriter out = resp.getWriter();
 
-        for (Song song : playlist.getPlaylistSongs()){
+        for (Song song : playlist.getPlaylistSongs()) {
             List<User> listArtist = song.getArtists();
             String artists = "";
-            for (User artist: song.getArtists()){
+            for (User artist : song.getArtists()) {
                 artists += artist.getUserName() + " ";
             }
             out.println(
                     "        <div class=\"song-item\">\n" +
-                    "          <div class=\"song-edit\">\n" +
-                    "            <input type=\"checkbox\" class=\"delete-checkbox\" />\n" +
-                    "          </div>\n" +
-                    "          <div class=\"song-ranking\">1</div>\n" +
-                    "          <div class=\"song-img\">\n" +
-                    "            <img src=\""+ song.getSongPoster() +"\" alt=\"\" />\n" +
-                    "          </div>\n" +
-                    "          <div class=\"song-info\">\n" +
-                    "            <div class=\"song-info-title\">" + song.getSongName() + "</div>\n" +
-                    "            <div class=\"song-info-author\">" + artists +"</div>\n" +
-                    "          </div>\n" +
-                    "          <div class=\"song-genre\">Pop</div>\n" +
-                    "          <div class=\"song-view\">1,234,567</div>\n" +
-                    "        </div>");
-        }
+                            "          <div class=\"song-edit\">\n" +
+                            "            <input type=\"checkbox\" class=\"delete-checkbox\" />\n" +
+                            "          </div>\n" +
+                            "          <div class=\"song-ranking\">1</div>\n" +
+                            "          <div class=\"song-img\">\n" +
+                            "            <img src=\"" + song.getSongPoster() + "\" alt=\"\" />\n" +
+                            "              <div >" + song.getSongData() + "</div>" +
 
+                            "          </div>\n" +
+                            "          <div class=\"song-info\">\n" +
+                            "            <div class=\"song-info-title\">" + song.getSongName() + "</div>\n" +
+                            "            <div class=\"song-info-author\">" + artists + "</div>\n" +
+                            "          </div>\n" +
+                            "          <div class=\"song-genre\">Pop</div>\n" +
+                            "          <div class=\"song-view\">1,234,567</div>\n" +
+                            "        </div>");
+        }
     }
 
     @Override

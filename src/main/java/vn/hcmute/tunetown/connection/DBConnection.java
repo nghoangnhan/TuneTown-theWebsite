@@ -11,7 +11,7 @@ public class DBConnection {
     private final String portNumber = "3306";
     private final String instance = "";
     private final String userID = "root";
-    private final String password = "Hoangnhan217";
+    private final String password = "023345458";
 
     public Connection getConnection() throws Exception{
         String url = "jdbc:mysql://" + serverName + ":" + portNumber + "//" + instance + ";databaseName=" + dbName;

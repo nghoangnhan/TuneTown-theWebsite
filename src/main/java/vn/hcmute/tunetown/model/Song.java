@@ -54,6 +54,13 @@ public class Song {
         this.amountOfListens = amountOfListens;
         this.playlists = playlists;
     }
+    public Song(String songName, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens) {
+        this.songName = songName;
+        this.songPoster = songPoster;
+        this.songData = songData;
+        this.amountOfLikes = amountOfLikes;
+        this.amountOfListens = amountOfListens;
+    }
 
     public Integer getSongId() {
         return songId;

@@ -1,6 +1,6 @@
 function createPlaylist() {
     $.ajax({
-        url: "/TuneTown_war_exploded/createPlaylist",
+        url: "/TuneTown_theWebsite_main_war_exploded/createPlaylist",
         type: "get",
         success: function () {
             loadPLaylist();
@@ -15,27 +15,23 @@ function createPlaylist() {
 
 function loadPLaylist(){
     $.ajax({
-        url: "/TuneTown_war_exploded/loadPlaylists",
+        url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylists",
         type: "post",
         dataType: "json",
         success: function (data) {
-
-            //console.log(data);
             var jsonData = JSON.parse(JSON.stringify(data));
-
             let myPlaylistHTML = document.getElementById("my-playlist");
             myPlaylistHTML.innerHTML = ``;
 
             jsonData.forEach((playlist) => {
                 myPlaylistHTML.innerHTML += `
-                        <div class="my-playlist-item" id="playlist-id-${playlist.playlistId}" onclick="loadPlaylistSongs(this)">
-                      ${playlist.playlistName}
-          </div>
-                `
-            })
-
+                    <div class="my-playlist-item" id="playlist-id-${playlist.playlistId}" onclick="loadPlaylistSongs(this)">
+                        ${playlist.playlistName}
+                    </div>
+                `;
+            });
         },
-        error: function (xhr){
+        error: function (xhr) {
             console.log("Error: " + xhr.responseText);
         }
     });

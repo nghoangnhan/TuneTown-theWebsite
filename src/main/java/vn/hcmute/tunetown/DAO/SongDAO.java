@@ -29,6 +29,7 @@ public class SongDAO {
             TypedQuery<Song> songTypedQuery = em.createQuery(jpql, Song.class);
             songTypedQuery.setParameter("songId", songId);
             Song song = songTypedQuery.getSingleResult();
+            System.out.println(song);
             return song;
         } catch (NoResultException e) {
             e.printStackTrace();
@@ -77,12 +78,7 @@ public class SongDAO {
                     "values (?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setString(1, song.getSongName());
-
-            //image processing
-            byte[] imageByte = Base64.getDecoder().decode(song.getSongPoster());
-            InputStream songPoster = new ByteArrayInputStream(imageByte);
-            ps.setBlob(2, songPoster);
-
+            ps.setString(2, song.getSongPoster());
             ps.setString(3, song.getSongData());
             ps.setInt(4, song.getAmountOfLikes());
             ps.setInt(5, song.getAmountOfListens());

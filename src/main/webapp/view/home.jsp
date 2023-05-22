@@ -259,7 +259,7 @@
           <c:if test="${status.index < 100}">
             <div class="song-item" id="song-item-${song.getSongId()}" >
               <div class="song-img">
-                <img id="${song.getSongId()}"  src="./assets/img/CoverArt/dontoliver.jpg" alt="" onclick="moveToControlBar(this)"/>
+                <img id="${song.getSongId()}"  src="${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>
                 <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
               <div class="song-info" id="info-song">
