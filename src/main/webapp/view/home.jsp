@@ -78,12 +78,11 @@
             <div class="wrap-option-profile">
               <img
                       id="avatar-profile"
-                      src="./assets/img/Ava/TT3.jpg"
+                      src="${avatar}"
                       alt="avatar"
               />
               <ul id="option-profile">
                 <li><a href="loadProfile" methods="POST">Profile</a></li>
-                <li><a href="">Setting</a></li>
                 <li><a href="logOut">Logout</a></li>
               </ul>
             </div>

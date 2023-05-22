@@ -83,8 +83,6 @@ public class loadPlaylistSongsServlet extends HttpServlet {
             jsonArray.put(jsonSong);
         }
 
-        System.out.println(jsonArray);
-
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(jsonArray.toString());

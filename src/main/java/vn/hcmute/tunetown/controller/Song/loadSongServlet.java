@@ -42,6 +42,7 @@ public class loadSongServlet extends HttpServlet {
                 List<Playlist> listPlaylist = playlistDAO.getAllPlaylistByUserId(loggedUser.getUserID());
                 req.setAttribute("listPlaylist", listPlaylist);
                 req.setAttribute("username", loggedUser.getUserName());
+                req.setAttribute("avatar", loggedUser.getUserAvatar());
             }
         } catch (Exception e)
         {

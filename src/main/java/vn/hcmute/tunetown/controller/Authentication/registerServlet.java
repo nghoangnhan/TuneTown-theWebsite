@@ -27,7 +27,7 @@ public class registerServlet extends HttpServlet {
 
         String emailCheck = UserDAO.checkUserByEmail(email);
         String usernameCheck = UserDAO.checkUserByUsername(username);
-        User user = new User(username,email,password,gender,1);
+        User user = new User(username,null,email,password,gender,1,null,null);
         try {
             if(emailCheck != null && emailCheck.equals(email)){
                 message = "Email existed!";

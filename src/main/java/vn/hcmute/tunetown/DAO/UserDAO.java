@@ -105,7 +105,7 @@ public class UserDAO {
             ps.setString(1, user.getUserName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getUserPassword());
-            ps.setDate(4, (Date) user.getBirthDate());
+            ps.setString(4, user.getBirthDate());
             ps.setInt(5, user.getSex());
             ps.setInt(6, user.getCountry());
             ps.setString(7, user.getUserBio());
@@ -123,6 +123,20 @@ public class UserDAO {
         trans.begin();
         try {
             em.persist(user);
+            trans.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            trans.rollback();
+        } finally {
+            em.close();
+        }
+    }
+    public static void update(User user) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        trans.begin();
+        try {
+            em.merge(user);
             trans.commit();
         } catch (Exception e) {
             System.out.println(e);

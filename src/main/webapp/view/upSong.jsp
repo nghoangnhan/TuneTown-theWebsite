@@ -41,17 +41,17 @@
       <div class="wrap-form">
         <form action="upload" method="post" enctype="multipart/form-data">
           <h1 class="input_title">Song Name</h1>
-          <input class ="input-song-name" name="songName" type="text" placeholder="Your song name" />
+          <input class ="input-song-name" name="songName" type="text" placeholder="Your song name" required/>
 
           <h1 class="input_title">Song Image</h1>
           <div class="input-file-container">  
-            <input class="input-btn" name="songImage" type="file" placeholder="Input PNG,JPG,..." accept="image/png, image/gif, image/jpeg" onclick="uploadImage()"/>
+            <input class="input-btn" name="songImage" type="file" placeholder="Input PNG,JPG,..." accept="image/png, image/gif, image/jpeg" onclick="uploadImage()" required/>
           </div>
 
           <div class="input_title">Song</div>
             <div class="input-file-container">   
                        
-              <input class="input-btn" name="songData" type="file" placeholder="Input mp3,mp4..." accept=".mp4,.mp3,audio/*" onclick="uploadImage()"/>
+              <input class="input-btn" name="songData" type="file" placeholder="Input mp3,mp4..." accept=".mp4,.mp3,audio/*" onclick="uploadImage()" required/>
             </div>
           <div class="submit-btn">
             <input type="submit"  />

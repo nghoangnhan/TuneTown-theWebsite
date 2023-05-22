@@ -64,7 +64,7 @@
         <input type="submit" value="Register">
       </div>
       <div class="input-form">
-        <p>Return To Login <a href="/TuneTown_theWebsite_main_war_exploded/">Return</a></p>
+        <p>Return To Login <a href="/TuneTown_theWebsite_war_exploded/">Return</a></p>
       </div>
     </div>
   </form>

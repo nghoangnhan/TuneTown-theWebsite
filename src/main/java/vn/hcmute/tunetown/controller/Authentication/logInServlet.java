@@ -39,7 +39,7 @@ public class logInServlet extends HttpServlet {
 
                 url = "/loadSong";
                 if (user.getRoles() == 0) {
-                    url ="/view/upSong.html";
+                    url ="/view/upSong.jsp";
                 }
             }
             else{

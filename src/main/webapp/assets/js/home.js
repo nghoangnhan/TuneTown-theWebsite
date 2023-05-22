@@ -257,7 +257,7 @@ function showPlaylistFeed(musicfeed, playlistfeed) {
 function getPlaylistSongs() {
   console.log(currentPlaylistId);
     $.ajax({
-        url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylistSongs",
+        url: "/TuneTown_theWebsite_war_exploded/loadPlaylistSongs",
         type: "post",
         dataType: "json",
         data: {
@@ -461,7 +461,7 @@ function showContextMenu(event) {
 
 function loadPLaylists(){
   $.ajax({
-    url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylists",
+    url: "/TuneTown_theWebsite_war_exploded/loadPlaylists",
     type: "post",
     dataType: "json",
     success: function (data) {
@@ -483,7 +483,7 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
   playlistId = deleteLetter(playlistId, "my-playlist-");
 
   $.ajax({
-    url: "/TuneTown_theWebsite_main_war_exploded/addSongToPlaylist",
+    url: "/TuneTown_theWebsite_war_exploded/addSongToPlaylist",
     type: "post",
     data: {
       songId : rightClickedSongId,
@@ -594,4 +594,3 @@ function findSongs(searchQuery) {
     dropdown.style.display = "block"; // Show the dropdown with results
   }
 }
-

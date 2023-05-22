@@ -66,13 +66,12 @@
             <div class="wrap-option-profile">
               <img
                       id="avatar-profile"
-                      src="./assets/img/Ava/TT3.jpg"
+                      src="${avatar}"
                       alt="avatar"
               />
               <ul id="option-profile">
-                <li><a href="./profile.html">Profile</a></li>
-                <li><a href="">Setting</a></li>
-                <li><a href="">Logout</a></li>
+                <li><a href="">Profile</a></li>
+                <li><a href="logOut">Logout</a></li>
               </ul>
             </div>
           </div>
@@ -83,53 +82,51 @@
   <!-- END THANH BÊN PLAYLIST  -->
 
   <!-- WRAP FORM  -->
-  <div class="updateInfor-form" action="">
-    <div class="wrapper">
-      <div class="title">Update Informations</div>
-      <div class="form">
-        <div class="inputfield">
-          <label>First Name</label>
-          <input value="${user.getUserName()}" type="text" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Last Name</label>
-          <input value="Nguyen Huynh" type="text" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Password</label>
-          <input value="${user.getUserPassword()}" type="password" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Birthday</label>
-          <input value="${user.getBirthDate()}" type="date" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Gender</label>
-          <div class="custom_select">
-            <select>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
+  <form action="modifyProfile" method="post" enctype="multipart/form-data">
+    <div class="updateInfor-form">
+      <div class="wrapper">
+        <div class="title">Update Informations</div>
+        <div class="form">
+          <div class="inputfield">
+            <label>Username</label>
+            <input value="${user.getUserName()}" name="username" type="text" class="input" />
           </div>
-        </div>
-        <div class="inputfield">
-          <label>Email Address</label>
-          <input value="${user.getEmail()}" type="text" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Phone Number</label>
-          <input value="0123456789" type="text" class="input" />
-        </div>
-        <div class="inputfield">
-          <label>Address</label>
-          <input value="${user.getUserBio()}" class="textarea" />
-        </div>
-        <div class="inputfield">
-          <input type="submit" value="Update" class="btn" />
+          <div class="inputfield">
+            <label>Password</label>
+            <input value="${user.getUserPassword()}" name="password" type="password" class="input" />
+          </div>
+          <div class="inputfield">
+            <label>Birthday</label>
+            <input value="${user.getBirthDate()}" name="birthdate" type="date" class="input" />
+          </div>
+          <div class="inputfield">
+            <label>Gender</label>
+            <div class="custom_select" name="gender">
+              <select>
+                <option value="0">Male</option>
+                <option value="1">Female</option>
+              </select>
+            </div>
+          </div>
+          <div class="inputfield">
+            <label>Email Address</label>
+            <input value="${user.getEmail()}" name="email" type="text" class="input" />
+          </div>
+          <div class="inputfield">
+            <label>Bio</label>
+            <input value="${user.getUserBio()}" name="userBio" class="textarea" />
+          </div>
+          <div class="input-file-container">
+            <label>Avatar</label>
+            <input class="input-btn" name="userAvatar" type="file" placeholder="Input PNG,JPG,..." accept="image/png, image/gif, image/jpeg" onclick="uploadImage()" required/>
+          </div>
+          <div class="inputfield">
+            <input type="submit" value="Update" class="btn" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
   <!-- END FORM  -->
 
   <!-- HISTORY -->

@@ -23,7 +23,7 @@ public class User implements Serializable {
 
     private String userPassword;
 
-    private Date birthDate;
+    private String birthDate;
 
     private int sex;
 
@@ -32,6 +32,7 @@ public class User implements Serializable {
     private String userBio;
 
     private int roles;
+    private String userAvatar;
 
     @ManyToMany
     private List<Song> songs;
@@ -46,7 +47,7 @@ public class User implements Serializable {
         userBio = "";
     }
 
-    public User(int userID, String userName, String email, String userPassword, Date birthDate, int sex, int country, String userBio, int roles, List<Song> songs, List<Genre> favoriteGenre) {
+    public User(int userID, String userName, String email, String userPassword, String birthDate, int sex, int country, String userBio, int roles, List<Song> songs, List<Genre> favoriteGenre, String userAvatar) {
         this.userID = userID;
         this.userName = userName;
         this.email = email;
@@ -58,13 +59,28 @@ public class User implements Serializable {
         this.roles = roles;
         this.songs = songs;
         this.favoriteGenre = favoriteGenre;
+        this.userAvatar = userAvatar;
     }
-    public User(String userName, String email, String userPassword, int sex, int roles) {
+    public User(int userID, String userName, String birthDate, String email, String userPassword, int sex, int roles,String userBio, String userAvatar) {
+        this.userID = userID;
         this.userName = userName;
+        this.birthDate = birthDate;
         this.email = email;
         this.userPassword = userPassword;
         this.sex = sex;
         this.roles = roles;
+        this.userBio = userBio;
+        this.userAvatar = userAvatar;
+    }
+    public User(String userName, String birthDate, String email, String userPassword, int sex, int roles,String userBio, String userAvatar) {
+        this.userName = userName;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.userPassword = userPassword;
+        this.sex = sex;
+        this.roles = roles;
+        this.userBio = userBio;
+        this.userAvatar = userAvatar;
     }
 
 
@@ -100,11 +116,11 @@ public class User implements Serializable {
         this.userPassword = userPassword;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -138,5 +154,13 @@ public class User implements Serializable {
 
     public void setRoles(int roles) {
         this.roles = roles;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 }

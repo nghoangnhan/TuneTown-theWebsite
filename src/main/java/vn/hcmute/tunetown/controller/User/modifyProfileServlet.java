@@ -1,38 +1,18 @@
-package vn.hcmute.tunetown.controller.Song;
+package vn.hcmute.tunetown.controller.User;
 
-
-
-//import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-//import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-//import com.google.api.client.googleapis.media.MediaHttpUploader;
-//import com.google.api.client.http.HttpTransport;
-//import com.google.api.client.json.JsonFactory;
-//import com.google.api.client.json.JsonObjectParser;
-//import com.google.api.client.json.JsonParser;
-//import com.google.api.client.json.JsonParserFactory;
-//import com.google.api.services.drive.Drive;
-//import com.google.api.services.drive.DriveScopes;
-//import com.google.api.services.drive.model.File;
-
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.Drive;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import com.google.common.collect.ImmutableMap;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.StorageClient;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import vn.hcmute.tunetown.DAO.SongDAO;
-import vn.hcmute.tunetown.connection.GGDriveConnection;
-import vn.hcmute.tunetown.model.Song;
-import com.google.cloud.storage.Storage;
-
+import vn.hcmute.tunetown.DAO.UserDAO;
+import vn.hcmute.tunetown.GlobalUser;
+import vn.hcmute.tunetown.model.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -41,29 +21,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.security.GeneralSecurityException;
+import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 
-@WebServlet(urlPatterns = {"/upload"})
+@WebServlet(urlPatterns = {"/modifyProfile"})
 @MultipartConfig
-public class uploadSong extends HttpServlet {
-    private Song song;
-    private String downloadUrlData;
-    private String downloadUrlImage;
-    private String songName;
-
+public class modifyProfileServlet extends HttpServlet {
+    private String downloadUrlAvatar;
+    private User userUpdate;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String url = "/view/profile.jsp";
 
-        songName = req.getParameter("songName");
-        String url = "/login";
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserById(GlobalUser.globalUserId);
+
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        String birthdate = req.getParameter("birthdate");
+//        int gender = Integer.parseInt(req.getParameter("gender"));
+        String email  = req.getParameter("email");
+        String userBio = req.getParameter("userBio");
 
         InputStream serviceAccount;
 
@@ -88,7 +68,7 @@ public class uploadSong extends HttpServlet {
                         .getBytes());
 
                 // Upload Image to Firebase
-                Part filePart = req.getPart("songImage");
+                Part filePart = req.getPart("userAvatar");
                 String fileName = filePart.getSubmittedFileName();
                 InputStream fileContent = filePart.getInputStream();
                 try {
@@ -105,7 +85,7 @@ public class uploadSong extends HttpServlet {
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
 
                     // Construct the download URL manually
-                    downloadUrlImage = "https://firebasestorage.googleapis.com/v0/b/" +
+                    downloadUrlAvatar = "https://firebasestorage.googleapis.com/v0/b/" +
                             "tunetowntest-e968a.appspot.com" +
                             "/o/" +
                             "images%2F" + fileName +
@@ -119,49 +99,38 @@ public class uploadSong extends HttpServlet {
                     fileContent.close();
                 }
 
+                // Check if user has an existing avatar
+                if (user.getUserAvatar() != null && !user.getUserAvatar().isEmpty()) {
+                    // Get the file name of the existing avatar
+                    String existingFileName = user.getUserAvatar().substring(user.getUserAvatar().lastIndexOf("/") + 1);
 
-                // Upload MP3 file to storage
-                Part filePart2 = req.getPart("songData");
-                String fileName2 = filePart2.getSubmittedFileName();
-                InputStream fileContent2 = filePart2.getInputStream();
-                try {
-                    Storage storage = StorageClient.getInstance(app).bucket("tunetowntest-e968a.appspot.com").getStorage();
+                    // URL-decode the file name
+                    existingFileName = URLDecoder.decode(existingFileName, "UTF-8");
 
-                    BlobInfo blobInfo = BlobInfo.newBuilder("tunetowntest-e968a.appspot.com", "audios/" + fileName2)
-                            .setContentType(filePart2.getContentType())
-                            .setMetadata(ImmutableMap.of("firebaseStorageDownloadTokens", appCheckToken))
-                            .build();
-
-                    // Upload the file to Firebase Storage
-                    storage.create(blobInfo, fileContent2,
-                            Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
-                            Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
-
-                    // Construct the download URL manually
-                    downloadUrlData = "https://firebasestorage.googleapis.com/v0/b/" +
-                            "tunetowntest-e968a.appspot.com" +
-                            "/o/" +
-                            "audios%2F" + fileName2 +
-                            "?alt=media";
-
-
-                } catch (Exception e) {
-                    // Handle any other exception
-                    throw new RuntimeException(e);
-                } finally {
-                    fileContent2.close();
+                    // Extract the file name from the decoded string
+                    String fileName2 = existingFileName.substring(existingFileName.lastIndexOf("/") + 1);
+                    String fileName3 = fileName2.substring(0, fileName2.indexOf("?"));
+                    // Delete the existing avatar from Firebase Storage
+                    try {
+                        Storage storage = StorageClient.getInstance(app).bucket().getStorage();
+                        BlobId blobId = BlobId.of("tunetowntest-e968a.appspot.com", "images/" + fileName3);
+                        storage.delete(blobId);
+                    } catch (Exception e) {
+                        // Handle any exception during deletion
+                        throw new RuntimeException(e);
+                    }
                 }
-                // Add to SQL
-                song = new Song(songName, downloadUrlImage, downloadUrlData, 1000000, 1000000);
-                SongDAO songDAO = new SongDAO();
-                songDAO.uploadSong(song);
 
+                userUpdate = new User(user.getUserID(), username, birthdate, email, password, 0, user.getRoles(), userBio, downloadUrlAvatar);
+                UserDAO.update(userUpdate);
                 url = "/loadSong";
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
             }
         }
-        getServletContext().getRequestDispatcher(url).forward(req, resp);
+        req.setAttribute("user", userUpdate);
+        getServletContext().getRequestDispatcher(url).forward(req,resp);
+
     }
 
     @Override
