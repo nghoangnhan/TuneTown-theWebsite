@@ -230,13 +230,21 @@ function deleteLetter(str, letter) {
 
 // CONTENT FEED CHANGE EVENT
 var currentPlaylistId;
+
+var btnBackHome = document.getElementById("btn-back-home");
+const musicfeed = document.getElementById("music-feed");
+const playlistfeed = document.getElementById("playlist-feed");
+
+function handleBackHomeClick() {
+  showMusicFeed(musicfeed, playlistfeed);
+}
+const btnHome = document.getElementById("bt-home");
+btnHome.addEventListener("click", handleBackHomeClick);
+
 function loadPlaylistSongs(get) {
   let playlistId = get.getAttribute("id");
-  const btnBackHome = document.getElementById("btn-back-home");
   const btnPlaylist = document.getElementById(playlistId);
-  const musicfeed = document.getElementById("music-feed");
-  const playlistfeed = document.getElementById("playlist-feed");
-  btnBackHome.addEventListener("click", showMusicFeed(musicfeed, playlistfeed));
+  btnBackHome.addEventListener("click", handleBackHomeClick);
   btnPlaylist.addEventListener("click", showPlaylistFeed(musicfeed, playlistfeed));
 
   playlistId = deleteLetter(playlistId, "playlist-id-");
@@ -255,55 +263,56 @@ function showPlaylistFeed(musicfeed, playlistfeed) {
 }
 
 function getPlaylistSongs() {
-  console.log(currentPlaylistId);
-    $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/loadPlaylistSongs",
-        type: "post",
-        dataType: "json",
-        data: {
-            playlistId : currentPlaylistId
-        },
-        success: function (data) {
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/loadPlaylistSongs",
+    type: "post",
+    dataType: "json",
+    data: {
+      playlistId: currentPlaylistId
+    },
+    success: function (data) {
+      var listSong = JSON.parse(JSON.stringify(data));
+      console.log(listSong);
 
-            var listSong = JSON.parse(JSON.stringify(data));
+      var listSongHTML = document.getElementById("playlist-songs");
+      listSongHTML.innerHTML = ``;
 
-            console.log(listSong);
+      listSong.forEach((song) => {
+        var listArtists = song.songArtists;
+        let artists = "";
+        listArtists.forEach((artist) => {
+          artists += artist.userName;
+        });
 
-            var listSongHTML = document.getElementById("playlist-songs");
-            listSongHTML.innerHTML = ``;
+        listSongHTML.innerHTML += `
+          <div class="song-item playlisted">
+            <div class="song-ranking">1</div>
+            <div class="song-img">
+              <img id="${song.songId}" src="${song.songPoster}" alt=""/>
+              <div id="song-data-${song.songId}" hidden="hidden">${song.songData}</div>
+            </div>
+            <div class="song-info">
+              <div class="song-info-title">${song.songName}</div>
+              <div class="song-info-author">${artists}</div>
+            </div>
+            <div class="song-genre">Pop</div>
+            <div class="song-view">1,234,567</div>
+          </div>
+        `;
+      });
 
-            listSong.forEach((song) => {
-
-              var listArtists = song.songArtists;
-              let artists = "";
-              listArtists.forEach((artist) => {
-                artists += artist.userName;
-              });
-
-              listSongHTML.innerHTML += `
-                        <div class="song-item playlisted">
-                          <div class="song-ranking">1</div>
-                          <div class="song-img">
-                            <img src="${song.songPoster}" alt="" onclick="moveToControlBar(this)"/>
-                          </div>
-                          <div class="song-info">
-                            <div class="song-info-title">${song.songName}</div>
-                            <div class="song-info-author">${artists}</div>
-                          </div>
-                          <div class="song-genre">Pop</div>
-                          <div class="song-view">1,234,567</div>
-                        </div>
-              `
-            });
-
-        },
-        error: function (xhr){
-            console.log("Error" + xhr.responseText);
-        }
-
-    });
+      // Reattach the event handlers to the newly loaded elements
+      listSongHTML.querySelectorAll(".song-item img").forEach((img) => {
+        img.addEventListener("click", function () {
+          moveToControlBar(this);
+        });
+      });
+    },
+    error: function (xhr) {
+      console.log("Error" + xhr.responseText);
+    }
+  });
 }
-
 // // SHOW EDIT OPTION PLAYLIST
 const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
 console.log(deleteCheckboxes)

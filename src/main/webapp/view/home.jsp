@@ -57,11 +57,11 @@
     <div class="music-nav">
       <div class="list-tool">
         <div class="wrap-nav-item">
-          <a href="loadSong">
+<%--          <a href="loadSong">--%>
             <div class="nav-item home is-active">
-              <i class="fa fa-home"></i>Home
+              <i class="fa fa-home" id="bt-home"></i>Home
             </div>
-          </a>
+<%--          </a>--%>
 
 
             <!-- THANH SEARCH  -->

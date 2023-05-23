@@ -1,6 +1,6 @@
 function createPlaylist() {
     $.ajax({
-        url: "/TuneTown_theWebsite_main_war_exploded/createPlaylist",
+        url: "/TuneTown_theWebsite_war_exploded/createPlaylist",
         type: "get",
         success: function () {
             loadPLaylist();
@@ -15,7 +15,7 @@ function createPlaylist() {
 
 function loadPLaylist(){
     $.ajax({
-        url: "/TuneTown_theWebsite_main_war_exploded/loadPlaylists",
+        url: "/TuneTown_theWebsite_war_exploded/loadPlaylists",
         type: "post",
         dataType: "json",
         success: function (data) {
