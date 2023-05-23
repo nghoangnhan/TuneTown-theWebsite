@@ -65,9 +65,18 @@
 
 
             <!-- THANH SEARCH  -->
-            <div class="search-container">
-                <input id="search-content" name="search-bar" type="text" placeholder="Search" oninput="findSongs(this.value)" />
+            <div class="nav-item text">
+              <div class="search-container">
+                <input
+                id="search-content"
+                name="search-bar"
+                type="text"
+                placeholder="Search"
+                oninput="findSongs(this.value)"
+                />
                 <div id="search-results" class="dropdown"></div>
+              </div>
+              <i class="fa fa-search"></i>
             </div>
 
           <div class="nav-item info">

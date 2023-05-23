@@ -1,3 +1,4 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,11 +67,11 @@
             <div class="wrap-option-profile">
               <img
                       id="avatar-profile"
-                      src="${avatar}"
+                      src="${user.getUserAvatar()}"
                       alt="avatar"
               />
               <ul id="option-profile">
-                <li><a href="">Profile</a></li>
+                <li><a href="loadProfile" methods="POST">Profile</a></li>
                 <li><a href="logOut">Logout</a></li>
               </ul>
             </div>
@@ -101,8 +102,8 @@
           </div>
           <div class="inputfield">
             <label>Gender</label>
-            <div class="custom_select" name="gender">
-              <select>
+            <div class="custom_select">
+              <select name="gender">
                 <option value="0">Male</option>
                 <option value="1">Female</option>
               </select>

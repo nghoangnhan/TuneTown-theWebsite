@@ -22,6 +22,8 @@ import javax.servlet.http.Part;
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -33,7 +35,6 @@ public class profileServlet extends HttpServlet {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(GlobalUser.globalUserId);
-
 
         req.setAttribute("user", user);
         getServletContext().getRequestDispatcher(url).forward(req,resp);

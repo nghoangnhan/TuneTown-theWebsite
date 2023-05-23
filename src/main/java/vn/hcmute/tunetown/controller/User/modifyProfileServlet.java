@@ -24,7 +24,10 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 @WebServlet(urlPatterns = {"/modifyProfile"})
 @MultipartConfig
@@ -41,7 +44,8 @@ public class modifyProfileServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String birthdate = req.getParameter("birthdate");
-//        int gender = Integer.parseInt(req.getParameter("gender"));
+
+        int gender = Integer.parseInt(req.getParameter("gender"));
         String email  = req.getParameter("email");
         String userBio = req.getParameter("userBio");
 
@@ -91,6 +95,30 @@ public class modifyProfileServlet extends HttpServlet {
                             "images%2F" + fileName +
                             "?alt=media";
 
+                    // Check if user has an existing avatar
+                    if (user.getUserAvatar() != null && !user.getUserAvatar().isEmpty()) {
+                        // Get the file name of the existing avatar
+                        String existingFileName = user.getUserAvatar().substring(user.getUserAvatar().lastIndexOf("/") + 1);
+
+                        // URL-decode the file name
+                        existingFileName = URLDecoder.decode(existingFileName, "UTF-8");
+
+                        // Extract the file name from the decoded string
+                        String fileName2 = existingFileName.substring(existingFileName.lastIndexOf("/") + 1);
+                        String fileName3 = fileName2.substring(0, fileName2.indexOf("?"));
+                        // Delete the existing avatar from Firebase Storage
+                        try {
+                            if(!fileName3.equals("avatar.png"))
+                            {
+                                storage = StorageClient.getInstance(app).bucket().getStorage();
+                                BlobId blobId = BlobId.of("tunetowntest-e968a.appspot.com", "images/" + fileName3);
+                                storage.delete(blobId);
+                            }
+                        } catch (Exception e) {
+                            // Handle any exception during deletion
+                            throw new RuntimeException(e);
+                        }
+                    }
 
                 } catch (Exception e) {
                     // Handle any other exception
@@ -99,38 +127,18 @@ public class modifyProfileServlet extends HttpServlet {
                     fileContent.close();
                 }
 
-                // Check if user has an existing avatar
-                if (user.getUserAvatar() != null && !user.getUserAvatar().isEmpty()) {
-                    // Get the file name of the existing avatar
-                    String existingFileName = user.getUserAvatar().substring(user.getUserAvatar().lastIndexOf("/") + 1);
-
-                    // URL-decode the file name
-                    existingFileName = URLDecoder.decode(existingFileName, "UTF-8");
-
-                    // Extract the file name from the decoded string
-                    String fileName2 = existingFileName.substring(existingFileName.lastIndexOf("/") + 1);
-                    String fileName3 = fileName2.substring(0, fileName2.indexOf("?"));
-                    // Delete the existing avatar from Firebase Storage
-                    try {
-                        Storage storage = StorageClient.getInstance(app).bucket().getStorage();
-                        BlobId blobId = BlobId.of("tunetowntest-e968a.appspot.com", "images/" + fileName3);
-                        storage.delete(blobId);
-                    } catch (Exception e) {
-                        // Handle any exception during deletion
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                userUpdate = new User(user.getUserID(), username, birthdate, email, password, 0, user.getRoles(), userBio, downloadUrlAvatar);
+                // Update user
+                userUpdate = new User(user.getUserID(), username, birthdate, email, password, gender, user.getRoles(), userBio, downloadUrlAvatar);
                 UserDAO.update(userUpdate);
+
                 url = "/loadSong";
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
             }
         }
         req.setAttribute("user", userUpdate);
-        getServletContext().getRequestDispatcher(url).forward(req,resp);
-
+        // Redirect to a different page to prevent continuous updates
+        resp.sendRedirect(req.getContextPath() + url);
     }
 
     @Override

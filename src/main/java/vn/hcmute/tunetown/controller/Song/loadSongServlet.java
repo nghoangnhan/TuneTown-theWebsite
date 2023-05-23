@@ -2,6 +2,7 @@ package vn.hcmute.tunetown.controller.Song;
 
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
+import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.Song;
@@ -42,7 +43,8 @@ public class loadSongServlet extends HttpServlet {
                 List<Playlist> listPlaylist = playlistDAO.getAllPlaylistByUserId(loggedUser.getUserID());
                 req.setAttribute("listPlaylist", listPlaylist);
                 req.setAttribute("username", loggedUser.getUserName());
-                req.setAttribute("avatar", loggedUser.getUserAvatar());
+                User user = UserDAO.getUserByEmail(loggedUser.getEmail());
+                req.setAttribute("avatar", user.getUserAvatar());
             }
         } catch (Exception e)
         {
