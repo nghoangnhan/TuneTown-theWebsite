@@ -84,7 +84,7 @@ public class profileServlet extends HttpServlet {
                         "<label>Bio</label>\n"+
                         "<input value=\""+user.getUserBio()+"\" name=\"userBio\" class=\"textarea\" />\n"+
                       "</div>\n"+
-                        "<input type=\"hidden\" value=\""+user.getRoles()+"\" name=\"roles\" class=\"textarea\" />\n"+
+                        "<input type=\"hidden\" value=\""+user.getRole()+"\" name=\"roles\" class=\"textarea\" />\n"+
                         "<div class=\"inputfield\">\n"+
                         "<input type=\"submit\" value=\"Update\" class=\"btn\" />\n"+
                       "</div>\n"+
@@ -110,10 +110,9 @@ public class profileServlet extends HttpServlet {
         jsonUser.put("userName", user.getUserName());
         jsonUser.put("userPassword", user.getUserPassword());
         jsonUser.put("birthDate", user.getBirthDate());
-        jsonUser.put("sex", user.getSex());
         jsonUser.put("email", user.getEmail());
         jsonUser.put("userBio", user.getUserBio());
-        jsonUser.put("roles", user.getRoles());
+        jsonUser.put("roles", user.getRole());
 
         jsonArray.put(jsonUser);
 

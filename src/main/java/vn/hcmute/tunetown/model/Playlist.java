@@ -16,18 +16,20 @@ public class Playlist {
     private String playlistName;
 
     private Integer userId;
+    private String playlistType;
+
 
     @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Song> playlistSongs;
 
     public Playlist() {
     }
 
-    public Playlist(Integer playlistId, String playlistName, Integer userId, List<Song> playlistSongs) {
+    public Playlist(Integer playlistId, String playlistName, Integer userId, String playlistType, List<Song> playlistSongs) {
         this.playlistId = playlistId;
         this.playlistName = playlistName;
         this.userId = userId;
+        this.playlistType = playlistType;
         this.playlistSongs = playlistSongs;
     }
 
@@ -53,6 +55,14 @@ public class Playlist {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getPlaylistType() {
+        return playlistType;
+    }
+
+    public void setPlaylistType(String playlistType) {
+        this.playlistType = playlistType;
     }
 
     public List<Song> getPlaylistSongs() {

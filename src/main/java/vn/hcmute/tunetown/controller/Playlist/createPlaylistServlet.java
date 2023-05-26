@@ -26,6 +26,7 @@ public class createPlaylistServlet extends HttpServlet {
 
         playlist.setPlaylistName("New playlist");
         playlist.setUserId(GlobalUser.globalUserId);
+        playlist.setPlaylistType("Personal");
 
         playlistDAO.addPlaylist(playlist);
 

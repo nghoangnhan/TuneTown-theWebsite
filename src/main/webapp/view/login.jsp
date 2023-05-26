@@ -26,11 +26,6 @@
 </head>
 <body>
     <section>
-        <!--Bắt Đầu Phần Hình Ảnh-->
-        <div class="img-bg">
-            <img src="./assets/img/slider/loginslider.avif" alt="Hình Ảnh Minh Họa">
-        </div>
-        <!--Kết Thúc Phần Hình Ảnh-->
         <!--Bắt Đầu Phần Nội Dung-->
         <div class="content">
             <div class="logo">

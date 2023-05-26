@@ -51,7 +51,7 @@ public class loadPlaylistSongsServlet extends HttpServlet {
                             "          </div>\n" +
                             "          <div class=\"song-info\">\n" +
                             "            <div class=\"song-info-title\">" + song.getSongName() + "</div>\n" +
-                            "            <div class=\"song-info-author\">" + song.getArtists() + "</div>\n" +
+                            "            <div class=\"song-info-author\">" + song.getArtists().getUserName() + "</div>\n" +
                             "          </div>\n" +
                             "          <div class=\"song-genre\">Pop</div>\n" +
                             "          <div class=\"song-view\">1,234,567</div>\n" +
@@ -78,7 +78,7 @@ public class loadPlaylistSongsServlet extends HttpServlet {
             jsonSong.put("songName", song.getSongName());
             jsonSong.put("songPoster", song.getSongPoster());
             jsonSong.put("songData", song.getSongData());
-            jsonSong.put("songArtists", song.getArtists());
+            jsonSong.put("songArtists", song.getArtists().getUserName());
 
             jsonArray.put(jsonSong);
         }

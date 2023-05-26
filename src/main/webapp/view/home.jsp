@@ -289,9 +289,9 @@
               </div>
               <div class="song-info" id="info-song">
                 <div id="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
-                <div class="song-info-author" id="song-info-author-${song.getSongId()}">${song.getArtists()}</div>
+                <div class="song-info-author" id="song-info-author-${song.getSongId()}">${song.getArtists().getUserName()}</div>
               </div>
-              <div class="song-genre">Pop</div>
+              <div class="song-genre">${song.getGenre().getGenreName()}</div>
               <div class="song-view">1,000,000</div>
             </div>
           </c:if>

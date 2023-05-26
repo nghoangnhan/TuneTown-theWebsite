@@ -129,7 +129,7 @@ public class modifyProfileServlet extends HttpServlet {
                 }
 
                 // Update user
-                userUpdate = new User(user.getUserID(), username, birthdate, email, password, gender, user.getRoles(), userBio, downloadUrlAvatar);
+                userUpdate = new User(user.getUserID(), username, birthdate, email, password, gender, user.getRole(), userBio, downloadUrlAvatar);
                 if (downloadUrlAvatar.equals("https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2F?alt=media"))
                 {
                     userUpdate.setUserAvatar(user.getUserAvatar());

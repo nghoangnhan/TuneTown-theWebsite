@@ -5,6 +5,7 @@ import vn.hcmute.tunetown.model.Song;
 import vn.hcmute.tunetown.model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.swing.*;
@@ -16,10 +17,6 @@ import java.util.Base64;
 import java.util.List;
 
 public class SongDAO {
-    private Connection connection = null;
-    private PreparedStatement ps = null;
-    private ResultSet rs = null;
-    private String sql = null;
 
     public Song getSong(Integer songId) {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
@@ -39,22 +36,6 @@ public class SongDAO {
         }
     }
 
-
-//    EntityManager em = DBConnection.getEmFactory().createEntityManager();
-//        try {
-//        String jpql = "SELECT u FROM User u WHERE u.email = :email AND u.userPassword = :password";
-//        TypedQuery<User> query = em.createQuery(jpql, User.class);
-//        query.setParameter("email", email);
-//        query.setParameter("password", password);
-//        User user = query.getSingleResult();
-//        return user;
-//    } catch (NoResultException e) {
-//        return null;
-//    } finally {
-//        em.close();
-//
-//    }
-
     public List<Song> getAllSongs(){
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
 
@@ -71,22 +52,16 @@ public class SongDAO {
     }
 
     public void uploadSong(Song song) {
-
-        try{
-            connection = new DBConnection().getConnection();
-            sql = "INSERT INTO song (songName, artists, songPoster, songData, amountOfLikes, amountOfListens)" +
-                    "values (?, ?, ?, ?, ?, ?)";
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, song.getSongName());
-            ps.setString(2, song.getArtists());
-            ps.setString(3, song.getSongPoster());
-            ps.setString(4, song.getSongData());
-            ps.setInt(5, song.getAmountOfLikes());
-            ps.setInt(6, song.getAmountOfListens());
-
-            ps.execute();
-        } catch (Exception e){
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        trans.begin();;
+        try {
+            em.persist(song);
+            trans.commit();
+        } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            em.close();
         }
     }
 }

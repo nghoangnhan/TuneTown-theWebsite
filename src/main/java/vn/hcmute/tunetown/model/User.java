@@ -1,8 +1,6 @@
 package vn.hcmute.tunetown.model;
 
-//import jakarta.persistence.*;
 
-import net.bytebuddy.utility.nullability.MaybeNull;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +10,6 @@ import javax.persistence.*;
 
 @Entity
 public class User implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userID;
@@ -25,64 +22,41 @@ public class User implements Serializable {
 
     private String birthDate;
 
-    private int sex;
-
-    private int country;
+    private int gender;
 
     private String userBio;
 
-    private int roles;
+    private Integer role;
     private String userAvatar;
 
-    @ManyToMany
-    private List<Song> songs;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Genre> favoriteGenre;
 
-    public User(){
-        userName = "";
-        email = "";
-        userPassword = "";
-        userBio = "";
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Song> history;
+
+    public User() {
     }
 
-    public User(int userID, String userName, String email, String userPassword, String birthDate, int sex, int country, String userBio, int roles, List<Song> songs, List<Genre> favoriteGenre, String userAvatar) {
+    public User(int userID, String userName, String email, String userPassword, String birthDate, int gender, String userBio, Integer role, String userAvatar, List<Genre> favoriteGenre, List<Song> history) {
         this.userID = userID;
         this.userName = userName;
         this.email = email;
         this.userPassword = userPassword;
         this.birthDate = birthDate;
-        this.sex = sex;
-        this.country = country;
+        this.gender = gender;
         this.userBio = userBio;
-        this.roles = roles;
-        this.songs = songs;
+        this.role = role;
+        this.userAvatar = userAvatar;
         this.favoriteGenre = favoriteGenre;
-        this.userAvatar = userAvatar;
-    }
-    public User(int userID, String userName, String birthDate, String email, String userPassword, int sex, int roles,String userBio, String userAvatar) {
-        this.userID = userID;
-        this.userName = userName;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.userPassword = userPassword;
-        this.sex = sex;
-        this.roles = roles;
-        this.userBio = userBio;
-        this.userAvatar = userAvatar;
-    }
-    public User(String userName, String birthDate, String email, String userPassword, int sex, int roles,String userBio, String userAvatar) {
-        this.userName = userName;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.userPassword = userPassword;
-        this.sex = sex;
-        this.roles = roles;
-        this.userBio = userBio;
-        this.userAvatar = userAvatar;
+        this.history = history;
     }
 
+    public User(String username, Object o, String email, String password, int i, int i1, Object o1, String s) {
+    }
+
+    public User(int userID, String username, String birthdate, String email, String password, int gender, Integer role, String userBio, String downloadUrlAvatar) {
+    }
 
     public int getUserID() {
         return userID;
@@ -92,27 +66,27 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
-    public java.lang.String getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName){
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public java.lang.String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(java.lang.String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public java.lang.String getUserPassword() {
+    public String getUserPassword() {
         return userPassword;
     }
 
-    public void setUserPassword(java.lang.String userPassword) {
+    public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
 
@@ -124,36 +98,28 @@ public class User implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public int getSex() {
-        return sex;
+    public int getGender() {
+        return gender;
     }
 
-    public void setSex(int sex) {
-        this.sex = sex;
+    public void setGender(int gender) {
+        this.gender = gender;
     }
 
-    public int getCountry() {
-        return country;
-    }
-
-    public void setCountry(int country) {
-        this.country = country;
-    }
-
-    public java.lang.String getUserBio() {
+    public String getUserBio() {
         return userBio;
     }
 
-    public void setUserBio(java.lang.String userBio) {
+    public void setUserBio(String userBio) {
         this.userBio = userBio;
     }
 
-    public int getRoles() {
-        return roles;
+    public Integer getRole() {
+        return role;
     }
 
-    public void setRoles(int roles) {
-        this.roles = roles;
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     public String getUserAvatar() {
@@ -162,5 +128,21 @@ public class User implements Serializable {
 
     public void setUserAvatar(String userAvatar) {
         this.userAvatar = userAvatar;
+    }
+
+    public List<Genre> getFavoriteGenre() {
+        return favoriteGenre;
+    }
+
+    public void setFavoriteGenre(List<Genre> favoriteGenre) {
+        this.favoriteGenre = favoriteGenre;
+    }
+
+    public List<Song> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<Song> history) {
+        this.history = history;
     }
 }

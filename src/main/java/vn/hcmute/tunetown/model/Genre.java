@@ -9,17 +9,13 @@ public class Genre {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer genreId;
     private String genreName;
-    private String genreDescription;
-    @ManyToMany(mappedBy = "favoriteGenre")
-    private List<User> listUser;
 
     public Genre() {
     }
 
-    public Genre(Integer genreId, String genreName, String genreDescription) {
+    public Genre(Integer genreId, String genreName) {
         this.genreId = genreId;
         this.genreName = genreName;
-        this.genreDescription = genreDescription;
     }
 
     public Integer getGenreId() {
@@ -36,13 +32,5 @@ public class Genre {
 
     public void setGenreName(String genreName) {
         this.genreName = genreName;
-    }
-
-    public String getGenreDescription() {
-        return genreDescription;
-    }
-
-    public void setGenreDescription(String genreDescription) {
-        this.genreDescription = genreDescription;
     }
 }

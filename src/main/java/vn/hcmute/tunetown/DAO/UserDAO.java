@@ -10,9 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UserDAO {
-    private Connection connection = null;
-    private PreparedStatement ps = null;
-    private ResultSet rs = null;
 
     public static User getUserByEmailAndPassword(String email, String password) {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
@@ -92,28 +89,6 @@ public class UserDAO {
             return null;
         } finally {
             em.close();
-        }
-    }
-
-
-    public void setUSer(User user) {
-        String sql = "INSERT INTO user (userName, email ,userPassword, birthDate, sex, country, userBio, roles) VALUES " +
-                            "(? ,? ,? ,? ,?, ?, ?, ?)";
-        try {
-            connection = new DBConnection().getConnection();
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, user.getUserName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getUserPassword());
-            ps.setString(4, user.getBirthDate());
-            ps.setInt(5, user.getSex());
-            ps.setInt(6, user.getCountry());
-            ps.setString(7, user.getUserBio());
-            ps.setInt(8, user.getRoles());
-
-            ps.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

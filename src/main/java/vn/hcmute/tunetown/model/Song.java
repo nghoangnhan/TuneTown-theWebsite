@@ -1,6 +1,5 @@
 package vn.hcmute.tunetown.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -16,50 +15,44 @@ public class Song {
     private Integer songId;
     private String songName;
 
-    private String artists;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User artists;
 
     private String songPoster;
     private String songData;
-    private Integer amountOfLikes;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Genre genre;
     private Integer amountOfListens;
 
     @ManyToMany(mappedBy = "playlistSongs")
-    @JsonBackReference
     private List<Playlist> playlists;
-
 
     public Song() {
     }
-    public Song(int songId, String songName) {
-        this.songId = songId;
-        this.songName = songName;
-    }
 
-    public String getArtists() {
-        return artists;
-    }
-
-    public void setArtists(String artists) {
-        this.artists = artists;
-    }
-
-    public Song(Integer songId, String songName, String artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens, List<Playlist> playlists) {
+    public Song(Integer songId, String songName, User artists, String songPoster, String songData, Genre genre, Integer amountOfListens, List<Playlist> playlists) {
         this.songId = songId;
         this.songName = songName;
         this.artists = artists;
         this.songPoster = songPoster;
         this.songData = songData;
-        this.amountOfLikes = amountOfLikes;
+        this.genre = genre;
         this.amountOfListens = amountOfListens;
         this.playlists = playlists;
     }
-    public Song(String songName, String artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens) {
+
+    public Song(Integer songId, String songName, User artists, String songPoster, String songData, Integer amountOfListens, List<Playlist> playlists) {
+        this.songId = songId;
         this.songName = songName;
         this.artists = artists;
         this.songPoster = songPoster;
         this.songData = songData;
-        this.amountOfLikes = amountOfLikes;
         this.amountOfListens = amountOfListens;
+        this.playlists = playlists;
+    }
+
+    public Song(String songName, String userName, String downloadUrlImage, String downloadUrlData, int i, int i1) {
     }
 
     public Integer getSongId() {
@@ -78,6 +71,14 @@ public class Song {
         this.songName = songName;
     }
 
+    public User getArtists() {
+        return artists;
+    }
+
+    public void setArtists(User artists) {
+        this.artists = artists;
+    }
+
     public String getSongPoster() {
         return songPoster;
     }
@@ -94,14 +95,6 @@ public class Song {
         this.songData = songData;
     }
 
-    public Integer getAmountOfLikes() {
-        return amountOfLikes;
-    }
-
-    public void setAmountOfLikes(Integer amountOfLikes) {
-        this.amountOfLikes = amountOfLikes;
-    }
-
     public Integer getAmountOfListens() {
         return amountOfListens;
     }
@@ -113,7 +106,16 @@ public class Song {
     public List<Playlist> getPlaylists() {
         return playlists;
     }
+
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists = playlists;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 }
