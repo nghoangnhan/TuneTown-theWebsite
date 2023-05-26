@@ -56,8 +56,8 @@
           <div class="submit-btn">
             <input type="submit"  />
           </div>
+        </form>
       </div>
-      </form>
     </div>
     <!-- end title form  -->
 <!--    Firebase config-->

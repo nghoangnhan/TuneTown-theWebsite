@@ -16,8 +16,7 @@ public class Song {
     private Integer songId;
     private String songName;
 
-    @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<User> artists;
+    private String artists;
 
     private String songPoster;
     private String songData;
@@ -36,15 +35,15 @@ public class Song {
         this.songName = songName;
     }
 
-    public List<User> getArtists() {
+    public String getArtists() {
         return artists;
     }
 
-    public void setArtists(List<User> artists) {
+    public void setArtists(String artists) {
         this.artists = artists;
     }
 
-    public Song(Integer songId, String songName, List<User> artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens, List<Playlist> playlists) {
+    public Song(Integer songId, String songName, String artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens, List<Playlist> playlists) {
         this.songId = songId;
         this.songName = songName;
         this.artists = artists;
@@ -54,8 +53,9 @@ public class Song {
         this.amountOfListens = amountOfListens;
         this.playlists = playlists;
     }
-    public Song(String songName, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens) {
+    public Song(String songName, String artists, String songPoster, String songData, Integer amountOfLikes, Integer amountOfListens) {
         this.songName = songName;
+        this.artists = artists;
         this.songPoster = songPoster;
         this.songData = songData;
         this.amountOfLikes = amountOfLikes;

@@ -349,6 +349,34 @@
 }
 /* End Song  */
 
+
+/*UserFeed*/
+.user-feed {
+  width: 85%;
+  height: 1000px;
+  /* background-color: #121212; */
+  background-image: linear-gradient(#224d54, #000000);
+  font-size: large;
+  display: none;
+}
+.user-feed.active {
+  display: block;
+}
+
+/*UploadFeed*/
+.upload-feed {
+  width: 85%;
+  height: 1000px;
+  /* background-color: #121212; */
+  background-image: linear-gradient(#224d54, #000000);
+  font-size: large;
+  display: none;
+}
+.upload-feed.active {
+  display: block;
+}
+
+
 /* Playlistfeed */
 .playlist-feed {
   width: 85%;

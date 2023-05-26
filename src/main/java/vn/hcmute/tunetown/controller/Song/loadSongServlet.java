@@ -30,6 +30,7 @@ public class loadSongServlet extends HttpServlet {
             // Check whether User has logged already or not
             HttpSession session = req.getSession();
             User loggedUser = (User) session.getAttribute("loggedUser");
+            UserDAO userDAO = new UserDAO();
 
             if (loggedUser == null) {
                 url = "/view/login.jsp";
@@ -39,10 +40,12 @@ public class loadSongServlet extends HttpServlet {
                 List<Song> listSong = songDAO.getAllSongs();
                 req.setAttribute("listSong", listSong);
 
+
                 PlaylistDAO playlistDAO = new PlaylistDAO();
                 List<Playlist> listPlaylist = playlistDAO.getAllPlaylistByUserId(loggedUser.getUserID());
                 req.setAttribute("listPlaylist", listPlaylist);
                 req.setAttribute("username", loggedUser.getUserName());
+                req.setAttribute("userId", loggedUser.getUserID());
                 User user = UserDAO.getUserByEmail(loggedUser.getEmail());
                 req.setAttribute("avatar", user.getUserAvatar());
             }

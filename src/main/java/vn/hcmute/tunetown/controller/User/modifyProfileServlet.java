@@ -36,7 +36,8 @@ public class modifyProfileServlet extends HttpServlet {
     private User userUpdate;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String url = "/view/profile.jsp";
+        String url = "";
+        String message = null;
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(GlobalUser.globalUserId);
@@ -108,7 +109,7 @@ public class modifyProfileServlet extends HttpServlet {
                         String fileName3 = fileName2.substring(0, fileName2.indexOf("?"));
                         // Delete the existing avatar from Firebase Storage
                         try {
-                            if(!fileName3.equals("avatar.png"))
+                            if(!fileName3.equals("avatar.png") && !downloadUrlAvatar.equals("https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2F?alt=media"))
                             {
                                 storage = StorageClient.getInstance(app).bucket().getStorage();
                                 BlobId blobId = BlobId.of("tunetowntest-e968a.appspot.com", "images/" + fileName3);
@@ -129,15 +130,34 @@ public class modifyProfileServlet extends HttpServlet {
 
                 // Update user
                 userUpdate = new User(user.getUserID(), username, birthdate, email, password, gender, user.getRoles(), userBio, downloadUrlAvatar);
-                UserDAO.update(userUpdate);
+                if (downloadUrlAvatar.equals("https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2F?alt=media"))
+                {
+                    userUpdate.setUserAvatar(user.getUserAvatar());
+                }
+                String emailCheck = UserDAO.checkUserByEmail(email);
+                String usernameCheck = UserDAO.checkUserByUsername(username);
+                if(emailCheck != null && emailCheck.equals(email)){
+                    message = "Email existed!";
+                }
+                else if(usernameCheck != null && usernameCheck.equals(username)){
+                    message = "Username existed!";
+                }
+                else if (!email.contains("@gmail.com")){
+                    message = "Wrong email format!";
+                }
+                else{
+                    UserDAO.update(userUpdate);
 
-                url = "/loadSong";
+                    url = "/loadSong";
+                }
+
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
             }
         }
-        req.setAttribute("user", userUpdate);
+//        req.setAttribute("user", userUpdate);
         // Redirect to a different page to prevent continuous updates
+        req.setAttribute("message", message);
         resp.sendRedirect(req.getContextPath() + url);
     }
 

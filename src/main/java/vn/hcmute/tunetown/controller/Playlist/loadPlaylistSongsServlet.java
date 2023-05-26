@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
+import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.Song;
@@ -29,17 +30,14 @@ public class loadPlaylistSongsServlet extends HttpServlet {
         String playlistId = req.getParameter("playlistId");
         Integer iPlaylistId = Integer.parseInt(playlistId);
 
+        UserDAO userDAO = new UserDAO();
+
         PlaylistDAO playlistDAO = new PlaylistDAO();
         Playlist playlist = playlistDAO.getPlaylistById(iPlaylistId);
 
         PrintWriter out = resp.getWriter();
 
         for (Song song : playlist.getPlaylistSongs()) {
-            List<User> listArtist = song.getArtists();
-            String artists = "";
-            for (User artist : song.getArtists()) {
-                artists += artist.getUserName() + " ";
-            }
             out.println(
                     "        <div class=\"song-item\">\n" +
                             "          <div class=\"song-edit\">\n" +
@@ -53,7 +51,7 @@ public class loadPlaylistSongsServlet extends HttpServlet {
                             "          </div>\n" +
                             "          <div class=\"song-info\">\n" +
                             "            <div class=\"song-info-title\">" + song.getSongName() + "</div>\n" +
-                            "            <div class=\"song-info-author\">" + artists + "</div>\n" +
+                            "            <div class=\"song-info-author\">" + song.getArtists() + "</div>\n" +
                             "          </div>\n" +
                             "          <div class=\"song-genre\">Pop</div>\n" +
                             "          <div class=\"song-view\">1,234,567</div>\n" +
@@ -65,6 +63,8 @@ public class loadPlaylistSongsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String playlistId = req.getParameter("playlistId");
         Integer iPlaylistId = Integer.parseInt(playlistId);
+
+        UserDAO userDAO = new UserDAO();
 
         PlaylistDAO playlistDAO = new PlaylistDAO();
         Playlist playlist = playlistDAO.getPlaylistById(iPlaylistId);

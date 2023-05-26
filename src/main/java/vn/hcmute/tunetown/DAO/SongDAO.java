@@ -74,14 +74,15 @@ public class SongDAO {
 
         try{
             connection = new DBConnection().getConnection();
-            sql = "INSERT INTO song (songName, songPoster, songData, amountOfLikes, amountOfListens)" +
-                    "values (?, ?, ?, ?, ?)";
+            sql = "INSERT INTO song (songName, artists, songPoster, songData, amountOfLikes, amountOfListens)" +
+                    "values (?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setString(1, song.getSongName());
-            ps.setString(2, song.getSongPoster());
-            ps.setString(3, song.getSongData());
-            ps.setInt(4, song.getAmountOfLikes());
-            ps.setInt(5, song.getAmountOfListens());
+            ps.setString(2, song.getArtists());
+            ps.setString(3, song.getSongPoster());
+            ps.setString(4, song.getSongData());
+            ps.setInt(5, song.getAmountOfLikes());
+            ps.setInt(6, song.getAmountOfListens());
 
             ps.execute();
         } catch (Exception e){

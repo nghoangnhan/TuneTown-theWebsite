@@ -23,8 +23,6 @@ public class logInServlet extends HttpServlet {
         String url = "/view/login.jsp";
         String message = null;
 
-        UserDAO usersDAO = new UserDAO();
-
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
@@ -38,9 +36,6 @@ public class logInServlet extends HttpServlet {
                 session.setAttribute("loggedUser", user);
 
                 url = "/loadSong";
-                if (user.getRoles() == 0) {
-                    url ="/view/upSong.jsp";
-                }
             }
             else{
                 message = "Password are not correct";

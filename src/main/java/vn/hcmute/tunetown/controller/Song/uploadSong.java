@@ -29,6 +29,8 @@ import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import vn.hcmute.tunetown.DAO.SongDAO;
+import vn.hcmute.tunetown.DAO.UserDAO;
+import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.connection.GGDriveConnection;
 import vn.hcmute.tunetown.model.Song;
 import com.google.cloud.storage.Storage;
@@ -56,12 +58,15 @@ public class uploadSong extends HttpServlet {
     private String downloadUrlData;
     private String downloadUrlImage;
     private String songName;
+    private User user;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         songName = req.getParameter("songName");
-        String url = "/login";
+        String url = "/loadSong";
+        UserDAO userDAO = new UserDAO();
+//        user = userDAO.getUserById(GlobalUser.globalUserId);
 
         InputStream serviceAccount;
 
@@ -150,16 +155,15 @@ public class uploadSong extends HttpServlet {
                     fileContent2.close();
                 }
                 // Add to SQL
-                song = new Song(songName, downloadUrlImage, downloadUrlData, 1000000, 1000000);
+                song = new Song(songName, userDAO.getUserById(GlobalUser.globalUserId).getUserName(), downloadUrlImage, downloadUrlData, 1000000, 1000000);
                 SongDAO songDAO = new SongDAO();
                 songDAO.uploadSong(song);
 
-                url = "/loadSong";
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
             }
         }
-        getServletContext().getRequestDispatcher(url).forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + url);
     }
 
     @Override

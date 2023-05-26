@@ -1,5 +1,4 @@
 const navItems = document.querySelectorAll(".nav-item");
-const navItem = document.querySelector(".nav-item");
 [...navItems].forEach((item) => item.addEventListener("click", handleTabclick));
 function handleTabclick(event) {
   [...navItems].forEach((item) => item.classList.remove("is-active"));
@@ -11,7 +10,6 @@ const ava = document.getElementById("avatar-profile");
 const optionPro = document.getElementById("option-profile");
 ava.addEventListener("click", clickAva);
 function clickAva(event) {
-  console.log("click");
   optionPro.classList.toggle("active");
 }
 
@@ -42,6 +40,7 @@ function playAudio() {
 const songImage = document.getElementById("songing-image");
 
 let songInfoTitle = document.getElementById("songing-info-title");
+let songInfoAuthor = document.getElementById("songing-info-author");
 
 
 const repeatbtn = document.getElementById("fa-retweet");
@@ -66,6 +65,8 @@ function moveToControlBar(get) {
   // Load song's information
   const songTitle = document.getElementById("song-title-" + id).innerHTML;
   songInfoTitle.innerHTML = songTitle;
+  const songAuthor = document.getElementById("song-info-author-" + id).innerHTML;
+  songInfoAuthor.innerHTML = songAuthor;
   audio.load();
 
   // load Duration onto Control Bar
@@ -88,6 +89,8 @@ function moveToControlBar(get) {
     end.innerHTML = minute_int + ":" + second;
     console.log(end.innerHTML);
     console.log(duration);
+    console.log(songTitle);
+    console.log(songAuthor);
 
     // play the Audio link
     playAudio();
@@ -234,9 +237,11 @@ var currentPlaylistId;
 var btnBackHome = document.getElementById("btn-back-home");
 const musicfeed = document.getElementById("music-feed");
 const playlistfeed = document.getElementById("playlist-feed");
+const userfeed = document.getElementById("user-feed");
+const uploadfeed = document.getElementById("upload-feed");
 
 function handleBackHomeClick() {
-  showMusicFeed(musicfeed, playlistfeed);
+  showMusicFeed(musicfeed, playlistfeed, userfeed, uploadfeed);
 }
 const btnHome = document.getElementById("bt-home");
 btnHome.addEventListener("click", handleBackHomeClick);
@@ -245,22 +250,45 @@ function loadPlaylistSongs(get) {
   let playlistId = get.getAttribute("id");
   const btnPlaylist = document.getElementById(playlistId);
   btnBackHome.addEventListener("click", handleBackHomeClick);
-  btnPlaylist.addEventListener("click", showPlaylistFeed(musicfeed, playlistfeed));
+  btnPlaylist.addEventListener("click", showPlaylistFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
 
   playlistId = deleteLetter(playlistId, "playlist-id-");
   console.log(playlistId);
   currentPlaylistId = playlistId;
   getPlaylistSongs();
 }
+const btProfile = document.getElementById("bt-profile");
 
-function showMusicFeed(musicfeed, playlistfeed) {
+function loadUser(){
+  btProfile.addEventListener("click", showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
+  optionPro.classList.remove("active");
+  getUser();
+}
+function showMusicFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
   musicfeed.classList.add("active");
   playlistfeed.classList.remove("active");
+  userfeed.classList.remove("active");
+  uploadfeed.classList.remove("active");
 }
-function showPlaylistFeed(musicfeed, playlistfeed) {
+function showPlaylistFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
   musicfeed.classList.remove("active");
   playlistfeed.classList.add("active");
+  userfeed.classList.remove("active");
+  uploadfeed.classList.remove("active");
 }
+function showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
+  musicfeed.classList.remove("active");
+  playlistfeed.classList.remove("active");
+  userfeed.classList.add("active");
+  uploadfeed.classList.remove("active");
+}
+function showUploadFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
+  musicfeed.classList.remove("active");
+  playlistfeed.classList.remove("active");
+  userfeed.classList.remove("active");
+  uploadfeed.classList.add("active");
+}
+
 
 function getPlaylistSongs() {
   $.ajax({
@@ -278,12 +306,6 @@ function getPlaylistSongs() {
       listSongHTML.innerHTML = ``;
 
       listSong.forEach((song) => {
-        var listArtists = song.songArtists;
-        let artists = "";
-        listArtists.forEach((artist) => {
-          artists += artist.userName;
-        });
-
         listSongHTML.innerHTML += `
           <div class="song-item playlisted">
             <div class="song-ranking">1</div>
@@ -293,7 +315,7 @@ function getPlaylistSongs() {
             </div>
             <div class="song-info">
               <div class="song-info-title">${song.songName}</div>
-              <div class="song-info-author">${artists}</div>
+              <div class="song-info-author">${song.songArtists}</div>
             </div>
             <div class="song-genre">Pop</div>
             <div class="song-view">1,234,567</div>
@@ -313,6 +335,206 @@ function getPlaylistSongs() {
     }
   });
 }
+
+const userid = document.getElementById("user-id").value;
+function getUser() {
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/loadProfile",
+    type: "post",
+    dataType: "json",
+    data: {
+      userId: userid
+    },
+    success: function (data) {
+      var user = data[0]; // Retrieve the user object from the JSON response
+      console.log(user);
+
+      var userHTML = document.getElementById("user-feed");
+      userHTML.innerHTML = "";
+      userHTML.innerHTML += `
+        <form id="update-form" action="modifyProfile" method="post" enctype="multipart/form-data">
+          <div class="updateInfor-form">
+            <div class="wrapper">
+              <div class="title">Update Informations</div>
+              <div class="form">
+                <div class="inputfield image">
+                  <div id="wrapper-image-input">
+                    <img id="image-preview"  src="${user.userAvatar}" onclick="updateAvatar()"/>
+                    <input id="image-input" name="userAvatar" type="file" accept="image/*" class="" />
+                  </div>
+                </div>
+                <div class="inputfield">
+                  <label>Username</label>
+                  <input type="text" name="username" class="input" value="${user.userName}"/>
+                </div>
+                <div class="inputfield">
+                  <label>Password</label>
+                  <input value="${user.userPassword}" name="password" type="password" class="input" />
+                </div>
+                <div class="inputfield">
+                  <label>Birthday</label>
+                  <input value="${user.birthDate}" name="birthdate" type="date" class="input" />
+                </div>
+                <div class="inputfield">
+                  <label>Gender</label>
+                  <div class="custom_select">
+                    <select name="gender">
+                      <option value="0">Male</option>
+                      <option value="1">Female</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="inputfield">
+                  <label>Email Address</label>
+                  <input value="${user.email}" name="email" type="text" class="input" />
+                </div>
+                <div class="inputfield">
+                  <label>Bio</label>
+                  <input value="${user.userBio}" name="userBio" class="textarea" />
+                </div>
+                <input type="hidden" value="${user.roles}" name="roles" class="textarea" />
+                <div class="inputfield">
+                  <input id="update-btn" type="submit" value="Update" class="btn" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        
+      `;
+
+      // function to handle event
+      var imageInput = document.getElementById("image-input");
+      var imagePreview = document.getElementById("image-preview");
+      imageInput.style.display = "none";
+
+      let handledClick = false;
+
+
+      function updateAvatar() {
+        imagePreview.addEventListener("click", function (event) {
+          if (!handledClick && event.target === imagePreview) {
+            handledClick = true;
+            imageInput.click();
+            handledClick = false; // Reset the handledClick flag
+          }
+        });
+
+        imageInput.addEventListener("change", function () {
+          handledClick = false;
+
+          const file = this.files[0];
+
+          if (file) {
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+              imagePreview.src = reader.result;
+              imagePreview.style.display = "block"; // Show the image preview
+            });
+
+            reader.readAsDataURL(file);
+
+            // Update the input value
+            imageInput.value = file.name;
+          } else {
+            imagePreview.src = "";
+            imagePreview.style.display = "none"; // Hide the image preview
+          }
+        });
+      }
+      // Call the updateAvatar function when the page loads or at the appropriate time
+      updateAvatar();
+
+      var btUpdate = document.getElementById("update-btn");
+    },
+    error: function (xhr) {
+      console.log("Error: " + xhr.responseText);
+    }
+  });
+}
+
+function uploadSong(){
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/loadProfile",
+    type: "post",
+    dataType: "json",
+    data: {
+      userId: userid
+    },
+    success: function (data) {
+      var user = data[0]; // Retrieve the user object from the JSON response
+      console.log(user);
+
+      var uploadSongHTML = document.getElementById("upload-feed");
+      uploadSongHTML.innerHTML = ``;
+
+
+      if (user.roles == 1) {
+        uploadSongHTML.innerHTML += `
+          <h1 class="header-form">Sorry, you do not have the permission to upload any song!</h1>
+        `;
+      } else {
+        uploadSongHTML.innerHTML += `
+          <div class="content-form">
+            <!-- title form  -->
+            <div class="wrap-header-form">
+              <h1 class="header-form">Upload Song</h1>
+            </div>
+            <div class="wrap-form">
+              <form action="upload" method="post" enctype="multipart/form-data">
+                <h1 class="input_title">Song Name</h1>
+                <input class="input-song-name" name="songName" type="text" placeholder="Your song name" required/>
+    
+                <h1 class="input_title">Song Image</h1>
+                <div class="input-file-container">  
+                  <input class="input-btn" name="songImage" type="file" placeholder="Input PNG,JPG,..." accept="image/png, image/gif, image/jpeg" onclick="uploadImage()" required/>
+                </div>
+    
+                <div class="input_title">Song</div>
+                <div class="input-file-container">   
+                  <input class="input-btn" name="songData" type="file" placeholder="Input mp3,mp4..." accept=".mp4,.mp3,audio/*" onclick="uploadImage()" required/>
+                </div>
+                <div class="submit-btn">
+                  <input type="submit" />
+                </div>
+              </form>
+            </div>
+          </div>
+    `;
+      }
+    },
+    error: function (xhr) {
+      console.log("Error" + xhr.responseText);
+    }
+  });
+}
+const btUpload = document.getElementById("bt-upload");
+function upSong(){
+  btUpload.addEventListener("click", showUploadFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
+  uploadSong();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // // SHOW EDIT OPTION PLAYLIST
 const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
 console.log(deleteCheckboxes)
@@ -507,7 +729,6 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
     }
   });
 }
-
 
 //DELETE SONG ITEM TRONG PLAYLIST
 // Show contextMenu Trong Playlist

@@ -1,3 +1,5 @@
+<%@ page import="vn.hcmute.tunetown.DAO.UserDAO" %>
+<%@ page import="vn.hcmute.tunetown.model.User" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +24,8 @@
           rel="stylesheet"
   />
   <link rel="stylesheet" href="./assets/css/home.css" />
+  <link rel="stylesheet" href="./assets/css/profile.css" />
+  <link rel="stylesheet" href="./assets/css/UpSong.css" />
   <link rel="stylesheet" href="./assets/css/reset.css" />
   <title>TuneTown</title>
   <link
@@ -57,11 +61,12 @@
     <div class="music-nav">
       <div class="list-tool">
         <div class="wrap-nav-item">
-<%--          <a href="loadSong">--%>
-            <div class="nav-item home is-active">
-              <i class="fa fa-home" id="bt-home"></i>Home
-            </div>
-<%--          </a>--%>
+          <div class="nav-item home is-active">
+            <i class="fa fa-home" id="bt-home" onclick="handleBackHomeClick()"> Home</i>
+          </div>
+          <div class="nav-item upload">
+            <i class="fa fa-star" id="bt-upload" onclick="upSong()"> Upload Product</i>
+          </div>
 
 
             <!-- THANH SEARCH  -->
@@ -91,7 +96,7 @@
                       alt="avatar"
               />
               <ul id="option-profile">
-                <li><a href="loadProfile" methods="POST">Profile</a></li>
+                <li><a id="bt-profile" onclick="loadUser()" methods="get">Profile</a></li>
                 <li><a href="logOut">Logout</a></li>
               </ul>
             </div>
@@ -102,7 +107,19 @@
     <!-- END THANH BÊN PLAYLIST  -->
   </div>
 
-  <div class="content">
+  <div class="content" id="content">
+
+    <div id="user-feed" class="user-feed">
+      <input type="hidden" value="${userId}" name="userId" id="user-id">
+
+    </div>
+
+    <div id="upload-feed" class="upload-feed">
+<%--      <input type="hidden" value="${userId}" name="userId" id="user-id">--%>
+
+    </div>
+
+
     <!-- VÙNG FEED NHẠC  -->
     <div class="music-feed active" id="music-feed">
       <!-- Playlist  -->
@@ -265,29 +282,20 @@
 
         <c:forEach items="${listSong}" var="song" varStatus="status">
           <c:if test="${status.index < 100}">
-            <div class="song-item" id="song-item-${song.getSongId()}" >
+            <div class="song-item" id="song-item-${song.getSongId()}">
               <div class="song-img">
-                <img id="${song.getSongId()}"  src="${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)"/>
+                <img id="${song.getSongId()}" src="${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)" />
                 <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
               <div class="song-info" id="info-song">
-                <div id ="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
-                <div class="song-info-author" id="song-info-author-${song.getSongId()}">
-                  <c:forEach items="${song.getArtists()}" var="o" varStatus="st">
-                    <c:if test="${st.index != 0}">
-                      ,
-                    </c:if>
-                    ${o.getUserName()}
-                  </c:forEach>
-                </div>
+                <div id="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
+                <div class="song-info-author" id="song-info-author-${song.getSongId()}">${song.getArtists()}</div>
               </div>
               <div class="song-genre">Pop</div>
               <div class="song-view">1,000,000</div>
             </div>
           </c:if>
         </c:forEach>
-
-        <!-- End Song Item  -->
       </div>
 
     </div>
@@ -331,8 +339,6 @@
     </div>
     <!-- END TAB PLAYLIST  -->
 
-
-
     <div class="music-playlist">
       <div class="my-library">
         <i class="fa fa-bookmark"></i>
@@ -375,7 +381,7 @@
       </div>
       <div class="songing-info">
         <div id ="songing-info-title" class="songing-info-title">None</div>
-        <div id="song-info-author" class="songing-info-author">None</div>
+        <div id="songing-info-author" class="songing-info-author">None</div>
       </div>
 
       <div class="songing-control">

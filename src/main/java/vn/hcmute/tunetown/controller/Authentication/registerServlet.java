@@ -23,11 +23,10 @@ public class registerServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String rePassword = req.getParameter("rePassword");
-        int gender = Integer.parseInt(req.getParameter("gender"));
 
         String emailCheck = UserDAO.checkUserByEmail(email);
         String usernameCheck = UserDAO.checkUserByUsername(username);
-        User user = new User(username,null,email,password,gender,1,null,null);
+        User user = new User(username,null,email,password,2,1,null,"https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2Favatar.png?alt=media&token=%5B101");
         try {
             if(emailCheck != null && emailCheck.equals(email)){
                 message = "Email existed!";
