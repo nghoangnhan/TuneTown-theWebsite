@@ -29,10 +29,10 @@ public class User implements Serializable {
     private Integer role;
     private String userAvatar;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Genre> favoriteGenre;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany
     private List<Song> history;
 
     public User() {

@@ -1,6 +1,7 @@
 package vn.hcmute.tunetown.DAO;
 
 import vn.hcmute.tunetown.connection.DBConnection;
+import vn.hcmute.tunetown.model.Genre;
 import vn.hcmute.tunetown.model.Song;
 import vn.hcmute.tunetown.model.User;
 
@@ -61,6 +62,37 @@ public class SongDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
+            em.close();
+        }
+    }
+
+    public void updateAmountOfListens (Song song) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        trans.begin();;
+        try {
+            em.merge(song);
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+    }
+
+    public List<Song> getTop10SongByGenreId (Genre genre) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT s FROM Song s WHERE s.genre =: genre ORDER BY s.amountOfListens";
+            TypedQuery<Song> query = em.createQuery(jpql, Song.class);
+            query.setParameter("genre", genre);
+            List<Song> top10Songs = query.getResultList();
+            return top10Songs;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
             em.close();
         }
     }

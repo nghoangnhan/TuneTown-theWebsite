@@ -1,6 +1,7 @@
 package vn.hcmute.tunetown.DAO;
 
 import vn.hcmute.tunetown.connection.DBConnection;
+import vn.hcmute.tunetown.model.Song;
 import vn.hcmute.tunetown.model.User;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 public class UserDAO {
 
@@ -119,5 +121,12 @@ public class UserDAO {
         } finally {
             em.close();
         }
+    }
+
+    public List<Song> getUserListeningHistory (Integer userId) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        User parent = em.find(User.class, userId);
+        return parent.getHistory(); // Access the lazy-initialized collection
     }
 }

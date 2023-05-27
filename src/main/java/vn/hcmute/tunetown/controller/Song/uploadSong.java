@@ -155,7 +155,7 @@ public class uploadSong extends HttpServlet {
                     fileContent2.close();
                 }
                 // Add to SQL
-                song = new Song(songName, userDAO.getUserById(GlobalUser.globalUserId).getUserName(), downloadUrlImage, downloadUrlData, 1000000, 1000000);
+                song = new Song(songName, userDAO.getUserById(GlobalUser.globalUserId), downloadUrlImage, downloadUrlData, 1000000, 1000000);
                 SongDAO songDAO = new SongDAO();
                 songDAO.uploadSong(song);
 

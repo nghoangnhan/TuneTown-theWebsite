@@ -284,7 +284,7 @@
           <c:if test="${status.index < 100}">
             <div class="song-item" id="song-item-${song.getSongId()}">
               <div class="song-img">
-                <img id="${song.getSongId()}" src="${song.getSongPoster()}" alt="" onclick="moveToControlBar(this)" />
+                <img id="${song.getSongId()}" src="./assets/img/CoverArt/starboy.jpg" alt="" onclick="moveToControlBar(this)" />
                 <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
               <div class="song-info" id="info-song">
@@ -309,15 +309,11 @@
             <i class="fa fa-chevron-circle-left"></i>Back
           </button>
         </div>
-        <div class="wrap-button-edit">
-          <button id="btn-edit" class="btn-edit">Edit</button>
-        </div>
+
         <div class="wrap-button-delete">
           <button id="btn-delete" class="btn-delete">Delete</button>
         </div>
-        <div class="wrap-button-cancel">
-          <button id="btn-cancel" class="btn-cancel">Cancel</button>
-        </div>
+
       </div>
       <div class="title-playlist-feed">My Playlist #1</div>
       <div class="wrap-song-item">
@@ -348,6 +344,10 @@
           <button id="btn-create-playlist" onclick="createPlaylist()" >
             <i class="fa fa-plus-square">Create Playlist</i>
           </button>
+
+        <button id="btn-suggest-playlist" onclick="suggestPlaylist()" >
+          <i class="fa fa-plus-square">Suggest Playlist</i>
+        </button>
 
 
       </div>

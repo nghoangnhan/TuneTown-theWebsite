@@ -19,7 +19,7 @@ public class Playlist {
     private String playlistType;
 
 
-    @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany (fetch = FetchType.EAGER)
     private List<Song> playlistSongs;
 
     public Playlist() {

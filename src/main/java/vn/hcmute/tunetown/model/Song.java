@@ -52,7 +52,7 @@ public class Song {
         this.playlists = playlists;
     }
 
-    public Song(String songName, String userName, String downloadUrlImage, String downloadUrlData, int i, int i1) {
+    public Song(String songName, User artists, String downloadUrlImage, String downloadUrlData, int i, int i1) {
     }
 
     public Integer getSongId() {

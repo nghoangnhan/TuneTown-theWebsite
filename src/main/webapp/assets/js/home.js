@@ -54,33 +54,48 @@ function ActiveRepeat(event) {
   event.target.classList.toggle("active");
   randombtn.classList.remove("active")
 }
+
+
 function moveToControlBar(get) {
+
+  let handledClick = false;
+
+  console.log("workMoveToControlBar");
+
   let id = get.getAttribute('id');
-  const data = document.getElementById("song-data-" + id);
-  const image = get.getAttribute('src');
+  console.log(id);
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/updateListeningHistory",
+    type: "get",
+    data: {
+      songId: id,
+    },
+    error: function (xhr) {
+      console.log("Error: " + xhr.responseText);
+    }
+  });
+
+  let data = document.getElementById("song-data-" + id);
+  let image = get.getAttribute('src');
   audio.src = deleteLetter(data.innerHTML, "amp;");
 
   songImage.setAttribute('src', image);
 
   // Load song's information
-  const songTitle = document.getElementById("song-title-" + id).innerHTML;
+  let songTitle = document.getElementById("song-title-" + id).innerHTML;
   songInfoTitle.innerHTML = songTitle;
-  const songAuthor = document.getElementById("song-info-author-" + id).innerHTML;
+  let songAuthor = document.getElementById("song-info-author-" + id).innerHTML;
   songInfoAuthor.innerHTML = songAuthor;
+
   audio.load();
+
+  console.log(audio);
 
   // load Duration onto Control Bar
   audio.addEventListener("loadedmetadata", function() {
     const currentAudio = document.getElementById("audio");
     var duration = currentAudio.duration;
     var currentTime = currentAudio.currentTime;
-
-
-    // var start = document.getElementById("start-timeline");
-    // minute_float = parseFloat(currentTime / 60);
-    // minute_int = parseInt(currentTime / 60);
-    // second = parseInt((minute_float - minute_int) * 60);
-    // start.innerHTML = minute_int + ":" + second;
 
     var end = document.getElementById("end-duration");
     minute_float = parseFloat(duration / 60);
@@ -310,7 +325,7 @@ function getPlaylistSongs() {
           <div class="song-item playlisted">
             <div class="song-ranking">1</div>
             <div class="song-img">
-              <img id="${song.songId}" src="${song.songPoster}" alt=""/>
+              <img id="${song.songId}" src="./assets/img/CoverArt/starboy.jpg" alt="" onclick="moveToControlBar(this) alt=""/>
               <div id="song-data-${song.songId}" hidden="hidden">${song.songData}</div>
             </div>
             <div class="song-info">
@@ -321,6 +336,66 @@ function getPlaylistSongs() {
             <div class="song-view">1,234,567</div>
           </div>
         `;
+      });
+
+      //DELETE SONG ITEM TRONG PLAYLIST
+      // Show contextMenu Trong Playlist
+      const songItemsPlaylist = document.querySelectorAll(".song-item.playlisted");
+      console.log(songItemsPlaylist);
+      songItemsPlaylist.forEach((songItemPlaylist) => {
+        songItemPlaylist.addEventListener("contextmenu", showContextMenuPlaylist = (event) => {
+          event.preventDefault(); // Ngăn chặn hiển thị menu chuột phải mặc định của trình duyệt
+          const songItem = event.target.closest(".song-item");
+          const songItems = document.querySelectorAll(".song-item");
+          songItem.classList.add("active");
+
+          // Xóa context menu cũ nếu nó tồn tại
+          if (activeContextMenu) {
+            activeContextMenu.remove();
+          }
+          if (songItem.classList.contains("active")) {
+            songItems.forEach((item) => item.classList.remove("active"));
+          }
+          // Tạo context menu mới
+          const contextMenu = document.createElement("div");
+          contextMenu.className = "context-menu";
+          contextMenu.innerHTML = `
+        <ul>  
+          <li>Share</li>
+          <li>Copy Link</li>
+          <li class="remove-SongItem-playlist">Remove from Playlist</li>
+        </ul>
+      `;
+          // Lấy vị trí hiển thị của context menu
+          const songItemRect = songItem.getBoundingClientRect();
+          contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
+          contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
+
+          // Thêm contextmenu vào SongItem
+          songItem.appendChild(contextMenu);
+          activeContextMenu = contextMenu; // Cập nhật trạng thái context menu đang hiển thị
+          songItem.classList.add("active");
+          document.addEventListener("click", function hideContextMenu() {
+            // Đóng context menu khi click vào bất kỳ đâu trên trang
+            if (activeContextMenu === contextMenu) {
+              activeContextMenu = null; // Gán giá trị null nếu context menu được đóng bằng cách click vào một playlist item
+              songItem.classList.remove("active");
+            }
+            document.removeEventListener("click", hideContextMenu);
+            // songItem.classList.remove("active");
+            contextMenu.remove();
+          });
+
+          // REMOVE SONG ITEM FROM PLAYLIST
+          const removeSongItemPlaylist = contextMenu.querySelector(
+              ".remove-SongItem-playlist"
+          );
+          removeSongItemPlaylist.addEventListener("click", removeSongItemPlaylistFunc);
+
+          function removeSongItemPlaylistFunc() {
+            songItem.remove();
+          }
+        });
       });
 
       // Reattach the event handlers to the newly loaded elements
@@ -407,8 +482,6 @@ function getUser() {
       var imageInput = document.getElementById("image-input");
       var imagePreview = document.getElementById("image-preview");
       imageInput.style.display = "none";
-
-      let handledClick = false;
 
 
       function updateAvatar() {
@@ -538,7 +611,7 @@ function upSong(){
 // // SHOW EDIT OPTION PLAYLIST
 const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
 console.log(deleteCheckboxes)
-const editButton = document.getElementById("btn-edit");
+const editButton = document.getElementById("btn -edit");
 const deleteButton = document.getElementById("btn-delete");
 const cancelButton = document.getElementById("btn-cancel");
 editButton.addEventListener(
@@ -730,65 +803,7 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
   });
 }
 
-//DELETE SONG ITEM TRONG PLAYLIST
-// Show contextMenu Trong Playlist
-const songItemsPlaylist = document.querySelectorAll(".song-item.playlisted");
-console.log(songItemsPlaylist);
-songItemsPlaylist.forEach((songItemPlaylist) => {
-  songItemPlaylist.addEventListener("contextmenu", showContextMenuPlaylist = (event) => {
-    event.preventDefault(); // Ngăn chặn hiển thị menu chuột phải mặc định của trình duyệt
-    const songItem = event.target.closest(".song-item");
-    const songItems = document.querySelectorAll(".song-item");
-    songItem.classList.add("active");
 
-    // Xóa context menu cũ nếu nó tồn tại
-    if (activeContextMenu) {
-      activeContextMenu.remove();
-    }
-    if (songItem.classList.contains("active")) {
-      songItems.forEach((item) => item.classList.remove("active"));
-    }
-    // Tạo context menu mới
-    const contextMenu = document.createElement("div");
-    contextMenu.className = "context-menu";
-    contextMenu.innerHTML = `
-        <ul>  
-          <li>Share</li>
-          <li>Copy Link</li>
-          <li class="remove-SongItem-playlist">Remove from Playlist</li>
-        </ul>
-      `;
-    // Lấy vị trí hiển thị của context menu
-    const songItemRect = songItem.getBoundingClientRect();
-    contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
-    contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
-
-    // Thêm contextmenu vào SongItem
-    songItem.appendChild(contextMenu);
-    activeContextMenu = contextMenu; // Cập nhật trạng thái context menu đang hiển thị
-    songItem.classList.add("active");
-    document.addEventListener("click", function hideContextMenu() {
-      // Đóng context menu khi click vào bất kỳ đâu trên trang
-      if (activeContextMenu === contextMenu) {
-        activeContextMenu = null; // Gán giá trị null nếu context menu được đóng bằng cách click vào một playlist item
-        songItem.classList.remove("active");
-      }
-      document.removeEventListener("click", hideContextMenu);
-      // songItem.classList.remove("active");
-      contextMenu.remove();
-    });
-
-    // REMOVE SONG ITEM FROM PLAYLIST
-    const removeSongItemPlaylist = contextMenu.querySelector(
-        ".remove-SongItem-playlist"
-    );
-    removeSongItemPlaylist.addEventListener("click", removeSongItemPlaylistFunc);
-
-    function removeSongItemPlaylistFunc() {
-      songItem.remove();
-    }
-  });
-});
 
 // // Find Songs
 function findSongs(searchQuery) {

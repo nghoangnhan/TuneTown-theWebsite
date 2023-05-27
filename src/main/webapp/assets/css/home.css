@@ -472,10 +472,8 @@
   color: #fff;
 }
 
+
 .btn-delete {
-  display: none;
-}
-.btn-delete.active {
   display: block;
   position: relative;
 
@@ -837,7 +835,7 @@
   cursor: pointer;
   height: 5px;
   width: 400px;
-  margin: 0px 15px 0px;
+  margin: 0px 15px 0px !important;
 }
 #slider-timeline::-webkit-slider-thumb {
   /* display: none; */
@@ -870,10 +868,10 @@
   color: rgb(229, 229, 229);
 }
 .wrap-songing-item .songing-volume .fa-volume-down {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .wrap-songing-item .songing-volume .fa-volume-up {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 #slider-volume {
   cursor: pointer;
