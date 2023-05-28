@@ -588,22 +588,7 @@
   border-radius: 10px;
 }
 
-.song-item .song-edit .delete-checkbox {
-  font-size: 20px;
-  display: none;
-  margin-right: 10px;
-}
-/* checkbox edit  */
-.song-item .song-edit .delete-checkbox.active {
-  display: block;
-  transform: scale(1.1);
-  cursor: pointer;
-}
 
-.song-item .song-edit .delete-checkbox:checked::before {
-  background-color: #6b8aff;
-  border-color: #6b8aff;
-}
 /* End Playlist Feed  */
 
 /* start MUSIC FEED  */

@@ -50,6 +50,8 @@ public class modifyProfileServlet extends HttpServlet {
         String email  = req.getParameter("email");
         String userBio = req.getParameter("userBio");
 
+        System.out.println(username);
+
         InputStream serviceAccount;
 
         {
@@ -136,20 +138,10 @@ public class modifyProfileServlet extends HttpServlet {
                 }
                 String emailCheck = UserDAO.checkUserByEmail(email);
                 String usernameCheck = UserDAO.checkUserByUsername(username);
-                if(emailCheck != null && emailCheck.equals(email)){
-                    message = "Email existed!";
-                }
-                else if(usernameCheck != null && usernameCheck.equals(username)){
-                    message = "Username existed!";
-                }
-                else if (!email.contains("@gmail.com")){
-                    message = "Wrong email format!";
-                }
-                else{
-                    UserDAO.update(userUpdate);
 
-                    url = "/loadSong";
-                }
+                System.out.println(userUpdate.getUserBio());
+                UserDAO.update(userUpdate);
+                System.out.println("updated");
 
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);

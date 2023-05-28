@@ -56,6 +56,15 @@ public class User implements Serializable {
     }
 
     public User(int userID, String username, String birthdate, String email, String password, int gender, Integer role, String userBio, String downloadUrlAvatar) {
+        this.userID = userID;
+        this.userName = username;
+        this.email = email;
+        this.userPassword = password;
+        this.birthDate = birthdate;
+        this.gender = gender;
+        this.userBio = userBio;
+        this.role = role;
+        this.userAvatar = downloadUrlAvatar;
     }
 
     public int getUserID() {

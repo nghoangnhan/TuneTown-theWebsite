@@ -299,6 +299,12 @@ function deletePlaylist() {
 
 
 const btProfile = document.getElementById("bt-profile");
+
+function loadUser(){
+  btProfile.addEventListener("click", showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
+  optionPro.classList.remove("active");
+  getUser();
+}
 function showMusicFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
   musicfeed.classList.add("active");
   playlistfeed.classList.remove("active");
@@ -487,11 +493,6 @@ function getPlaylistSongs() {
     }
   });
 }
-function loadUser(){
-  btProfile.addEventListener("click", showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
-  optionPro.classList.remove("active");
-  getUser();
-}
 
 const userid = document.getElementById("user-id").value;
 function getUser() {
@@ -550,6 +551,8 @@ function getUser() {
                   <input value="${user.userBio}" name="userBio" class="textarea" />
                 </div>
                 <input type="hidden" value="${user.roles}" name="roles" class="textarea" />
+                
+                
                 <div class="inputfield">
                   <input id="update-btn" type="submit" value="Update" class="btn" />
                 </div>
@@ -558,6 +561,18 @@ function getUser() {
                 </div>
               </div>
             </div>
+            
+            <div class="update-modal">
+              <div class="update-modal-content">
+                <h3>Confirm Delete</h3>
+                <p>Are you sure you want to update?</p>
+                <div class="modal-buttons">
+                  <button id="confirm-update-btn">Update</button>
+                  <button id="cancel-update-btn">Cancel</button>
+                </div>
+              </div>
+            </div>
+            
           </div>
         </form>
         
@@ -693,23 +708,38 @@ function getUser() {
               <label for="othergenre"><span></span>Other</label>
             </div>
             <div class="wrap-btn-update-genre">
-            <input
-              type="submit"
-              value="Update"
-              class="btn-update-genre"
-              id="btn-update-genre"
-            />
-          </div>
+              <input
+                type="submit"
+                value="Update"
+                class="btn-update-genre"
+                id="btn-update-genre"
+              />
+            </div>
+            <div class="update-modal">
+              <div class="update-modal-content">
+                <h3>Confirm Delete</h3>
+                <p>Are you sure you want to update?</p>
+                <div class="modal-buttons">
+                  <button id="confirm-update-btn">Update</button>
+                  <button id="cancel-update-btn">Cancel</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        
         <!-- END MUSIC GENRE  -->
       `;
+      loadListOfGenres();
+
+
       //Show confirm update infor modal
       // SHOW MODAL DELETE CONFIRM
-      const updateButton = document.getElementById("btn-update");
+      const updateButton = document.getElementById("update-btn");
       const updateModal = document.querySelector(".update-modal");
       const confirmUpdateBtn = document.getElementById("confirm-update-btn");
       const cancelUpdateBtn = document.getElementById("cancel-update-btn");
+      const updateform = document.getElementById("update-form")
 
       // Show confirm delete modal
       updateButton.addEventListener("click", () => {
@@ -720,6 +750,7 @@ function getUser() {
         // Perform delete operation here
         // Hide confirm delete modal
         updateModal.style.display = "none";
+        // updateform.submit();
       });
       // Handle cancel delete
       cancelUpdateBtn.addEventListener("click", () => {
@@ -730,8 +761,8 @@ function getUser() {
 
       // SHOW CONFIRM UPDATE GENRE MODAL
       const updateGenreButton = document.getElementById("btn-update-genre");
-      const inputgern = document.getElementById("popgenre");
-      inputgern.setAttribute("checked", "checked");
+      // const inputgern = document.getElementById("popgenre");
+
 
       updateGenreButton.addEventListener("click", () => {
         updateModal.style.display = "flex";
@@ -740,6 +771,7 @@ function getUser() {
       confirmUpdateBtn.addEventListener("click", () => {
         // Perform update operation here
         // Hide confirm update modal
+        // inputgern.setAttribute("checked", "checked");
         updateModal.style.display = "none";
       });
       // Handle cancel update
@@ -791,7 +823,7 @@ function getUser() {
       }
       // Call the updateAvatar function when the page loads or at the appropriate time
       updateAvatar();
-      loadListOfGenres();
+
     },
     error: function (xhr) {
       console.log("Error: " + xhr.responseText);
@@ -812,16 +844,34 @@ function loadListOfGenres() {
     },
     success:function (data) {
       var jsonData = JSON.parse(JSON.stringify(data));
+      jsonData = jsonData[0]
 
-      var favoriteGenres = jsonData[0];
-      var allGenres = jsonData[1];
-      console.log(allGenres);
+      var favoriteGenres = jsonData["genreList"];
+      var allGenres = jsonData["allGenres"];
 
       allGenres.forEach((genre) => {
-        musicGenreDiv.innerHTML += `
+        let isLiked = false;
+
+        favoriteGenres.forEach((f_genre) => {
+          if(genre.genreName == f_genre.genreName) {
+            isLiked = true;
+          }
+        });
+
+        if(isLiked) {
+          musicGenreDiv.innerHTML += `
+              <input type="checkbox" checked id="genre-id-${genre.genreId}" name="" />
+              <label for="${genre.genreName}"><span></span>${genre.genreName}</label>`;
+        }
+        else {
+          musicGenreDiv.innerHTML += `
               <input type="checkbox" id="genre-id-${genre.genreId}" name="" />
               <label for="${genre.genreName}"><span></span>${genre.genreName}</label>`;
-      })
+        }
+      });
+
+
+
     }
   });
 }
@@ -962,7 +1012,12 @@ function findSongs(searchQuery) {
   }
 
   if (dropdown.innerHTML === "") {
-    dropdown.style.display = "none"; // Hide the dropdown if no results
+    dropdown.innerHTML = `
+    <div class="song-item" id="song-item">
+    No result
+    </div>
+    `;
+    dropdown.style.display = "block"; // Hide the dropdown if no results
   } else {
     dropdown.style.display = "block"; // Show the dropdown with results
   }
