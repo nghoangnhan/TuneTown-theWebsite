@@ -1,7 +1,9 @@
 package vn.hcmute.tunetown.DAO;
 
+import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.connection.DBConnection;
 import vn.hcmute.tunetown.model.Playlist;
+import vn.hcmute.tunetown.model.Song;
 import vn.hcmute.tunetown.model.User;
 
 import javax.persistence.*;
@@ -47,9 +49,10 @@ public class PlaylistDAO {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
 
         try {
-            String jpql = "SELECT p FROM Playlist p WHERE p.userId = :userId";
+            String jpql = "SELECT p FROM Playlist p WHERE p.userId = :userId AND p.playlistType = :type";
             TypedQuery<Playlist> query = em.createQuery(jpql, Playlist.class);
             query.setParameter("userId", userId);
+            query.setParameter("type", "Personal");
 
             List<Playlist> listPLaylist = query.getResultList();
             return listPLaylist;
@@ -64,7 +67,6 @@ public class PlaylistDAO {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
-
         try {
             em.merge(playlist);
             trans.commit();
@@ -76,5 +78,44 @@ public class PlaylistDAO {
         }
     }
 
+    public void deletePLaylist (Playlist playlist) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        trans.begin();
+        try {
+            em.remove(em.merge(playlist));
+            trans.commit();
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+    }
 
+    public Playlist findSuggestedPlaylist(Integer userId) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT p FROM Playlist p WHERE p.userId = :userId AND p.playlistType = :type";
+            TypedQuery<Playlist> query = em.createQuery(jpql, Playlist.class);
+            query.setParameter("userId", userId);
+            query.setParameter("type", "Suggest");
+
+            return query.getSingleResult();
+        } catch (Exception e){
+            e.printStackTrace();
+            Playlist suggestedPlaylist = new Playlist();
+            suggestedPlaylist.setPlaylistType("Suggest");
+            suggestedPlaylist.setPlaylistName("Suggested Playlist");
+            suggestedPlaylist.setUserId(GlobalUser.globalUserId);
+            List<Song> songList = new ArrayList<>();
+            suggestedPlaylist.setPlaylistSongs(songList);
+
+
+            addPlaylist(suggestedPlaylist);
+            return suggestedPlaylist;
+        } finally {
+            em.close();
+        }
+    }
 }

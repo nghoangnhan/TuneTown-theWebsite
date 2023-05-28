@@ -362,7 +362,7 @@
 .wrap-song-item .song-ranking-nohover {
   color: #fefefe;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 700;
   font-size: 14px;
   margin-right: 5px;
@@ -370,7 +370,7 @@
 .wrap-song-item .song-genre-nohover {
   position: absolute;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 700;
   color: #fbfbfb;
   font-size: 14px;
@@ -379,7 +379,7 @@
 .wrap-song-item .song-duration-nohover {
   position: absolute;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 700;
   color: #fbfbfb;
   font-size: 14px;
@@ -402,7 +402,7 @@
 .wrap-song-item .song-ranking {
   color: #fefefe;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 700;
   margin-right: 20px;
 }
@@ -416,7 +416,7 @@
 .wrap-song-item .song-info .song-info-title {
   color: #fefefe;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 700;
   font-size: medium;
   margin-bottom: 7px;
@@ -424,13 +424,13 @@
 .wrap-song-item .song-info .song-info-author {
   color: #a6a6a6;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-size: small;
 }
 .song-item .song-genre {
   position: absolute;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 300;
   color: #fbfbfb;
   font-size: 14px;
@@ -439,7 +439,7 @@
 .song-item .song-duration {
   position: absolute;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
   font-weight: 300;
   color: #fbfbfb;
   font-size: 14px;
@@ -490,6 +490,25 @@
 
 .music-genre input[type="checkbox"]:checked + label span {
   background-color: #1ae661;
+}
+
+/* button update genre  */
+.wrap-btn-update-genre {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+.btn-update-genre {
+  border: none;
+  border-radius: 5px;
+  height: 35px;
+  width: 80px;
+  font-weight: bold;
+}
+.btn-update-genre:hover {
+  background-color: #76b88d;
+  color: #fff;
 }
 
 /* End music genres  */

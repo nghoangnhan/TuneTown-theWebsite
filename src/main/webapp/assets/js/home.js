@@ -6,6 +6,8 @@ function handleTabclick(event) {
   console.log(event.target);
 }
 
+
+
 const ava = document.getElementById("avatar-profile");
 const optionPro = document.getElementById("option-profile");
 ava.addEventListener("click", clickAva);
@@ -25,7 +27,7 @@ function PlayStopMusic() {
 }
 
 const audio = document.getElementById("audio");
-isPlayed = false;
+
 function playAudio() {
   if (isPlayed == false)
   {
@@ -38,7 +40,6 @@ function playAudio() {
   }
 }
 const songImage = document.getElementById("songing-image");
-
 let songInfoTitle = document.getElementById("songing-info-title");
 let songInfoAuthor = document.getElementById("songing-info-author");
 
@@ -102,6 +103,7 @@ function moveToControlBar(get) {
     minute_int = parseInt(duration / 60);
     second = parseInt((minute_float - minute_int) * 60);
     end.innerHTML = minute_int + ":" + second;
+
     console.log(end.innerHTML);
     console.log(duration);
     console.log(songTitle);
@@ -246,7 +248,7 @@ function deleteLetter(str, letter) {
   return str.replace(new RegExp(letter, "g"), "");
 }
 
-// CONTENT FEED CHANGE EVENT
+// CONTENT FEED CHANGE EVENT PLAYLIST
 var currentPlaylistId;
 
 var btnBackHome = document.getElementById("btn-back-home");
@@ -263,6 +265,12 @@ btnHome.addEventListener("click", handleBackHomeClick);
 
 function loadPlaylistSongs(get) {
   let playlistId = get.getAttribute("id");
+  let playlistName = get.innerText;
+
+  if (playlistName == "Suggest Playlist") {
+
+  }
+
   const btnPlaylist = document.getElementById(playlistId);
   btnBackHome.addEventListener("click", handleBackHomeClick);
   btnPlaylist.addEventListener("click", showPlaylistFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
@@ -272,13 +280,25 @@ function loadPlaylistSongs(get) {
   currentPlaylistId = playlistId;
   getPlaylistSongs();
 }
-const btProfile = document.getElementById("bt-profile");
-
-function loadUser(){
-  btProfile.addEventListener("click", showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
-  optionPro.classList.remove("active");
-  getUser();
+let playlists;
+function deletePlaylist() {
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/deletePlaylist",
+    type: "get",
+    data:{
+      playlistId : currentPlaylistId,
+    },
+    success: function () {
+      loadPLaylist();
+    },
+    error: function (xhr) {
+      console.log("Error: " + xhr.responseText);
+    }
+  });
 }
+
+
+const btProfile = document.getElementById("bt-profile");
 function showMusicFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
   musicfeed.classList.add("active");
   playlistfeed.classList.remove("active");
@@ -314,11 +334,18 @@ function getPlaylistSongs() {
       playlistId: currentPlaylistId
     },
     success: function (data) {
-      var listSong = JSON.parse(JSON.stringify(data));
+      var listSong = JSON.parse(JSON.stringify(data.slice(1)));
       console.log(listSong);
 
       var listSongHTML = document.getElementById("playlist-songs");
       listSongHTML.innerHTML = ``;
+
+      var titleHTML = document.getElementById("title-playlist-feed");
+      titleHTML.innerHTML = ``;
+      titleHTML.innerHTML += `
+          <div class="title-playlist-feed" id="title-playlist" name="playlistName">${data[0].playlistName}</div>
+      `;
+
 
       listSong.forEach((song) => {
         listSongHTML.innerHTML += `
@@ -338,8 +365,58 @@ function getPlaylistSongs() {
         `;
       });
 
+      // Handle event edit name playlist
+      var titlePlaylist = document.getElementById("title-playlist");
+      var inputElement = document.createElement("input");
+      inputElement.classList.add("nav-item", "text");
+      titlePlaylist.addEventListener("dblclick", changeToInput);
+
+      function changeToInput() {
+        inputElement.value = titlePlaylist.innerText;
+
+        // Replace the title element with the input element
+        titlePlaylist.parentNode.replaceChild(inputElement, titlePlaylist);
+
+        // Focus on the input field
+        inputElement.focus();
+
+        console.log("change to input");
+      }
+      var contentField = document.getElementById("content");
+      contentField.addEventListener("click", changeToText);
+
+      function changeToText(){
+        // Replace the input element with the title element
+        inputElement.parentNode.replaceChild(titlePlaylist, inputElement);
+
+        titlePlaylist.innerText = inputElement.value;
+
+        titlePlaylist.focus();
+
+
+        // Edit name playlist from servlet
+        $.ajax({
+          url: "/TuneTown_theWebsite_war_exploded/editNamePlaylist",
+          type: "post",
+          data: {
+            playlistId: currentPlaylistId,
+            playlistName: inputElement.value
+          },
+          success: function (data) {
+
+            loadPLaylist();
+            console.log("Edit successfully");
+          },
+          error: function (xhr){
+            console.log("Error: " + xhr.responseText);
+          }
+        });
+      }
+
+
       //DELETE SONG ITEM TRONG PLAYLIST
       // Show contextMenu Trong Playlist
+      let activeContextMenu = null;
       const songItemsPlaylist = document.querySelectorAll(".song-item.playlisted");
       console.log(songItemsPlaylist);
       songItemsPlaylist.forEach((songItemPlaylist) => {
@@ -410,6 +487,11 @@ function getPlaylistSongs() {
     }
   });
 }
+function loadUser(){
+  btProfile.addEventListener("click", showUserFeed(musicfeed, playlistfeed, userfeed, uploadfeed));
+  optionPro.classList.remove("active");
+  getUser();
+}
 
 const userid = document.getElementById("user-id").value;
 function getUser() {
@@ -471,17 +553,208 @@ function getUser() {
                 <div class="inputfield">
                   <input id="update-btn" type="submit" value="Update" class="btn" />
                 </div>
+                <div class="input-form">
+                    <a href="view/changePassword.jsp">Change Password</a>
+                </div>
               </div>
             </div>
           </div>
         </form>
         
+          <!-- HISTORY -->
+        <!-- VÙNG FEED NHẠC  -->
+        <div class="music-history">
+          <!-- Song Popular -->
+          <div class="title-song">History<i class="fa fa-history"></i></div>
+          <div class="wrap-song-item">
+            <div class="song-item nohover">
+              <div class="song-ranking-nohover">#</div>
+              <div class="song-info">
+                <div class="song-info-title">Title</div>
+              </div>
+              <div class="song-genre-nohover">Genre</div>
+              <div class="song-duration-nohover">Duration</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">1</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">2</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">3</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">4</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">5</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+      
+            <div class="song-item">
+              <div class="song-ranking">6</div>
+              <div class="song-img">
+                <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
+              </div>
+              <div class="song-info">
+                <div class="song-info-title">Starboy</div>
+                <div class="song-info-author">The Weekend</div>
+              </div>
+              <div class="song-genre">Pop</div>
+              <div class="song-duration">3:48</div>
+            </div>
+          </div>
+          <!-- End Song Popular -->
+        </div>
+        <!-- END HISTORY -->
+      
+        <!-- MUSIC GENRE  -->
+        <div class="wrap-music-genre">
+          <div class="title-song">
+            Music genre<i class="fa fa-headphones"></i>
+          </div>
+          <div class="choose-music-genre">
+            <div class="music-genre" id="music-genre-id">
+              <input type="checkbox" id="popgenre" name="" />
+              <label for="popgenre"><span></span>Pop</label>
+      
+              <input type="checkbox" id="rockrollgenre" name="" />
+              <label for="rockrollgenre"><span></span>Rock</label>
+      
+              <input type="checkbox" id="jazzgenre" name="" />
+              <label for="jazzgenre"><span></span>Jazz</label>
+      
+              <input type="checkbox" id="countrygenre" name="" />
+              <label for="countrygenre"><span></span>Country</label>
+      
+              <input type="checkbox" id="discogenre" name="" />
+              <label for="discogenre"><span></span>Disco</label>
+      
+              <input type="checkbox" id="rapgenre" name="" />
+              <label for="rapgenre"><span></span>Rap</label>
+      
+              <input type="checkbox" id="vpopgenre" name="" />
+              <label for="vpopgenre"><span></span>V-Pop</label>
+      
+              <input type="checkbox" id="kpopgenre" name="" />
+              <label for="kpopgenre"><span></span>K-Pop</label>
+      
+              <input type="checkbox" id="othergenre" name="" />
+              <label for="othergenre"><span></span>Other</label>
+            </div>
+            <div class="wrap-btn-update-genre">
+            <input
+              type="submit"
+              value="Update"
+              class="btn-update-genre"
+              id="btn-update-genre"
+            />
+          </div>
+          </div>
+        </div>
+        <!-- END MUSIC GENRE  -->
       `;
+      //Show confirm update infor modal
+      // SHOW MODAL DELETE CONFIRM
+      const updateButton = document.getElementById("btn-update");
+      const updateModal = document.querySelector(".update-modal");
+      const confirmUpdateBtn = document.getElementById("confirm-update-btn");
+      const cancelUpdateBtn = document.getElementById("cancel-update-btn");
+
+      // Show confirm delete modal
+      updateButton.addEventListener("click", () => {
+        updateModal.style.display = "flex";
+      });
+      // Handle confirm delete
+      confirmUpdateBtn.addEventListener("click", () => {
+        // Perform delete operation here
+        // Hide confirm delete modal
+        updateModal.style.display = "none";
+      });
+      // Handle cancel delete
+      cancelUpdateBtn.addEventListener("click", () => {
+        // Hide confirm delete modal
+        updateModal.style.display = "none";
+      });
+
+
+      // SHOW CONFIRM UPDATE GENRE MODAL
+      const updateGenreButton = document.getElementById("btn-update-genre");
+      const inputgern = document.getElementById("popgenre");
+      inputgern.setAttribute("checked", "checked");
+
+      updateGenreButton.addEventListener("click", () => {
+        updateModal.style.display = "flex";
+      });
+      // Handle confirm update
+      confirmUpdateBtn.addEventListener("click", () => {
+        // Perform update operation here
+        // Hide confirm update modal
+        updateModal.style.display = "none";
+      });
+      // Handle cancel update
+      cancelUpdateBtn.addEventListener("click", () => {
+        // Hide confirm update modal
+        updateModal.style.display = "none";
+      });
+
 
       // function to handle event
       var imageInput = document.getElementById("image-input");
       var imagePreview = document.getElementById("image-preview");
       imageInput.style.display = "none";
+
+      let handledClick = false;
 
 
       function updateAvatar() {
@@ -518,11 +791,37 @@ function getUser() {
       }
       // Call the updateAvatar function when the page loads or at the appropriate time
       updateAvatar();
-
-      var btUpdate = document.getElementById("update-btn");
+      loadListOfGenres();
     },
     error: function (xhr) {
       console.log("Error: " + xhr.responseText);
+    }
+  });
+}
+
+function loadListOfGenres() {
+  console.log("work");
+  let musicGenreDiv = document.getElementById("music-genre-id");
+  musicGenreDiv.innerHTML =``;
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/loadGenres",
+    type: "get",
+    dataType: "json",
+    data: {
+      userId: userid
+    },
+    success:function (data) {
+      var jsonData = JSON.parse(JSON.stringify(data));
+
+      var favoriteGenres = jsonData[0];
+      var allGenres = jsonData[1];
+      console.log(allGenres);
+
+      allGenres.forEach((genre) => {
+        musicGenreDiv.innerHTML += `
+              <input type="checkbox" id="genre-id-${genre.genreId}" name="" />
+              <label for="${genre.genreName}"><span></span>${genre.genreName}</label>`;
+      })
     }
   });
 }
@@ -591,177 +890,6 @@ function upSong(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // SHOW EDIT OPTION PLAYLIST
-const deleteCheckboxes = document.getElementsByClassName(".delete-checkbox");
-console.log(deleteCheckboxes)
-const editButton = document.getElementById("btn -edit");
-const deleteButton = document.getElementById("btn-delete");
-const cancelButton = document.getElementById("btn-cancel");
-editButton.addEventListener(
-    "click",
-    (showEditOption = () => {
-      deleteButton.classList.toggle("active");
-      cancelButton.classList.toggle("active");
-      [...deleteCheckboxes].forEach((item) => item.classList.toggle("active"));
-    })
-);
-deleteButton.addEventListener(
-    "click",
-    (deleteOption = () => {
-      const checkboxes = document.querySelectorAll(".delete-checkbox:checked");
-      checkboxes.forEach((checkbox) => {
-        const songItem = checkbox.closest(".song-item");
-        songItem.remove();
-      });
-    })
-);
-cancelButton.addEventListener(
-    "click",
-    (removeOption = () => {
-      deleteButton.classList.remove("active");
-      cancelButton.classList.remove("active");
-      [...deleteCheckboxes].forEach((item) => item.classList.remove("active"));
-    })
-);
-
-// RIGHT CLICK SONG ITEM
-// Show contextMenu
-const songItems = document.querySelectorAll(".song-item");
-let activeContextMenu = null;
-songItems.forEach((songItem) => {
-  songItem.addEventListener("contextmenu", showContextMenu);
-});
-
-
-
-let playlists;
-
-
-function showContextMenu(event) {
-  event.preventDefault(); // Ngăn chặn hiển thị menu chuột phải mặc định của trình duyệt
-
-  const songItem = event.target.closest(".song-item");
-  const songItems = document.querySelectorAll(".song-item");
-  songItem.classList.add("active");
-
-  // Xóa context menu cũ nếu nó tồn tại
-  if (activeContextMenu) {
-    activeContextMenu.remove();
-  }
-  if (songItem.classList.contains("active")) {
-    songItems.forEach((item) => item.classList.remove("active"));
-  }
-
-  let playlistDropdownHTML = ``;
-  loadPLaylists();
-  console.log(playlists);
-  playlists.forEach((playlist) => {
-    playlistDropdownHTML += `
-           <li class="my-playlist" id="my-playlist-${playlist.playlistId}">${playlist.playlistName}</li>
-      `;
-  });
-
-
-  const contextMenu = document.createElement("div");
-  contextMenu.className = "context-menu";
-  contextMenu.innerHTML = `
-    <ul>
-      <li id="context-menu-option">
-        <ul class="add-to-playlist">Add to Playlist<i class="fa fa-chevron-right"></i>
-            <ul class="playlist-dropdown" id="playlist-dropdown-id">   
-                ${playlistDropdownHTML}       
-            </ul>
-        </ul>
-      </li>   
-      <li>Share</li>
-      <li>Copy Link</li>
-      
-    </ul>
-  `;
-
-
-
-
-
-  const songItemRect = songItem.getBoundingClientRect();
-  contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
-  contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
-  songItem.appendChild(contextMenu);
-  activeContextMenu = contextMenu; // Cập nhật context menu đang hiển thị
-  songItem.classList.add("active");
-  document.addEventListener("click", function hideContextMenu() {
-    if (activeContextMenu === contextMenu) {
-      activeContextMenu = null; // Gán giá trị null nếu context menu được đóng bằng cách click vào một playlist item
-      songItem.classList.remove("active");
-    }
-    document.removeEventListener("click", hideContextMenu);
-    // songItem.classList.remove("active");
-    contextMenu.remove();
-  });
-
-  // SHOW PLAYLIST OPTION
-  const addToPlaylistItem = contextMenu.querySelector(".add-to-playlist");
-  const playlistDropdown = document.querySelector(".playlist-dropdown");
-  const playlistItems = document.querySelectorAll(".my-playlist");
-  let isDropdownShown = false; // Biến để kiểm tra xem dropdown đã được hiển thị chưa
-
-  addToPlaylistItem.addEventListener("mouseenter", showPlaylistDropdown);
-  // addToPlaylistItem.addEventListener("mouseout", closePlaylistDropdown);
-  // playlistDropdown.addEventListener("mouseover", showPlaylistDropdown);
-  playlistDropdown.addEventListener("mouseout", closePlaylistDropdown);
-
-  playlistItems.forEach((playlistItem) => {
-    playlistItem.addEventListener("click", closePlaylistDropdown);
-  });
-
-  function closePlaylistDropdown(event) {
-    if (
-        !addToPlaylistItem.contains(event.relatedTarget) &&
-        !playlistDropdown.contains(event.relatedTarget)
-    ) {
-      playlistDropdown.style.display = "none";
-    }
-  }
-  function showPlaylistDropdown() {
-    console.log("Show playlist dropdown");
-    playlistDropdown.style.display = "block";
-
-    isDropdownShown = true; // Đặt biến isDropdownShown thành true khi dropdown được hiển thị
-    if (isDropdownShown) songItem.classList.add("active");
-  }
-
-
-  // rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
-  // console.log(rightClickedSongId);
-
-  playlistItems.forEach((playlistItem) => {
-    playlistItem.addEventListener("click",getPlaylistId=(e)=>{
-      const playlistID = e.target.getAttribute("id");
-      let rightClickedSongId = event.target.getAttribute("id");
-      rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
-      console.log("rightclickedSongId:" + rightClickedSongId);
-      addSongToPlaylist(rightClickedSongId, playlistID);
-    })
-  });
-
-}
 
 function loadPLaylists(){
   $.ajax({
@@ -839,3 +967,20 @@ function findSongs(searchQuery) {
     dropdown.style.display = "block"; // Show the dropdown with results
   }
 }
+
+function setPersonalPlaylist() {
+  let playlistId = currentPlaylistId;
+  $.ajax({
+    url: "/TuneTown_theWebsite_war_exploded/setPersonal",
+    type: "get",
+    data: {
+      playlistId: playlistId,
+    },
+    success: function () {
+      loadPLaylist();
+    },
+    error: function (xhr) {
+      console.log("Error: " + xhr.responseText);
+    }
+  });
+};

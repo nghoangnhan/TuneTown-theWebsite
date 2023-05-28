@@ -1,4 +1,4 @@
-package vn.hcmute.tunetown.controller.Playlist;
+package vn.hcmute.tunetown.controller.Playlist.SuggestPlaylist;
 
 import vn.hcmute.tunetown.DAO.GenreDAO;
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @WebServlet(urlPatterns = {"/suggestPlaylist"})
@@ -24,29 +25,56 @@ public class suggestPlaylist extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        // get list of favorite genres
         GenreDAO genreDAO = new GenreDAO();
         List<Genre> favoriteGenre = genreDAO.getFavoriteGenresByUserId(GlobalUser.globalUserId);
 
-        Playlist suggestedPlaylist = new Playlist();
+
         PlaylistDAO playlistDAO = new PlaylistDAO();
         SongDAO songDAO = new SongDAO();
 
-        suggestedPlaylist.setPlaylistType("Suggest");
-        suggestedPlaylist.setPlaylistName("Suggested Playlist");
-        suggestedPlaylist.setUserId(GlobalUser.globalUserId);
+        Playlist suggestedPlaylist;
 
+
+        // create suggestion on existing suggested playlist
+        // if not existing --> create new one
+        suggestedPlaylist = playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId);
         List<Song> songList = new ArrayList<>();
         suggestedPlaylist.setPlaylistSongs(songList);
 
+//        if(suggestedPlaylist == null) {
+//            System.out.println("Create new suggest playlist");
+//            suggestedPlaylist = new Playlist();
+//            suggestedPlaylist.setPlaylistType("Suggest");
+//            suggestedPlaylist.setPlaylistName("Suggested Playlist");
+//            suggestedPlaylist.setUserId(GlobalUser.globalUserId);
+//
+//            playlistDAO.addPlaylist(suggestedPlaylist);
+//        }
 
         for(Genre g : favoriteGenre) {
             List<Song> songsBasedOnGenre = songDAO.getTop10SongByGenreId(g);
 
-            for (int i = 0; i < songsBasedOnGenre.size(); i++) {
-                suggestedPlaylist.getPlaylistSongs().add(getRandomSong(songsBasedOnGenre));
+            // check whether adding song has already in the playlist or not
+            for (int i = 0; i < 10; i++) {
+                Song addedSong = getRandomSong(songsBasedOnGenre);
+                boolean isAdded = false;
+
+                for(Song song : suggestedPlaylist.getPlaylistSongs()) {
+                    if(Objects.equals(addedSong.getSongId(), song.getSongId())){
+                        isAdded = true;
+                    }
+                }
+
+                if(!isAdded) {
+                    suggestedPlaylist.getPlaylistSongs().add(addedSong);
+                }
             }
         }
-        playlistDAO.addPlaylist(suggestedPlaylist);
+
+        playlistDAO.modifyPlaylist(suggestedPlaylist);
+        System.out.println("size:" + suggestedPlaylist.getPlaylistSongs().size());
+
 
         getServletContext().getRequestDispatcher("/loadPlaylists").forward(req, resp);
     }

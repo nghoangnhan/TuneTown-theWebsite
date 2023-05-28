@@ -70,10 +70,13 @@ public class loadPlaylistSongsServlet extends HttpServlet {
         Playlist playlist = playlistDAO.getPlaylistById(iPlaylistId);
 
         JSONArray jsonArray = new JSONArray();
+        JSONObject jsonPlaylist = new JSONObject();
+        jsonPlaylist.put("playlistName", playlist.getPlaylistName());
+        jsonArray.put(jsonPlaylist);
 
-        for(Song song : playlist.getPlaylistSongs()) {
+        for (Song song : playlist.getPlaylistSongs()) {
+            JSONObject jsonSong = new JSONObject(); // Create a new object for each song
 
-            JSONObject jsonSong = new JSONObject();
             jsonSong.put("songId", song.getSongId());
             jsonSong.put("songName", song.getSongName());
             jsonSong.put("songPoster", song.getSongPoster());

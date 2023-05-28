@@ -496,6 +496,30 @@
   color: #fff;
 }
 
+.btn-setPersonal {
+  display: block;
+  position: relative;
+
+  margin-top: 10px;
+  margin-left: 20px;
+  font-family: monospace;
+  font-size: larger;
+  background-color: #f3f7fe;
+  color: #24984d;
+  border: none;
+  border-radius: 8px;
+  width: 120px;
+  height: 35px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.btn-setPersonal:hover {
+  background-color: #982424;
+  box-shadow: 0 0 0 4px #db3b3b;
+  color: #fff;
+}
+
+
 .btn-cancel {
   display: none;
 }
@@ -697,6 +721,21 @@
   margin-right: 10px;
 }
 
+#btn-suggest-playlist {
+  background-color: transparent;
+  border: none;
+  color: #a6a6a6;
+  font-size: large;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+#btn-suggest-playlist:hover {
+  color: #fff;
+}
+#btn-suggest-playlist i {
+  margin-right: 10px;
+}
+
 .music-playlist .myplaylist-title {
   text-transform: uppercase;
   font-weight: bold;
@@ -723,7 +762,138 @@
 
 /* END MUSIC PLAYLIST */
 
+/*NOTIFICATION CONFIRM DELETE */
+.delete-modal {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-modal-content {
+  width: 320px;
+  height: 120px;
+  background-color: #fff;
+  padding: 20px 15px 10px;
+  border-radius: 5px;
+}
+.delete-modal-content h3 {
+  font-weight: bold;
+}
+.delete-modal-content p {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.modal-buttons {
+  text-align: right;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  margin-left: 10px;
+}
+.modal-buttons #confirm-delete-btn {
+  background-color: #bd2020;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+  font-weight: bold;
+}
+.modal-buttons #confirm-delete-btn:hover {
+  background-color: #ff0000;
+  color: white;
+}
+.modal-buttons #cancel-delete-btn {
+  background-color: #e8e8e8;
+  color: #24984d;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+  font-weight: bold;
+}
+.modal-buttons #cancel-delete-btn:hover {
+  background-color: #145b2d;
+  color: white;
+}
+
+/*Update Modal Confirm Button*/
+/* MODAL UPDATE */
+.update-modal {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-modal-content {
+  width: 320px;
+  height: 120px;
+  background-color: #fff;
+  padding: 20px 15px 10px;
+  border-radius: 5px;
+}
+.update-modal-content h3 {
+  font-weight: bold;
+}
+.update-modal-content p {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.modal-buttons {
+  text-align: right;
+  margin-top: 15px;
+}
+
+.modal-buttons button {
+  margin-left: 10px;
+}
+.modal-buttons #confirm-update-btn {
+  background-color: #1cac56;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+  font-weight: bold;
+}
+.modal-buttons #confirm-update-btn:hover {
+  background-color: #0ce46d;
+  color: white;
+}
+.modal-buttons #cancel-update-btn {
+  background-color: #e8e8e8;
+  color: #24984d;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+  width: 70px;
+  font-weight: bold;
+}
+.modal-buttons #cancel-update-btn:hover {
+  background-color: #145b2d;
+  color: white;
+}
+
+
 /* END CONTENT */
+
+
+
 
 /* start MUSIC CONTROL BAR  */
 .music-control-bar {

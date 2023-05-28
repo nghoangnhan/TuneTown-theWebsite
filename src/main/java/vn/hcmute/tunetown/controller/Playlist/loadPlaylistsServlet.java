@@ -26,6 +26,12 @@ public class loadPlaylistsServlet extends HttpServlet {
 
         listPlaylist = playlistDAO.getAllPlaylistByUserId(GlobalUser.globalUserId);
 
+        if(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId) != null){
+            listPlaylist.add(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId));
+        }
+
+        System.out.println(listPlaylist.size());
+
         PrintWriter out = resp.getWriter();
 
         for(Playlist p : listPlaylist) {
@@ -39,6 +45,12 @@ public class loadPlaylistsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         listPlaylist = playlistDAO.getAllPlaylistByUserId(GlobalUser.globalUserId);
+
+        if(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId) != null){
+            listPlaylist.add(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId));
+        }
+
+        System.out.println(listPlaylist.size());
 
         JSONArray jsonArray = new JSONArray();
 

@@ -269,6 +269,8 @@
       </div>
       <!-- End Song Popular -->
 
+
+
       <!-- Song Item  -->
       <div class="title-song">Recommend Song</div>
       <div class="wrap-song-item" id="home-song">
@@ -284,7 +286,7 @@
           <c:if test="${status.index < 100}">
             <div class="song-item" id="song-item-${song.getSongId()}">
               <div class="song-img">
-                <img id="${song.getSongId()}" src="./assets/img/CoverArt/starboy.jpg" alt="" onclick="moveToControlBar(this)" />
+                <img id="${song.getSongId()}" src="./assets/img/CoverArt/starboy.jpg" alt="" onclick="playSong(this)" />
                 <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
               <div class="song-info" id="info-song">
@@ -292,7 +294,7 @@
                 <div class="song-info-author" id="song-info-author-${song.getSongId()}">${song.getArtists().getUserName()}</div>
               </div>
               <div class="song-genre">${song.getGenre().getGenreName()}</div>
-              <div class="song-view">1,000,000</div>
+              <div class="song-view">${song.getAmountOfListens()}</div>
             </div>
           </c:if>
         </c:forEach>
@@ -314,8 +316,23 @@
           <button id="btn-delete" class="btn-delete">Delete</button>
         </div>
 
+        <div class="wrap-button-setPersonal">
+          <button id="btn-setPersonal" class="btn-setPersonal" onclick="setPersonalPlaylist()">To personal</button>
+        </div>
+
       </div>
-      <div class="title-playlist-feed">My Playlist #1</div>
+      <%--      Notification Cofirm--%>
+      <div id="delete-modal" class="delete-modal">
+        <div class="delete-modal-content">
+          <h3>Confirm Delete</h3>
+          <p>Are you sure you want to delete?</p>
+          <div class="modal-buttons">
+            <button id="confirm-delete-btn">Delete</button>
+            <button id="cancel-delete-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="title-playlist-feed" id="title-playlist-feed" name="playlistName" ></div>
       <div class="wrap-song-item">
         <div class="song-item nohover">
           <div class="song-ranking-nohover">#</div>
@@ -344,12 +361,9 @@
           <button id="btn-create-playlist" onclick="createPlaylist()" >
             <i class="fa fa-plus-square">Create Playlist</i>
           </button>
-
         <button id="btn-suggest-playlist" onclick="suggestPlaylist()" >
           <i class="fa fa-plus-square">Suggest Playlist</i>
         </button>
-
-
       </div>
 
       <div class="myplaylist-title">My Playlist</div>
@@ -387,12 +401,12 @@
       <div class="songing-control">
         <div class="control-btn">
             <i id="fa-random" class="fa fa-random"></i>
-          <i id="fa-backward" class="fa fa-step-backward fa-2x" onclick="backwardSong(this)"></i>
+          <i id="fa-backward" class="fa fa-step-backward fa-2x" onclick="backward()"></i>
           <i id="fa-pause-circle" class="fa fa-pause-circle fa-2x" onclick="playAudio()">
             <audio id="audio" controls hidden="hidden" src = "" type="audio/mpeg"> </audio>
           </i>
             <i id="fa-play-circle" class="fa fa-play-circle active" onclick="playAudio()"></i>
-          <i id="fa-forward" class="fa fa-step-forward fa-2x"></i>
+          <i id="fa-forward" class="fa fa-step-forward fa-2x" onclick="forward()"></i>
             <i id="fa-retweet" class="fa fa-retweet"></i>
         </div>
         <div class="control-timeline">

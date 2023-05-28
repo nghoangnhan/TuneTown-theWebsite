@@ -47,4 +47,20 @@ public class GenreDAO {
         }
     }
 
+    public List<Genre> getAllGenres () {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT g FROM Genre g";
+            TypedQuery<Genre> query = em.createQuery(jpql, Genre.class);
+
+            return query.getResultList();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
 }

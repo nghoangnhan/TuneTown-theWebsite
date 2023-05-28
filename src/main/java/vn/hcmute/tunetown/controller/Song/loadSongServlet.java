@@ -43,6 +43,14 @@ public class loadSongServlet extends HttpServlet {
 
                 PlaylistDAO playlistDAO = new PlaylistDAO();
                 List<Playlist> listPlaylist = playlistDAO.getAllPlaylistByUserId(loggedUser.getUserID());
+
+                Playlist suggestedPlaylist = playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId);
+
+                if(suggestedPlaylist != null){
+                    listPlaylist.add(suggestedPlaylist);
+                }
+
+
                 req.setAttribute("listPlaylist", listPlaylist);
                 req.setAttribute("username", loggedUser.getUserName());
                 req.setAttribute("userId", loggedUser.getUserID());

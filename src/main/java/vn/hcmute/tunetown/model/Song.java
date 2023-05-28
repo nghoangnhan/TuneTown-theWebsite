@@ -15,13 +15,13 @@ public class Song {
     private Integer songId;
     private String songName;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User artists;
 
     private String songPoster;
     private String songData;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Genre genre;
     private Integer amountOfListens;
 
