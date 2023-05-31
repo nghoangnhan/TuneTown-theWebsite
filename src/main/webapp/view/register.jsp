@@ -106,14 +106,14 @@
               <div id="message">${message}</div>
               <div class="input-form">
                 <p class="input-form-register">
-                  Do not have an account?
-                  <a href="/TuneTown_theWebsite_war_exploded/">Login</a>
+                  Have an account?
+                  <a href="/">Login</a>
                 </p>
               </div>
               <div class="input-form">
                 <p>
                   Do not remember password?
-                  <a href="/TuneTown_theWebsite_war_exploded/view/forgetPassword.jsp">Forgot Password</a>
+                  <a href="/view/forgetPassword.jsp">Forgot Password</a>
                 </p>
               </div>
             </form>

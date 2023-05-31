@@ -266,7 +266,7 @@ function loadPlaylistSongs(get) {
 let playlists;
 function deletePlaylist() {
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/deletePlaylist",
+    url: "/deletePlaylist",
     type: "get",
     data:{
       playlistId : currentPlaylistId,
@@ -321,7 +321,7 @@ function showUploadFeed(musicfeed, playlistfeed, userfeed, uploadfeed) {
 
 function getPlaylistSongs() {
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/loadPlaylistSongs",
+    url: "/loadPlaylistSongs",
     type: "post",
     dataType: "json",
     data: {
@@ -388,7 +388,7 @@ function getPlaylistSongs() {
 
         // Edit name playlist from servlet
         $.ajax({
-          url: "/TuneTown_theWebsite_war_exploded/editNamePlaylist",
+          url: "/editNamePlaylist",
           type: "post",
           data: {
             playlistId: currentPlaylistId,
@@ -471,7 +471,7 @@ function getPlaylistSongs() {
             songItem.remove();
             // Set status to 1
             $.ajax({
-              url: "/TuneTown_theWebsite_war_exploded/removeSongPlaylist",
+              url: "/removeSongPlaylist",
               type: "post",
               data:{
                 songId: songId
@@ -528,7 +528,7 @@ function downloadSongItemFunc(songId) {
 const userid = document.getElementById("user-id").value;
 function getUser() {
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/loadProfile",
+    url: "/loadProfile",
     type: "post",
     dataType: "json",
     data: {
@@ -750,7 +750,7 @@ function getUser() {
 
         musicGenreDiv.innerHTML =``;
         $.ajax({
-          url: "/TuneTown_theWebsite_war_exploded/loadGenres",
+          url: "/loadGenres",
           type: "get",
           dataType: "json",
           data: {
@@ -803,7 +803,7 @@ function getUser() {
 
                 // Update user's genres
                 $.ajax({
-                  url: "/TuneTown_theWebsite_war_exploded/submitSelectedGenres",
+                  url: "/submitSelectedGenres",
                   type: "post",
                   data: {
                     genreIds: selectedGenres
@@ -834,7 +834,7 @@ function getUser() {
 
 function uploadSong(){
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/loadProfile",
+    url: "/loadProfile",
     type: "post",
     dataType: "json",
     data: {
@@ -891,7 +891,7 @@ function uploadSong(){
       }
       // LOAD GENRES
       $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/loadGenres",
+        url: "/loadGenres",
         type: "get",
         dataType: "json",
         data: {
@@ -931,7 +931,7 @@ function upSong(){
 
 function loadPLaylists(){
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/loadPlaylists",
+    url: "/loadPlaylists",
     type: "post",
     dataType: "json",
     success: function (data) {
@@ -953,7 +953,7 @@ function addSongToPlaylist(rightClickedSongId, playlistId) {
   playlistId = deleteLetter(playlistId, "my-playlist-");
 
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/addSongToPlaylist",
+    url: "/addSongToPlaylist",
     type: "post",
     data: {
       songId : rightClickedSongId,
@@ -1014,7 +1014,7 @@ function findSongs(searchQuery) {
 function setPersonalPlaylist() {
   let playlistId = currentPlaylistId;
   $.ajax({
-    url: "/TuneTown_theWebsite_war_exploded/setPersonal",
+    url: "/setPersonal",
     type: "get",
     data: {
       playlistId: playlistId,

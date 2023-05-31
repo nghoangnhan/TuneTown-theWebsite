@@ -114,7 +114,7 @@
             </div>
         </form>
         <div class="input-form">
-            <p>Return To Login <a href="/TuneTown_theWebsite_war_exploded/">Return</a></p>
+            <p>Return To Login <a href="/">Return</a></p>
         </div>
     </div>
 </div>

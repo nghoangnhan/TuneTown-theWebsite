@@ -10,11 +10,11 @@
 
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:mysql://localhost:3306/tunetown"/>
+                      value="jdbc:mysql://containers-us-west-153.railway.app:6190/railway"/>
             <property name="javax.persistence.jdbc.driver"
                       value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="023345458"/>
+            <property name="javax.persistence.jdbc.password" value="O8IAwprPF5cGtz36oxGk"/>
             <property name="javax.persistence.schema-generation.database.action"
                       value="update"/>
         </properties>

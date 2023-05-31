@@ -97,7 +97,7 @@
       </div>
     </form>
     <div class="input-form">
-      <p>Return To Homepage <a href="/TuneTown_theWebsite_war_exploded/loadSong">Return</a></p>
+      <p>Return To Homepage <a href="/loadSong">Return</a></p>
     </div>
   </div>
 </div>

@@ -13,7 +13,7 @@ function playAudio() {
 
 function createPlaylist() {
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/createPlaylist",
+        url: "/createPlaylist",
         type: "get",
         success: function () {
             loadPLaylist();
@@ -28,7 +28,7 @@ function createPlaylist() {
 
 function loadPLaylist(){
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/loadPlaylists",
+        url: "/loadPlaylists",
         type: "post",
         dataType: "json",
         success: function (data) {
@@ -56,7 +56,7 @@ function deleteLetter(str, letter) {
 
 function suggestPlaylist() {
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/suggestPlaylist",
+        url: "/suggestPlaylist",
         type: "get",
         success: function () {
             loadPLaylist();
@@ -70,7 +70,7 @@ function suggestPlaylist() {
 
 function recommendPlaylist(genreId) {
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/recommendPlaylist",
+        url: "/recommendPlaylist",
         type: "post",
         data:{
             genreId: genreId
@@ -114,7 +114,7 @@ function playSong(currentSong) {
     let songId = currentSong.getAttribute("id");
 
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/playSong",
+        url: "/playSong",
         type: "get",
         dataType: "json",
         data: {
@@ -165,7 +165,7 @@ function updateControlBar(songId, poster, songName, songArtist, songData) {
 
     //update listens
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/updateListeningHistory",
+        url: "/updateListeningHistory",
         type: "get",
         data: {
             songId: songId,
@@ -271,7 +271,7 @@ function updateControlBar(songId, poster, songName, songArtist, songData) {
 
 function forward() {
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/nextSong",
+        url: "/nextSong",
         type: "get",
         dataType: "json",
         success: function (data) {
@@ -295,7 +295,7 @@ function forward() {
 }
 function backward() {
     $.ajax({
-        url: "/TuneTown_theWebsite_war_exploded/previousSong",
+        url: "/previousSong",
         type: "get",
         dataType: "json",
         success: function (data) {
