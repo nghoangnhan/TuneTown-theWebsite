@@ -2,12 +2,10 @@ package vn.hcmute.tunetown.DAO;
 
 import vn.hcmute.tunetown.connection.DBConnection;
 import vn.hcmute.tunetown.model.Genre;
+import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +53,40 @@ public class GenreDAO {
             TypedQuery<Genre> query = em.createQuery(jpql, Genre.class);
 
             return query.getResultList();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public Genre getGenreById (Integer genreId) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT g FROM Genre g WHERE g.genreId = :genreId";
+            TypedQuery<Genre> query = em.createQuery(jpql, Genre.class);
+            query.setParameter("genreId", genreId);
+
+            Genre genre = query.getSingleResult();
+            return genre;
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    public Genre getGenreByName (String genreName) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT g FROM Genre g WHERE g.genreName = :genreName";
+            TypedQuery<Genre> query = em.createQuery(jpql, Genre.class);
+            query.setParameter("genreName", genreName);
+
+            Genre genre = query.getSingleResult();
+            return genre;
         } catch (NoResultException e) {
             e.printStackTrace();
             return null;

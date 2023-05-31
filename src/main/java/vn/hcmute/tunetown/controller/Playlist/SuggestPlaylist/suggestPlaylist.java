@@ -28,8 +28,6 @@ public class suggestPlaylist extends HttpServlet {
         // get list of favorite genres
         GenreDAO genreDAO = new GenreDAO();
         List<Genre> favoriteGenre = genreDAO.getFavoriteGenresByUserId(GlobalUser.globalUserId);
-
-
         PlaylistDAO playlistDAO = new PlaylistDAO();
         SongDAO songDAO = new SongDAO();
 
@@ -66,6 +64,7 @@ public class suggestPlaylist extends HttpServlet {
                     }
                 }
 
+
                 if(!isAdded) {
                     suggestedPlaylist.getPlaylistSongs().add(addedSong);
                 }
@@ -73,8 +72,6 @@ public class suggestPlaylist extends HttpServlet {
         }
 
         playlistDAO.modifyPlaylist(suggestedPlaylist);
-        System.out.println("size:" + suggestedPlaylist.getPlaylistSongs().size());
-
 
         getServletContext().getRequestDispatcher("/loadPlaylists").forward(req, resp);
     }
@@ -84,6 +81,10 @@ public class suggestPlaylist extends HttpServlet {
     }
 
     int getRandomIndex(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Length must be a positive integer greater than zero.");
+        }
+
         Random random = new Random();
         return random.nextInt(length);
     }

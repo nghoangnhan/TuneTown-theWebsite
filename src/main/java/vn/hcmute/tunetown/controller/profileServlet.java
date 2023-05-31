@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/loadProfile"})
 public class profileServlet extends HttpServlet {
@@ -39,9 +40,6 @@ public class profileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(GlobalUser.globalUserId);
-//        req.setAttribute("user", user);
-//        getServletContext().getRequestDispatcher(url).forward(req,resp);
-
 
         PrintWriter out = resp.getWriter();
         out.println(
@@ -102,6 +100,7 @@ public class profileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserById(GlobalUser.globalUserId);
+        List<Song> history = userDAO.getUserListeningHistory(GlobalUser.globalUserId);
         JSONArray jsonArray = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
@@ -115,6 +114,24 @@ public class profileServlet extends HttpServlet {
         jsonUser.put("roles", user.getRole());
 
         jsonArray.put(jsonUser);
+
+
+        JSONArray jsonSongs = new JSONArray();
+        for (Song song : history) {
+            JSONObject jsonSong = new JSONObject();
+
+            jsonSong.put("songId", song.getSongId());
+            jsonSong.put("songName", song.getSongName());
+            jsonSong.put("songPoster", song.getSongPoster());
+            jsonSong.put("songData", song.getSongData());
+            jsonSong.put("songArtists", song.getArtists().getUserName());
+            jsonSong.put("songGenre", song.getGenre().getGenreName());
+            jsonSong.put("songAmoutOfListens", song.getAmountOfListens());
+
+            jsonSongs.put(jsonSong);
+        }
+
+        jsonArray.put(jsonSongs);
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

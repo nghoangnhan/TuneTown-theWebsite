@@ -1,5 +1,7 @@
 package vn.hcmute.tunetown.controller.Song;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import vn.hcmute.tunetown.DAO.SongDAO;
 import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
@@ -36,12 +38,9 @@ public class updateListeningHistory extends HttpServlet {
         List<Song> history = userDAO.getUserListeningHistory(GlobalUser.globalUserId);
         history.add(song);
 
-        for(Song s: history) {
-            System.out.println(s.getSongId());
-        }
-
         user.setHistory(history);
 
         UserDAO.update(user);
     }
+
 }

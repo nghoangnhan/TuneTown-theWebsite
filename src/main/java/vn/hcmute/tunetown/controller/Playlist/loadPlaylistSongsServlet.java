@@ -30,8 +30,6 @@ public class loadPlaylistSongsServlet extends HttpServlet {
         String playlistId = req.getParameter("playlistId");
         Integer iPlaylistId = Integer.parseInt(playlistId);
 
-        UserDAO userDAO = new UserDAO();
-
         PlaylistDAO playlistDAO = new PlaylistDAO();
         Playlist playlist = playlistDAO.getPlaylistById(iPlaylistId);
 
@@ -64,8 +62,6 @@ public class loadPlaylistSongsServlet extends HttpServlet {
         String playlistId = req.getParameter("playlistId");
         Integer iPlaylistId = Integer.parseInt(playlistId);
 
-        UserDAO userDAO = new UserDAO();
-
         PlaylistDAO playlistDAO = new PlaylistDAO();
         Playlist playlist = playlistDAO.getPlaylistById(iPlaylistId);
 
@@ -75,15 +71,20 @@ public class loadPlaylistSongsServlet extends HttpServlet {
         jsonArray.put(jsonPlaylist);
 
         for (Song song : playlist.getPlaylistSongs()) {
-            JSONObject jsonSong = new JSONObject(); // Create a new object for each song
+            if(song.getSongStatus() == 0){
+                JSONObject jsonSong = new JSONObject(); // Create a new object for each song
 
-            jsonSong.put("songId", song.getSongId());
-            jsonSong.put("songName", song.getSongName());
-            jsonSong.put("songPoster", song.getSongPoster());
-            jsonSong.put("songData", song.getSongData());
-            jsonSong.put("songArtists", song.getArtists().getUserName());
+                jsonSong.put("songId", song.getSongId());
+                jsonSong.put("songName", song.getSongName());
+                jsonSong.put("songPoster", song.getSongPoster());
+                jsonSong.put("songData", song.getSongData());
+                jsonSong.put("songArtists", song.getArtists().getUserName());
+                jsonSong.put("songGenre", song.getGenre().getGenreName());
+                jsonSong.put("songAmoutOfListens", song.getAmountOfListens());
 
-            jsonArray.put(jsonSong);
+
+                jsonArray.put(jsonSong);
+            }
         }
 
         resp.setContentType("application/json");

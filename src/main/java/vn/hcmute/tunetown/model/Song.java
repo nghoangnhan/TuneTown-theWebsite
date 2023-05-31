@@ -28,6 +28,8 @@ public class Song {
     @ManyToMany(mappedBy = "playlistSongs")
     private List<Playlist> playlists;
 
+    private Integer songStatus;
+
     public Song() {
     }
 
@@ -52,7 +54,14 @@ public class Song {
         this.playlists = playlists;
     }
 
-    public Song(String songName, User artists, String downloadUrlImage, String downloadUrlData, int i, int i1) {
+    public Song(String songName, User artists, String downloadUrlImage, String downloadUrlData, Integer amountOfListens, Genre genre, Integer songStatus) {
+        this.songName = songName;
+        this.artists = artists;
+        this.songPoster = downloadUrlImage;
+        this.songData = downloadUrlData;
+        this.amountOfListens = amountOfListens;
+        this.genre = genre;
+        this.songStatus = songStatus;
     }
 
     public Integer getSongId() {
@@ -117,5 +126,13 @@ public class Song {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public Integer getSongStatus() {
+        return songStatus;
+    }
+
+    public void setSongStatus(Integer songStatus) {
+        this.songStatus = songStatus;
     }
 }

@@ -18,7 +18,6 @@ public class registerServlet extends HttpServlet {
         String url = "/view/register.jsp";
         String message = null;
 
-//        String fullName = req.getParameter("fullName");
         String username = req.getParameter("username");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
@@ -26,7 +25,7 @@ public class registerServlet extends HttpServlet {
 
         String emailCheck = UserDAO.checkUserByEmail(email);
         String usernameCheck = UserDAO.checkUserByUsername(username);
-        User user = new User(username,null,email,password,2,1,null,"https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2Favatar.png?alt=media&token=%5B101");
+        User user = new User(username,email,password,1,"https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2Favatar.png?alt=media&token=%5B101");
         try {
             if(emailCheck != null && emailCheck.equals(email)){
                 message = "Email existed!";

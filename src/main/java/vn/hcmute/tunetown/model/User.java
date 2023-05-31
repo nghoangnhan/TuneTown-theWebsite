@@ -22,8 +22,6 @@ public class User implements Serializable {
 
     private String birthDate;
 
-    private int gender;
-
     private String userBio;
 
     private Integer role;
@@ -38,30 +36,20 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int userID, String userName, String email, String userPassword, String birthDate, int gender, String userBio, Integer role, String userAvatar, List<Genre> favoriteGenre, List<Song> history) {
-        this.userID = userID;
+    public User(String userName, String email, String userPassword, Integer role, String userAvatar) {
         this.userName = userName;
         this.email = email;
         this.userPassword = userPassword;
-        this.birthDate = birthDate;
-        this.gender = gender;
-        this.userBio = userBio;
         this.role = role;
         this.userAvatar = userAvatar;
-        this.favoriteGenre = favoriteGenre;
-        this.history = history;
     }
 
-    public User(String username, Object o, String email, String password, int i, int i1, Object o1, String s) {
-    }
-
-    public User(int userID, String username, String birthdate, String email, String password, int gender, Integer role, String userBio, String downloadUrlAvatar) {
+    public User(int userID, String username, String birthdate, String email, String password, Integer role, String userBio, String downloadUrlAvatar) {
         this.userID = userID;
         this.userName = username;
         this.email = email;
         this.userPassword = password;
         this.birthDate = birthdate;
-        this.gender = gender;
         this.userBio = userBio;
         this.role = role;
         this.userAvatar = downloadUrlAvatar;
@@ -106,15 +94,6 @@ public class User implements Serializable {
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
-
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
     public String getUserBio() {
         return userBio;
     }

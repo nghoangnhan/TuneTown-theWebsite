@@ -10,10 +10,13 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.StorageClient;
+import vn.hcmute.tunetown.DAO.GenreDAO;
 import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
+import vn.hcmute.tunetown.model.Genre;
 import vn.hcmute.tunetown.model.User;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -26,8 +29,10 @@ import java.io.InputStream;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet(urlPatterns = {"/modifyProfile"})
 @MultipartConfig
@@ -36,7 +41,7 @@ public class modifyProfileServlet extends HttpServlet {
     private User userUpdate;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String url = "";
+        String url = "/loadSong";
         String message = null;
 
         UserDAO userDAO = new UserDAO();
@@ -45,12 +50,8 @@ public class modifyProfileServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String birthdate = req.getParameter("birthdate");
-
-        int gender = Integer.parseInt(req.getParameter("gender"));
         String email  = req.getParameter("email");
         String userBio = req.getParameter("userBio");
-
-        System.out.println(username);
 
         InputStream serviceAccount;
 
@@ -131,17 +132,15 @@ public class modifyProfileServlet extends HttpServlet {
                 }
 
                 // Update user
-                userUpdate = new User(user.getUserID(), username, birthdate, email, password, gender, user.getRole(), userBio, downloadUrlAvatar);
+                userUpdate = new User(user.getUserID(), username, birthdate, email, password, user.getRole(), userBio, downloadUrlAvatar);
                 if (downloadUrlAvatar.equals("https://firebasestorage.googleapis.com/v0/b/tunetowntest-e968a.appspot.com/o/images%2F?alt=media"))
                 {
                     userUpdate.setUserAvatar(user.getUserAvatar());
                 }
-                String emailCheck = UserDAO.checkUserByEmail(email);
-                String usernameCheck = UserDAO.checkUserByUsername(username);
-
-                System.out.println(userUpdate.getUserBio());
+                userUpdate.setFavoriteGenre(user.getFavoriteGenre());
                 UserDAO.update(userUpdate);
-                System.out.println("updated");
+
+                req.setAttribute("username", username);
 
             } catch (FirebaseAuthException e) {
                 throw new RuntimeException(e);
@@ -150,7 +149,11 @@ public class modifyProfileServlet extends HttpServlet {
 //        req.setAttribute("user", userUpdate);
         // Redirect to a different page to prevent continuous updates
         req.setAttribute("message", message);
-        resp.sendRedirect(req.getContextPath() + url);
+        getServletContext().getRequestDispatcher(url).forward(req,resp);
+        // Return a response indicating successful processing
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write("{\"status\": \"success\"}");
     }
 
     @Override

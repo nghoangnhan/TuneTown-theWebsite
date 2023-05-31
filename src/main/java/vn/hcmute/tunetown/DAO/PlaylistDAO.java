@@ -96,13 +96,13 @@ public class PlaylistDAO {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
 
         try {
-            String jpql = "SELECT p FROM Playlist p WHERE p.userId = :userId AND p.playlistType = :type";
+            String jpql = "SELECT p FROM Playlist p WHERE p.userId = :userId AND p.playlistType = :playlistType";
             TypedQuery<Playlist> query = em.createQuery(jpql, Playlist.class);
             query.setParameter("userId", userId);
-            query.setParameter("type", "Suggest");
+            query.setParameter("playlistType", "Suggest");
 
             return query.getSingleResult();
-        } catch (Exception e){
+        } catch (NoResultException e){
             e.printStackTrace();
             Playlist suggestedPlaylist = new Playlist();
             suggestedPlaylist.setPlaylistType("Suggest");

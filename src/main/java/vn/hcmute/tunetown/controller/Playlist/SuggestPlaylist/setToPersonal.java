@@ -1,7 +1,9 @@
 package vn.hcmute.tunetown.controller.Playlist.SuggestPlaylist;
 
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
+import vn.hcmute.tunetown.DAO.SongDAO;
 import vn.hcmute.tunetown.model.Playlist;
+import vn.hcmute.tunetown.model.Song;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

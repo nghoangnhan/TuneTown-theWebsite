@@ -28,10 +28,12 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.StorageClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import vn.hcmute.tunetown.DAO.GenreDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
 import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
 import vn.hcmute.tunetown.connection.GGDriveConnection;
+import vn.hcmute.tunetown.model.Genre;
 import vn.hcmute.tunetown.model.Song;
 import com.google.cloud.storage.Storage;
 import vn.hcmute.tunetown.model.User;
@@ -46,9 +48,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @WebServlet(urlPatterns = {"/upload"})
@@ -66,7 +71,6 @@ public class uploadSong extends HttpServlet {
         songName = req.getParameter("songName");
         String url = "/loadSong";
         UserDAO userDAO = new UserDAO();
-//        user = userDAO.getUserById(GlobalUser.globalUserId);
 
         InputStream serviceAccount;
 
@@ -112,7 +116,7 @@ public class uploadSong extends HttpServlet {
                             "tunetowntest-e968a.appspot.com" +
                             "/o/" +
                             "images%2F" + fileName +
-                            "?alt=media";
+                            "?alt=media" ;
 
 
                 } catch (Exception e) {
@@ -140,12 +144,19 @@ public class uploadSong extends HttpServlet {
                             Storage.BlobWriteOption.userProject("tunetowntest-e968a"),
                             Storage.BlobWriteOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
 
-                    // Construct the download URL manually
+                    // Encode the token using Base64 encoding
+                    String encodedFilePath = URLEncoder.encode("audios/" + fileName2, "UTF-8");
                     downloadUrlData = "https://firebasestorage.googleapis.com/v0/b/" +
                             "tunetowntest-e968a.appspot.com" +
                             "/o/" +
-                            "audios%2F" + fileName2 +
+                            encodedFilePath +
                             "?alt=media";
+
+                    String token = UUID.randomUUID().toString();
+                    String encodedToken = URLEncoder.encode(token, "UTF-8");
+                    downloadUrlData = downloadUrlData + "&token=" + encodedToken;
+
+                    System.out.println(downloadUrlData);
 
 
                 } catch (Exception e) {
@@ -154,8 +165,11 @@ public class uploadSong extends HttpServlet {
                 } finally {
                     fileContent2.close();
                 }
+                GenreDAO genreDAO = new GenreDAO();
+                String genreName = req.getParameter("genreName");
+                Genre genre = genreDAO.getGenreByName(genreName);
                 // Add to SQL
-                song = new Song(songName, userDAO.getUserById(GlobalUser.globalUserId), downloadUrlImage, downloadUrlData, 1000000, 1000000);
+                song = new Song(songName, userDAO.getUserById(GlobalUser.globalUserId), downloadUrlImage, downloadUrlData, 0, genre, 0);
                 SongDAO songDAO = new SongDAO();
                 songDAO.uploadSong(song);
 

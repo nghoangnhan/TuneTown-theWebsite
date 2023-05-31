@@ -17,7 +17,6 @@ public class editNamePlaylist extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String playlistId = req.getParameter("playlistId");
-        System.out.println("PlaylistId: "+playlistId);
 
         PlaylistDAO playlistDAO = new PlaylistDAO();
         Playlist playlist = playlistDAO.getPlaylistById(Integer.valueOf(playlistId));

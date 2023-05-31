@@ -68,6 +68,47 @@ function suggestPlaylist() {
     });
 }
 
+function recommendPlaylist(genreId) {
+    $.ajax({
+        url: "/TuneTown_theWebsite_war_exploded/recommendPlaylist",
+        type: "post",
+        data:{
+            genreId: genreId
+        },
+        success: function (data) {
+            var listSong = JSON.parse(JSON.stringify(data.slice(1)));
+            var listSongHTML = document.getElementById("playlist-songs");
+            listSongHTML.innerHTML = ``;
+            var titleHTML = document.getElementById("title-playlist-feed");
+            titleHTML.innerHTML = ``;
+            titleHTML.innerHTML += `
+              <div class="title-playlist-feed" id="title-playlist" name="playlistName">${data[0].playlistName}</div>
+          `;
+
+            listSong.forEach((song) => {
+                listSongHTML.innerHTML += `
+                  <div class="song-item playlisted">
+                    <div class="song-img">
+                      <img id="${song.songId}" src="${song.songPoster}" alt="" onclick="playSong(this)"/>
+                      <div id="song-data-${song.songId}" hidden="hidden">${song.songData}</div>
+                    </div>
+                    <div class="song-info">
+                      <div class="song-info-title">${song.songName}</div>
+                      <div class="song-info-author">${song.songArtists}</div>
+                    </div>
+                    <div class="song-genre">${song.songGenre}</div>
+                    <div class="song-view">${song.songAmoutOfListens}</div>
+                  </div>
+                `;
+            });
+        },
+        error: function (xhr) {
+            console.log("Error: " + xhr.responseText);
+        }
+    });
+}
+
+
 //const playbtn = document.getElementById("fa-play-circle");
 function playSong(currentSong) {
     let songId = currentSong.getAttribute("id");
@@ -99,13 +140,25 @@ function playSong(currentSong) {
 
 
 const audioPlay = document.getElementById("audio");
+const repeatbtn = document.getElementById("fa-retweet");
+const randombtn = document.getElementById("fa-random");
+
+function ActiveRandom(event) {
+    event.target.classList.toggle("active");
+    repeatbtn.classList.remove("active")
+}
+function ActiveRepeat(event) {
+    event.target.classList.toggle("active");
+    randombtn.classList.remove("active")
+}
+
 function updateControlBar(songId, poster, songName, songArtist, songData) {
     let songImage = document.getElementById("songing-image");
     let songInfoTitle = document.getElementById("songing-info-title");
     let songInfoAuthor = document.getElementById("songing-info-author");
 
 
-    songImage.innerHTML = poster;
+    songImage.src = poster;
     songInfoAuthor.innerHTML = songArtist;
     songInfoTitle.innerHTML = songName;
     audioPlay.src = deleteLetter(songData, "amp;");
@@ -178,17 +231,16 @@ function updateControlBar(songId, poster, songName, songArtist, songData) {
             //servlet function
 
             //delete all
-            const currentSong = document.getElementById("song-item-"+id);
+            const currentSong = document.getElementById("song-item-"+songId);
             // songList.forEach(songItem => {
             if (currentSong !== null) {
                 const randomIndex = Math.floor(Math.random() * 10);
                 const randomSong = document.getElementById("song-item-"+randomIndex);
-                console.log(randomSong);
 
                 if (randomSong !== null && randomSong !== currentSong) {
                     currentSong.classList.remove("active");
                     randomSong.classList.add("active");
-                    moveToControlBar(randomSong.querySelector("img"));
+                    playSong(randomSong.querySelector("img"));
                 } else {
                     // Handle case where there is no previous element sibling
                     console.log("No next song");
@@ -206,7 +258,10 @@ function updateControlBar(songId, poster, songName, songArtist, songData) {
             } else if (randombtn.classList.contains("active")) {
                 playRandomSong();
             } else {
-                forward();
+                audio.pause();
+                stopbtn.classList.remove("active");
+                playbtn.classList.add("active");
+                isPlayed = false;
             }
         });
     });
@@ -214,8 +269,6 @@ function updateControlBar(songId, poster, songName, songArtist, songData) {
     audioPlay.load();
 }
 
-const bt_backward = document.getElementById('fa-backward');
-const bt_forward = document.getElementById('fa-forward');
 function forward() {
     $.ajax({
         url: "/TuneTown_theWebsite_war_exploded/nextSong",
@@ -249,7 +302,6 @@ function backward() {
             // Cap nhat music player
             var jsonData = JSON.parse(JSON.stringify(data));
             jsonData = jsonData[0];
-            console.log(jsonData);
             updateControlBar(jsonData.songId, jsonData.songPoster, jsonData.songName, jsonData.songArtist, jsonData.songData);
             audio.play();
 
@@ -308,11 +360,20 @@ function showContextMenu(event) {
             </ul>
         </ul>
       </li>   
-      <li>Share</li>
-      <li>Copy Link</li>
+      <li id="download-song">Download</li>
       
     </ul>
   `;
+    contextMenu.addEventListener("click", (eventContext) => {
+        if (eventContext.target.id === "download-song") {
+            // Handle download button click
+            let rightClickedSongId = event.target.getAttribute("id");
+            rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
+            downloadSongItemFunc(rightClickedSongId);
+        }
+    });
+
+
     const songItemRect = songItem.getBoundingClientRect();
     contextMenu.style.top = `${event.clientY - songItemRect.top}px`;
     contextMenu.style.left = `${event.clientX - songItemRect.left}px`;
@@ -353,20 +414,16 @@ function showContextMenu(event) {
         }
     }
     function showPlaylistDropdown() {
-        console.log("Show playlist dropdown");
         playlistDropdown.style.display = "block";
 
         isDropdownShown = true; // Đặt biến isDropdownShown thành true khi dropdown được hiển thị
         if (isDropdownShown) songItem.classList.add("active");
     }
-    // rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
-    // console.log(rightClickedSongId);
     playlistItems.forEach((playlistItem) => {
         playlistItem.addEventListener("click",getPlaylistId=(e)=>{
             const playlistID = e.target.getAttribute("id");
             let rightClickedSongId = event.target.getAttribute("id");
             rightClickedSongId = deleteLetter(rightClickedSongId, "song-item-");
-            console.log("rightclickedSongId:" + rightClickedSongId);
             addSongToPlaylist(rightClickedSongId, playlistID);
         })
     });
@@ -390,7 +447,8 @@ confirmDeleteBtn.addEventListener("click", () => {
     deleteModal.style.display = "none";
 });
 // Handle cancel delete
-cancelDeleteBtn.addEventListener("click", () => {
+cancelDeleteBtn.addEventListener("click", (event) => {
+    event.preventDefault();
     // Hide confirm delete modal
     deleteModal.style.display = "none";
 });

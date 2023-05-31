@@ -1,9 +1,11 @@
 package vn.hcmute.tunetown.controller.Song;
 
+import vn.hcmute.tunetown.DAO.GenreDAO;
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
 import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.GlobalUser;
+import vn.hcmute.tunetown.model.Genre;
 import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.Song;
 import vn.hcmute.tunetown.model.User;
@@ -32,6 +34,8 @@ public class loadSongServlet extends HttpServlet {
             User loggedUser = (User) session.getAttribute("loggedUser");
             UserDAO userDAO = new UserDAO();
 
+            User userLog = userDAO.getUserById(GlobalUser.globalUserId);
+
             if (loggedUser == null) {
                 url = "/view/login.jsp";
             }
@@ -39,6 +43,9 @@ public class loadSongServlet extends HttpServlet {
                 SongDAO songDAO = new SongDAO();
                 List<Song> listSong = songDAO.getAllSongs();
                 req.setAttribute("listSong", listSong);
+
+                List<Song> listTop10Song = songDAO.getTop10Songs();
+                req.setAttribute("listTop10Song", listTop10Song);
 
 
                 PlaylistDAO playlistDAO = new PlaylistDAO();
@@ -50,9 +57,13 @@ public class loadSongServlet extends HttpServlet {
                     listPlaylist.add(suggestedPlaylist);
                 }
 
+                GenreDAO genreDAO = new GenreDAO();
+                List<Genre> listGenre = genreDAO.getAllGenres();
+                req.setAttribute("listGenre", listGenre);
+
 
                 req.setAttribute("listPlaylist", listPlaylist);
-                req.setAttribute("username", loggedUser.getUserName());
+                req.setAttribute("loggedUser", userLog);
                 req.setAttribute("userId", loggedUser.getUserID());
                 User user = UserDAO.getUserByEmail(loggedUser.getEmail());
                 req.setAttribute("avatar", user.getUserAvatar());

@@ -81,11 +81,10 @@
                 />
                 <div id="search-results" class="dropdown"></div>
               </div>
-              <i class="fa fa-search"></i>
             </div>
 
           <div class="nav-item info">
-            <div class="info">Hello ${username}</div>
+            <div class="info" id="hello-username">Hello ${loggedUser.getUserName()}</div>
           </div>
 
           <div class="nav-item-profile">
@@ -115,7 +114,6 @@
     </div>
 
     <div id="upload-feed" class="upload-feed">
-<%--      <input type="hidden" value="${userId}" name="userId" id="user-id">--%>
 
     </div>
 
@@ -125,54 +123,16 @@
       <!-- Playlist  -->
       <div class="title-playlist">Recommend Playlist</div>
       <div class="wrap-playlist-item">
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/mosaic.jpg" alt="" />
-          <div class="playlist-title">Playlist #1</div>
-          <div class="playlist-artist">Mosiac</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
+        <c:forEach items="${listGenre}" var="genre" varStatus="loop">
+          <div class="playlist-item">
+            <img src="./assets/img/CoverArt/mosaic.jpg" alt="" />
+            <div class="playlist-title">Playlist #${loop.index + 1}</div>
+            <div class="playlist-genre">${genre.getGenreName()}</div>
+            <div class="iconplay">
+              <i class="fa fa-play-circle" id="ic-play" onclick="loadPlaylistRecommend(${genre.getGenreId()})"></i>
+            </div>
           </div>
-        </div>
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/dontoliver.jpg" alt="" />
-          <div class="playlist-title">Playlist #2</div>
-          <div class="playlist-artist">Don Toliver</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
-          </div>
-        </div>
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/lilpump.jpg" alt="" />
-          <div class="playlist-title">Playlist #3</div>
-          <div class="playlist-artist">Lil Pump</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
-          </div>
-        </div>
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/realliife.jpg" alt="" />
-          <div class="playlist-title">Playlist #4</div>
-          <div class="playlist-artist">Real Lift</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
-          </div>
-        </div>
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/sand.jpg" alt="" />
-          <div class="playlist-title">Playlist #5</div>
-          <div class="playlist-artist">San</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
-          </div>
-        </div>
-        <div class="playlist-item">
-          <img src="./assets/img/CoverArt/william.jpg" alt="" />
-          <div class="playlist-title">Playlist #6</div>
-          <div class="playlist-artist">William</div>
-          <div class="iconplay">
-            <i class="fa fa-play-circle"></i>
-          </div>
-        </div>
+        </c:forEach>
       </div>
       <!-- End Playlist  -->
       <!-- Song Popular -->
@@ -189,83 +149,24 @@
           <div class="song-view-nohover">Listens</div>
         </div>
 
-        <div class="song-item">
-          <div class="song-ranking">1</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
+        <c:forEach items="${listTop10Song}" var="song" varStatus="status">
+          <c:if test="${status.index < 10}">
+            <div class="song-item" id="song-item-${song.getSongId()}">
+              <div class="song-ranking">${status.index + 1}</div>
+              <div class="song-img">
+                <img id="${song.getSongId()}" src="${song.getSongPoster()}" alt="" onclick="playSong(this)" />
+                <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
+              </div>
+              <div class="song-info" id="info-song">
+                <div id="song-title-${song.getSongId()}" class="song-info-title">${song.getSongName()}</div>
+                <div class="song-info-author" id="song-info-author-${song.getSongId()}">${song.getArtists().getUserName()}</div>
+              </div>
+              <div class="song-genre">${song.getGenre().getGenreName()}</div>
+              <div class="song-view">${song.getAmountOfListens()}</div>
+            </div>
+          </c:if>
+        </c:forEach>
 
-        <div class="song-item">
-          <div class="song-ranking">2</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
-
-        <div class="song-item">
-          <div class="song-ranking">3</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
-
-        <div class="song-item">
-          <div class="song-ranking">4</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
-
-        <div class="song-item">
-          <div class="song-ranking">5</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
-
-        <div class="song-item">
-          <div class="song-ranking">6</div>
-          <div class="song-img">
-            <img src="./assets/img/CoverArt/starboy.jpg" alt="" />
-          </div>
-          <div class="song-info">
-            <div class="song-info-title">Starboy</div>
-            <div class="song-info-author">The Weekend</div>
-          </div>
-          <div class="song-genre">Pop</div>
-          <div class="song-view">1,234,567</div>
-        </div>
       </div>
       <!-- End Song Popular -->
 
@@ -286,7 +187,7 @@
           <c:if test="${status.index < 100}">
             <div class="song-item" id="song-item-${song.getSongId()}">
               <div class="song-img">
-                <img id="${song.getSongId()}" src="./assets/img/CoverArt/starboy.jpg" alt="" onclick="playSong(this)" />
+                <img id="${song.getSongId()}" src="${song.getSongPoster()}" alt="" onclick="playSong(this)" />
                 <div id="song-data-${song.getSongId()}" hidden="hidden">${song.getSongData()}</div>
               </div>
               <div class="song-info" id="info-song">
@@ -306,12 +207,6 @@
     <!-- TAB PLAYLIST  -->
     <div id="playlist-feed" class="playlist-feed">
       <div class="wrap-btn">
-        <div class="wrap-button-back-home">
-          <button id="btn-back-home" class="btn-back-home">
-            <i class="fa fa-chevron-circle-left"></i>Back
-          </button>
-        </div>
-
         <div class="wrap-button-delete">
           <button id="btn-delete" class="btn-delete">Delete</button>
         </div>
@@ -340,7 +235,7 @@
             <div class="song-info-title">Title</div>
           </div>
           <div class="song-genre-nohover">Genre</div>
-          <div class="song-view-nohover">Views</div>
+          <div class="song-view-nohover">Listens</div>
         </div>
 
         <div class="list-song-item" id="playlist-songs">
@@ -353,10 +248,6 @@
     <!-- END TAB PLAYLIST  -->
 
     <div class="music-playlist">
-      <div class="my-library">
-        <i class="fa fa-bookmark"></i>
-        <div>Library</div>
-      </div>
       <div class="wrap-create-playlist">
           <button id="btn-create-playlist" onclick="createPlaylist()" >
             <i class="fa fa-plus-square">Create Playlist</i>

@@ -30,7 +30,6 @@ public class loadPlaylistsServlet extends HttpServlet {
             listPlaylist.add(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId));
         }
 
-        System.out.println(listPlaylist.size());
 
         PrintWriter out = resp.getWriter();
 
@@ -50,7 +49,6 @@ public class loadPlaylistsServlet extends HttpServlet {
             listPlaylist.add(playlistDAO.findSuggestedPlaylist(GlobalUser.globalUserId));
         }
 
-        System.out.println(listPlaylist.size());
 
         JSONArray jsonArray = new JSONArray();
 
@@ -62,7 +60,6 @@ public class loadPlaylistsServlet extends HttpServlet {
             jsonArray.put(jsonPlaylist);
         }
 
-        System.out.println(jsonArray);
 
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

@@ -27,7 +27,6 @@ public class SongDAO {
             TypedQuery<Song> songTypedQuery = em.createQuery(jpql, Song.class);
             songTypedQuery.setParameter("songId", songId);
             Song song = songTypedQuery.getSingleResult();
-            System.out.println(song);
             return song;
         } catch (NoResultException e) {
             e.printStackTrace();
@@ -51,6 +50,21 @@ public class SongDAO {
             em.close();
         }
     }
+    public List<Song> getTop10Songs(){
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+
+        try {
+            String jpql = "SELECT s FROM Song s ORDER BY s.amountOfListens DESC";
+            TypedQuery<Song> query = em.createQuery(jpql, Song.class);
+            List<Song> listSong = query.getResultList();
+            return listSong;
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
 
     public void uploadSong(Song song) {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
@@ -84,7 +98,7 @@ public class SongDAO {
         EntityManager em = DBConnection.getEmFactory().createEntityManager();
 
         try {
-            String jpql = "SELECT s FROM Song s WHERE s.genre =: genre ORDER BY s.amountOfListens";
+            String jpql = "SELECT s FROM Song s WHERE s.genre =: genre ORDER BY s.amountOfListens DESC";
             TypedQuery<Song> query = em.createQuery(jpql, Song.class);
             query.setParameter("genre", genre);
             List<Song> top10Songs = query.getResultList();
@@ -96,4 +110,19 @@ public class SongDAO {
             em.close();
         }
     }
+
+    public void updateSong(Song song) {
+        EntityManager em = DBConnection.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        trans.begin();;
+        try {
+            em.merge(song);
+            trans.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            em.close();
+        }
+    }
+
 }

@@ -1,7 +1,8 @@
-package vn.hcmute.tunetown.controller.Playlist;
+package vn.hcmute.tunetown.controller.Song;
 
 import vn.hcmute.tunetown.DAO.PlaylistDAO;
 import vn.hcmute.tunetown.DAO.SongDAO;
+import vn.hcmute.tunetown.DAO.UserDAO;
 import vn.hcmute.tunetown.model.Playlist;
 import vn.hcmute.tunetown.model.Song;
 
@@ -12,24 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/addSongToPlaylist"})
-public class addSongToPlaylistServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/removeSongPlaylist"})
+public class removeSongPlaylist extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String songId = req.getParameter("songId");
+        Integer iSongId = Integer.parseInt(songId);
 
-        Integer songId = Integer.parseInt(req.getParameter("songId"));
-        Integer playlistId = Integer.parseInt(req.getParameter("playlistId"));
-
-        PlaylistDAO playlistDAO = new PlaylistDAO();
         SongDAO songDAO = new SongDAO();
+        Song song = songDAO.getSong(iSongId);
 
-        Song song = songDAO.getSong(songId);
-        song.setSongStatus(0);
+        song.setSongStatus(1);
         songDAO.updateSong(song);
 
-        Playlist playlist =  playlistDAO.getPlaylistById(playlistId);
-        playlist.getPlaylistSongs().add(song);
-
-        playlistDAO.modifyPlaylist(playlist);
     }
 }
